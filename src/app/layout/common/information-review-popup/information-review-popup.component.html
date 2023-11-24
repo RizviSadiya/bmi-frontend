@@ -1,0 +1,214 @@
+<div class="flex flex-col flex-auto md:w-160 md:min-w-160">
+    <form [formGroup]="infoForm" autocomplete="off">
+        <div class="m-4">
+            <div>
+                <div class="text-center py-0.5 px-3 rounded-full text-2xl font-medium text-black-600">
+                    Information Preview
+                </div>
+                <div class="flex-auto max-w-2xl prose prose-sm">
+                    <div class="bg-card px-6 rounded ">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="text-md text-secondary" style="color: #000!important;font-weight: 500;vertical-align: middle;vector-effect: non-scaling-stroke;">
+                                        <div>Full Name</div>
+                                    </td>
+                                    <td class="" *ngIf="!editMode">
+                                        {{ userDetails.fullname }}
+                                    </td>
+                                    <td *ngIf="editMode">
+                                        <mat-form-field class="info-popup w-full">
+                                            <input id="name" matInput formControlName="fullname">
+                                            <mat-error *ngIf="infoForm.get('fullname').hasError('required')">
+                                                Full name is required
+                                            </mat-error>
+                                            <mat-error *ngIf="infoForm.get('fullname').hasError('pattern')">
+                                                Enter valid name
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-md text-secondary" style="color: #000!important;font-weight: 500;vertical-align: middle;vector-effect: non-scaling-stroke;">
+                                        <div>Email</div>
+                                    </td>
+                                    <td class="" *ngIf="!editMode">
+                                        {{ userDetails.email }}
+                                    </td>
+                                    <td *ngIf="editMode">
+                                        <mat-form-field class="info-popup w-full">
+                                            <input type="email" matInput [formControlName]="'email'"
+                                                autocomplete="none">
+                                            <mat-error *ngIf="infoForm.get('email').hasError('required')">
+                                                Email address is required
+                                            </mat-error>
+                                            <mat-error *ngIf="infoForm.get('email').hasError('email')">
+                                                Invalid email address
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-md text-secondary" style="color: #000!important;font-weight: 500;vertical-align: middle;vector-effect: non-scaling-stroke;">
+                                        <div>Contact Number</div>
+                                    </td>
+                                    <td class="" *ngIf="!editMode">
+                                        {{ userDetails.phone }}
+                                    </td>
+                                    <td *ngIf="editMode">
+                                        <mat-form-field class="info-popup w-full">
+                                            <input id="mobile" matInput formControlName="phone">
+                                            <ng-container matPrefix class="flex items-center">
+                                                <span [matTooltip]="'India'"
+                                                    class="hidden sm:flex w-6 h-4 mr-1 overflow-hidden"
+                                                    [style.background]="'url(\'/assets/images/apps/contacts/flags.png\') no-repeat 0 0'"
+                                                    [style.backgroundSize]="'24px 3876px'"
+                                                    [style.backgroundPosition]="'-1px -2245px'"></span>
+                                                <span class="sm:ml-3 " style="color: #000;">+91</span>
+                                            </ng-container>
+                                            <mat-error *ngIf="infoForm.get('phone').hasError('required')">
+                                                Contact number is required
+                                            </mat-error>
+                                            <mat-error *ngIf="infoForm.get('phone').hasError('pattern')">
+                                                Invalid contact number
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="editMode">
+                                    <td class="text-md text-secondary" style="color: #000!important;font-weight: 500;vertical-align: middle;vector-effect: non-scaling-stroke;">
+                                        <div>Country</div>
+                                    </td>
+                                    <td>
+                                        <mat-form-field class="info-popup w-full">
+                                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:location-marker'"
+                                                matPrefix></mat-icon>
+                                            <mat-select formControlName="country_id">
+                                                <mat-option [value]="country.id" *ngFor="let country of countries">{{
+                                                    country.name }}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="infoForm.get('country_id').hasError('required')">
+                                                Country is required
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <!-- <tr>
+                                    <td class="text-md text-secondary" style="color: #000!important;font-weight: 500;vertical-align: middle;vector-effect: non-scaling-stroke;">
+                                        <div>Channel Name</div>
+                                    </td>
+                                    <td class="" *ngIf="!editMode">
+                                        {{ userDetails?.channel_name }}
+                                    </td>
+                                    <td *ngIf="editMode">
+                                        <mat-form-field class="info-popup w-full">
+                                            <input id="channelName" matInput formControlName="channel_name"  [placeholder]="'BBkivines'">
+                                            <span matPrefix>https://youtube.com/c/</span>
+                                            <mat-error *ngIf="infoForm.get('channel_name').hasError('required')">
+                                                Channel Name is required
+                                            </mat-error>
+                                            <mat-error *ngIf="infoForm.get('channel_name').hasError('pattern')">
+                                                Invalid Channel Name
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </td>
+                                </tr> -->
+                                <!-- <tr>
+                                    <td class="text-md text-secondary" style="color: #000!important;font-weight: 500;vertical-align: middle;vector-effect: non-scaling-stroke;">
+                                        <div>Channel Language</div>
+                                    </td>
+                                    <td class="" *ngIf="!editMode">
+                                        {{ userDetails?.language }}
+                                    </td>
+                                    <td *ngIf="editMode">
+                                        <mat-form-field class="info-popup w-full">
+                                            <mat-select formControlName="channel_lang">
+                                                <mat-option value="">Choose one</mat-option>
+                                                <mat-option value="Hindi">Hindi</mat-option>
+                                                <mat-option value="English">English</mat-option>
+                                                <mat-option value="Odia">Odia</mat-option>
+                                                <mat-option value="Malayalam">Malayalam</mat-option>
+                                                <mat-option value="Tamil">Tamil</mat-option>
+                                                <mat-option value="Bengali">Bengali</mat-option>
+                                                <mat-option value="Kannada">Kannada</mat-option>
+                                                <mat-option value="Punjabi">Punjabi</mat-option>
+                                                <mat-option value="Assamese">Assamese</mat-option>
+                                                <mat-option value="Gujarati">Gujarati</mat-option>
+                                                <mat-option value="Marathi">Marathi</mat-option>
+                                                <mat-option value="Telugu">Telugu</mat-option>
+                                                <mat-option value="Nagpuri">Nagpuri</mat-option>
+                                                <mat-option value="Chinese">Chinese</mat-option>
+                                                <mat-option value="Santali">Santali</mat-option>
+                                                <mat-option value="Bihari">Bihari</mat-option>
+                                                <mat-option value="Kumaoni">Kumaoni</mat-option>
+                                                <mat-option value="Garhwali">Garhwali</mat-option>
+                                                <mat-option value="Rajasthani">Rajasthani</mat-option>
+                                                <mat-option value="Haryanvi">Haryanvi</mat-option>
+                                                <mat-option value="Sanskrit">Sanskrit</mat-option>
+                                                <mat-option value="Spanish">Spanish</mat-option>
+                                                <mat-option value="Indonesian">Indonesian</mat-option>
+                                                <mat-option value="Croatian">Croatian</mat-option>
+                                                <mat-option value="Japanese">Japanese</mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="infoForm.get('channel_lang').hasError('required')">
+                                                Language is required
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </td>
+                                </tr> -->
+                                <!-- <tr>
+                                    <td class="text-md text-secondary" style="color: #000!important;font-weight: 500;vertical-align: middle;vector-effect: non-scaling-stroke;">
+                                        <div>Video Promotion Price</div>
+                                    </td>
+                                    <td class="" *ngIf="!editMode">
+                                        {{ userDetails?.video_promotion_price | currency : (userDetails.currency ?
+                                        userDetails.currency : 'INR') : 'symbol' : '1.0-2' }}
+                                    </td>
+                                    <td *ngIf="editMode">
+                                        <mat-form-field class="info-popup w-full">
+                                            <input matInput placeholder="Example: 10000"
+                                                formControlName="promotion_price">
+                                            <mat-select matPrefix formControlName="currency">
+                                                <mat-option [value]="'INR'">INR</mat-option>
+                                                <mat-option [value]="'USD'">USD</mat-option>
+                                            </mat-select>
+                                            <mat-error
+                                                *ngIf="infoForm.get('promotion_price').hasError('required')">
+                                                Video Promotion Price is required
+                                            </mat-error>
+                                            <mat-error
+                                                *ngIf="infoForm.get('promotion_price').hasError('pattern')">
+                                                Invalid Promotion Price
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center justify-end mt-4" *ngIf="!editMode">
+            <button mat-flat-button class="mr-2" [color]="'warn'" (click)="editInfo();">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                <span class="ml-2">Edit</span>
+            </button>
+            <button mat-flat-button [color]="'success'" (click)="updateInfo();">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:thumb-up'"></mat-icon>
+                <span class="ml-2">Looks Good</span>
+            </button>
+        </div>
+        <div class="flex items-center justify-end mt-4" *ngIf="editMode">
+            <button mat-flat-button class="mr-2" [color]="'warn'" (click)="viewInfo();">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:arrow-narrow-left'"></mat-icon>
+                <span class="ml-2">Back</span>
+            </button>
+            <button mat-flat-button [color]="'success'" (click)="updateInfo();">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
+                <span class="ml-2">Update</span>
+            </button>
+        </div>
+    </form>
+</div>

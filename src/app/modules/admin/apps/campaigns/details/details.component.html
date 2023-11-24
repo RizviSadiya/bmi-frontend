@@ -1,0 +1,426 @@
+<div class="flex flex-col w-full">
+
+    <!-- Apply mode -->
+    <ng-container *ngIf="!reviewMode">
+
+        <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
+            <div class="w-full">
+                <div class="mt-4 p-4">
+                    <div class="text-3xl font-bold" style="text-align: center;"> Submit Your Proposal</div>
+                    <!-- <div class="text-3xl font-bold">{{ campaign.brand_name + " Proposal Form" }}</div>
+                    <div class="font-medium">{{ campaign.camp_title }}</div> -->
+                </div>
+
+                <form class="p-4 bg-card shadow rounded overflow-hidden" [formGroup]="applicationForm">
+                    <!-- [linear]="true" -->
+                    <mat-stepper [orientation]="(stepperOrientation | async)!" #applicationStepper>
+                        <mat-step [formGroupName]="'step1'" [stepControl]="applicationForm.get('step1')"
+                            #applicationStepperStep1>
+                            <ng-template matStepLabel>Set your price </ng-template>
+                            <!-- <ng-template matStepLabel>About the Campaign</ng-template> -->
+                            <div class="flex flex-col sm:flex-row mt-6 flex-0 items-center justify-between">
+                                <div class="flex-1 min-w-0" *ngIf="camData.plateform==='youtube'">
+                                    <mat-form-field style="width: 71%" [floatLabel]="'always'" class="mySelectForm">
+                                        <mat-label class="font-bold">Applying as:<span class="text-danger"></span></mat-label>
+                                        <mat-select [formControlName]="'channel_id'" [placeholder]="'Channel Name'"
+                                            (selectionChange)="channelSelected($event.value)"
+                                            [ngClass]="{'valid': applicationForm.get('step1').get('channel_id').valid}">
+                                            <mat-option value="">- Please Select -</mat-option>
+                                            <mat-option *ngFor="let channel of channelList"
+                                                [value]="channel.id">{{ channel.title }}
+                                                <!-- <mat-icon class="material-icons visibility" ></mat-icon> -->
+                                                <mat-icon  class="icon-size-5" style="vertical-align: middle;"
+                                                [matTooltip]="channel.is_verified ? 'Channel Verified' : 'Channel Not Verified'"
+                                                [ngClass]="{'text-success': channel.is_verified, 'text-warning': !channel.is_verified, 'cursor-pointer' : userType === 'INFLUENCER' && !channel.is_verified}"
+                                                [svgIcon]="channel.is_verified ? 'heroicons_solid:badge-check' : 'heroicons_solid:exclamation'"
+                                                (click)="userType === 'INFLUENCER' && !channel.is_verified && verifyInfChannel();">
+                                            </mat-icon>
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-icon class="icon-size-5" matPrefix
+                                            [svgIcon]="'heroicons_solid:location-marker'">
+                                        </mat-icon>
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex-1 min-w-0" *ngIf="camData.plateform==='instagram'">
+                                    <mat-form-field style="width: 71%" [floatLabel]="'always'" class="mySelectForm">
+                                        <mat-label class="font-bold">Applying as:<span class="text-danger"></span></mat-label>
+                                        <mat-select [formControlName]="'channel_id'" [placeholder]="'Channel Name'"
+                                            (selectionChange)="channelSelected($event.value)"
+                                            [ngClass]="{'valid': applicationForm.get('step1').get('channel_id').valid}">
+                                            <mat-option value="">- Please Select -</mat-option>
+                                            <mat-option *ngFor="let channel of channelList"
+                                                [value]="channel.id">{{channel.username}}
+                                                <!-- <mat-icon class="material-icons visibility" ></mat-icon> -->
+                                                <mat-icon  class="icon-size-5" style="vertical-align: middle;"
+                                                [matTooltip]="channel.is_verified ? 'Channel Verified' : 'Channel Not Verified'"
+                                                [ngClass]="{'text-success': channel.is_verified, 'text-warning': !channel.is_verified, 'cursor-pointer' : userType === 'INFLUENCER' && !channel.is_verified}"
+                                                [svgIcon]="channel.is_verified ? 'heroicons_solid:badge-check' : 'heroicons_solid:exclamation'"
+                                                (click)="userType === 'INFLUENCER' && !channel.is_verified && verifyInfChannel();">
+                                            </mat-icon>
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-icon class="icon-size-5" matPrefix
+                                            [svgIcon]="'heroicons_solid:location-marker'">
+                                        </mat-icon>
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex flex-shrink-0">
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-2 mb-4"></mat-divider>
+
+                            <div class="flex flex-col sm:flex-row flex-0 items-center justify-between">
+                                <div class="flex-1 min-w-0">
+                                    <mat-form-field style="width: 90%">
+                                        <mat-label class="font-bold">
+                                            <!-- Please provide your bid value<span -->
+                                            Please provide your promotion price<span
+                                                class="text-danger"></span>
+                                            <!-- Please provide your quote for this campaign<span
+                                                class="text-danger"></span> -->
+                                        </mat-label>
+                                        <input matInput [placeholder]="'10000'" type="number" [formControlName]="'price'"
+                                            (change)="checkQuotationPrice();">
+                                        <mat-select matPrefix [formControlName]="'currency'">
+                                            <mat-option  [disabled]="userDetails.currency" [value]="'INR'">INR</mat-option>
+                                            <mat-option  [disabled]="userDetails.currency" [value]="'USD'">USD</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <span class="-mt-4 text-danger float-left text-xs">
+                                        *BookMyInfluencers will deduct 15% of bid value as Platform fee after deal completion</span>
+                                        <!-- *BookMyInfluencers will charge 15%</span> -->
+                                    <span *ngIf="applicationForm.value.step1.price > campaign.budget"
+                                        class="text-orange-600 float-left text-sm">
+                                        {{ '*Quotation higher than campaign budget (INR ' + campaign.budget + ')' }}
+                                    </span>
+                                </div>
+                                <div class="flex flex-shrink-0">
+                                    <mat-checkbox class="mt-3" style="margin-left: -38px;" [color]="'primary'" [checked]="defaultPriceSelected"
+                                        [disabled]="defaultPrice === 0" (change)="setQuotationPrice($event);">Same as
+                                        default price</mat-checkbox>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-2 mb-4"></mat-divider>
+
+                            <div class="flex flex-col" *ngIf="camData?.promot_product ==='In-Video brand integration'">
+                                <mat-label
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0 font-bold">
+                                    Brand would prefer the integration to be for {{camData.duration}}<span
+                                        class="text-danger">*</span>
+                                </mat-label>
+                                <mat-radio-group class="flex flex-row" [color]="'primary'"
+                                    [formControlName]="'old_duration'" required (change)="oldDurationSelection();">
+                                    <mat-radio-button class="mb-2 mr-4" [value]="'1'">
+                                        Agree
+                                    </mat-radio-button>
+                                    <mat-radio-button class="mb-2" [value]="'0'">
+                                        Disagree
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                                <mat-form-field class="flex-auto gt-xs:pr-3 pl-5" [floatLabel]="'always'"
+                                    *ngIf="this.applicationForm.value.step1.old_duration === '0'">
+                                    <mat-label >Select your preferred duration<span class="text-danger"></span>
+                                    </mat-label>
+                                    <mat-select [formControlName]="'new_duration'" [placeholder]="'Preferred Duration'"
+                                        (selectionChange)="newDurationSelection();">
+                                        <mat-option value="">- Please Select -</mat-option>
+                                        <mat-option *ngIf="camData.duration !='60-90 second'" value="60-90 seconds">60-90 seconds</mat-option>
+                                        <mat-option *ngIf="camData.duration !='30-60 second'" value="30-60 seconds">30-60 seconds</mat-option>
+                                        <mat-option *ngIf="camData.duration !='90-120 second'" value="90-120 seconds">90-120 seconds</mat-option>
+                                        <mat-option value="other">Other</mat-option>
+                                    </mat-select>
+                                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:clock'">
+                                    </mat-icon>
+                                </mat-form-field>
+                                <mat-form-field class="flex-auto gt-xs:pr-3 pl-10"
+                                    *ngIf="this.applicationForm.value.step1.new_duration === 'other'">
+                                    <input matInput [placeholder]="'Example : 10-20 seconds'"
+                                        [formControlName]="'new_other_duration'">
+                                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:clock'">
+                                    </mat-icon>
+                                </mat-form-field>
+                            </div>
+
+                            <mat-divider class="mt-2 mb-4"></mat-divider>
+
+                            <div class="flex flex-col" *ngIf="camData?.promot_product ==='In-Video brand integration'">
+                                <mat-label
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0 font-bold">
+                                    Brand prefers the promotion to appear at {{camData.promotion_start | lowercase}}
+                                    <!-- the start of the video -->
+                                    <span
+                                        class="text-danger">*</span>
+                                </mat-label>
+                                <mat-radio-group class="flex flex-row" [color]="'primary'"
+                                    [formControlName]="'promotion_slot'" required (change)="promotionSlotSelection();">
+                                    <mat-radio-button class="mb-2 mr-4 font-medium"  [value]="'1'">
+                                        <span class="font-medium">Agree</span>
+                                    </mat-radio-button>
+                                    <mat-radio-button class="mb-2" [value]="'0'">
+                                        <span class="font-medium">Disagree</span>
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                                <mat-form-field class="flex-auto gt-xs:pr-3 pl-5" [floatLabel]="'always'"
+                                    *ngIf="this.applicationForm.value.step1.promotion_slot === '0'">
+                                    <mat-label>Select your preference<span class="text-danger"></span></mat-label>
+                                    <mat-select [formControlName]="'new_promotion_slot'"
+                                        [placeholder]="'Select your preference'">
+                                        <mat-option value="">- Please Select -</mat-option>
+                                        <mat-option *ngIf="camData.promotion_start !='At the start of the video'" value="At the start of the video">At the start of the video
+                                        </mat-option>
+                                        <mat-option *ngIf="camData.promotion_start !='Somewhere in the first half'" value="Somewhere in the first half">Somewhere in the first half
+                                        </mat-option>
+                                        <mat-option *ngIf="camData.promotion_start !='Somewhere in the second half'" value="Somewhere in the second half">Somewhere in the second half
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:emoji-happy'">
+                                    </mat-icon>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="flex justify-end">
+                                <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button"
+                                    [routerLink]="['../']">
+                                    Cancel
+                                </button>
+                                <button class="px-8" mat-flat-button [color]="'primary'"
+                                     (click)="nextStep()"  [disabled]="applicationStepperStep1.stepControl.pristine && applicationStepperStep1.stepControl.invalid || defaultPrice === 0"
+                                    type="button" matStepperNext>
+                                    Next
+                                    <!-- applicationStepperStep1.stepControl.pristine || [disabled]="applicationStepperStep1.stepControl.invalid" -->
+                                </button>
+                            </div>
+                        </mat-step>
+
+                        <mat-step [formGroupName]="'step2'" [stepControl]="applicationForm.get('step2')"
+                            #applicationStepperStep2>
+                            <ng-template matStepLabel>Tell your preferences</ng-template>
+                            <!-- <ng-template matStepLabel>Preferences</ng-template> -->
+                            <!-- <div class="flex flex-col mt-6">
+                                <mat-label
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                    Can you commit any minimum video views for this campaign?<span
+                                        class="text-danger">*</span>
+                                </mat-label>
+                                <mat-radio-group class="flex flex-row" [color]="'primary'"
+                                    [formControlName]="'view_commitment'" required
+                                    (change)="viewCommitmentSelection();">
+                                    <mat-radio-button class="mb-2 mr-4" [value]="'1'">
+                                        Yes
+                                    </mat-radio-button>
+                                    <mat-radio-button class="mb-2" [value]="'0'">
+                                        No
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                                <mat-form-field class="flex-auto gt-xs:pr-3 pl-5"
+                                    *ngIf="this.applicationForm.value.step2.view_commitment === '1'">
+                                    <input type="number" matInput [placeholder]="'Example - 10000'" [formControlName]="'min_views'">
+                                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:calculator'">
+                                    </mat-icon>
+                                </mat-form-field>
+                            </div> -->
+
+                            <mat-divider class="mt-2 mb-4"></mat-divider>
+
+                            <div class="flex flex-col">
+                                <mat-label
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0 font-bold">
+                                    Are you flexible with minor changes after the video is submitted for review?<span
+                                        class="text-danger">*</span>
+                                </mat-label>
+                                <mat-radio-group class="flex flex-row" [color]="'primary'"
+                                    [formControlName]="'minor_changes'" required>
+                                    <mat-radio-button class="mb-2 mr-4" [value]="'1'">
+                                        Yes (Recommended)
+                                    </mat-radio-button>
+                                    <mat-radio-button class="mb-2" [value]="'0'">
+                                        No
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+
+                            <mat-divider class="mt-2 mb-4"></mat-divider>
+
+                            <div class="flex flex-col">
+                                <mat-label
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0 font-bold">
+                                    How soon can you deliver, after the order is confirmed by the brand?<span
+                                        class="text-danger">*</span>
+                                </mat-label>
+                                <mat-radio-group class="flex flex-row" [color]="'primary'"
+                                    [formControlName]="'delivery_days'" required (change)="deliveryDaysSelection();">
+                                    <mat-radio-button class="mb-2 mr-2" [value]="'7'">
+                                        Within 7 days
+                                    </mat-radio-button>
+                                    <mat-radio-button class="mb-2 mr-2" [value]="'15'">
+                                        Within 15 days
+                                    </mat-radio-button>
+                                    <mat-radio-button class="mb-2 mr-2" [value]="'30'">
+                                        Within 30 days
+                                    </mat-radio-button>
+                                    <mat-radio-button class="mb-2" [value]="0">
+                                        Other
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                                <mat-form-field class="flex-auto gt-xs:pr-3 pl-5"
+                                    *ngIf="this.applicationForm.value.step2.delivery_days === 0">
+                                    <input matInput type="number" [placeholder]="'Enter days'"
+                                        [formControlName]="'other_delivery_days'">
+                                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:calculator'">
+                                    </mat-icon>
+                                  
+                                </mat-form-field>
+                                    <!-- <mat-error *ngIf="applicationForm.get('step2').get('other_delivery_days.value')..hasError('required')">please enter valid days</mat-error> -->
+                                    <mat-error *ngIf="this.applicationForm.value.step2.delivery_days === 0 &&
+                                    applicationForm
+                                        .get('step2')
+                                        .get('other_delivery_days').value ==''">
+                                        please enter valid days
+                            </mat-error>
+                            </div>
+
+                            <mat-divider class="mt-2 mb-4"></mat-divider>
+
+                            <div class="flex flex-col">
+                                <mat-label
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0 font-bold">
+                                    Would you share the video on any of your other social media handles.<span
+                                        class="text-danger">*</span>
+                                </mat-label>
+                                <mat-radio-group class="flex flex-row" [color]="'primary'"
+                                    formControlName="social_media_share" required
+                                    (change)="socialMediaShareSelection();">
+                                    <mat-radio-button class="mb-2 mr-4" [value]="'1'">
+                                        Yes (Recommended)
+                                    </mat-radio-button>
+                                    <mat-radio-button class="mb-2" [value]="'0'">
+                                        No
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                                <div class="flex flex-row gt-xs:pr-3 pl-5"
+                                    *ngIf="this.applicationForm.value.step2.social_media_share === '1'">
+                                    <mat-checkbox class="mr-5" formControlName="facebook" [color]="'primary'"
+                                        (change)="socialOptionSelection($event);">
+                                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:facebook'"
+                                            style="vertical-align: middle;">
+                                        </mat-icon>
+                                    </mat-checkbox>
+                                    <mat-checkbox *ngIf="campaign.plateform !='instagram'" formControlName="instagram" class="mr-5" [color]="'primary'"
+                                        (change)="socialOptionSelection($event);">
+                                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:instagram'"
+                                            style="vertical-align: middle;">
+                                        </mat-icon>
+                                    </mat-checkbox>
+                                    <mat-checkbox formControlName="twitter" [color]="'primary'"
+                                        (change)="socialOptionSelection($event);">
+                                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:twitter'"
+                                            style="vertical-align: middle;">
+                                        </mat-icon>
+                                    </mat-checkbox>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-2 mb-4"></mat-divider>
+
+                            <div class="flex flex-col">
+                                <mat-checkbox class="mb-1" [color]="'primary'" [checked]="true"
+                                    [formControlName]="'privacyPolicy'" required>
+                                    I agree to not violate any Youtube Community Guidelines or 3rd party Intellectual
+                                    Property Rights which may hamper the video performance and understand that the brand
+                                    may cancel the order in such cases.<span class="text-danger">*</span>
+                                </mat-checkbox>
+                            </div>
+
+                            <div class="flex justify-end">
+                                <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button"
+                                    matStepperPrevious>
+                                    Back
+                                </button>
+                                <button class="px-8" mat-flat-button [color]="'primary'"
+                                    [disabled]="applicationStepperStep2.stepControl.pristine || applicationStepperStep2.stepControl.invalid"
+                                    type="button" matStepperNext>
+                                    Next
+                                </button>
+                            </div>
+                        </mat-step>
+
+                        <mat-step [formGroupName]="'step3'" [stepControl]="applicationForm.get('step3')">
+                            <!-- <ng-template matStepLabel>Qualification criteria</ng-template> -->
+                            <ng-template matStepLabel>Final words</ng-template>
+                            <div class="flex flex-col mt-6">
+                                <mat-label
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                    <!-- Would you like to add any additional comments for the Brand? (Optional) -->
+                                    Mention the top reasons why the brand should select your proposal(Optional)
+                                </mat-label>
+                                <mat-form-field class="fuse-mat-textarea flex-auto">
+                                    <textarea matInput [formControlName]="'comment'"  placeHolder="1. Consistent performance
+2. Higher engagement 
+3. Seamless style of brand integration 
+4. Flxible about changes |"
+                                        [rows]="10"></textarea>
+                                    <!-- <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:menu-alt-2'">
+                                    </mat-icon> -->
+                                </mat-form-field>
+                            </div>
+
+                            <div class="flex justify-end mt-8">
+                                <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button"
+                                    matStepperPrevious>
+                                    Back
+                                </button>
+                                <button class="px-8 mr-2" mat-flat-button [color]="'warn'" type="reset"
+                                    (click)="applicationStepper.reset();">
+                                    <!-- (click)="applicationStepper.reset();"> -->
+                                    Reset
+                                </button>
+                                <button class="px-8" mat-flat-button [color]="'primary'" type="button"
+                                    (click)="toggleReviewMode(true)">
+                                    Preview
+                                </button>
+                            </div>
+                        </mat-step>
+                    </mat-stepper>
+                </form>
+            </div>
+        </div>
+    </ng-container>
+
+    <!-- Review Mode -->
+    <ng-container *ngIf="reviewMode">
+        <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
+            <div class="w-full max-w-3xl">
+                <div class="mt-4">
+                    <div class="text-3xl font-bold" style="text-align: center;">{{ "Review your proposal" }}</div>
+                </div>
+
+                <app-review-proposal [proposalForm]="applicationForm" [userName]="userName" [selectedChannel]="selectedChannelName" [selectedChannelName]="selectedChannel"
+                    [campaignPrice]="campaign.budget"  [plateform_type]="channelList[0].plateform_type">
+                </app-review-proposal>
+
+                <!-- Alert -->
+                <!-- <bmi-alert class="mt-8" *ngIf="alert.message" [appearance]="'outline'" [showIcon]="false"
+                    [type]="alert.type" [@shake]="alert.type === 'error'">
+                    {{ alert.message }}
+                </bmi-alert> -->
+
+                <div class="flex justify-end mt-8">
+                    <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button" [disabled]="loading"
+                        (click)="backFromPreview()">
+                        Edit
+                    </button>
+                    <button class="px-8" mat-flat-button [color]="'primary'" type="button" (click)="checkChannel()"
+                        [disabled]="loading">
+                        <mat-progress-spinner *ngIf="loading" [diameter]="24" [mode]="'indeterminate'">
+                        </mat-progress-spinner>
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+</div>

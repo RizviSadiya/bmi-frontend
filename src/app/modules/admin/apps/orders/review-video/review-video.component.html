@@ -1,0 +1,92 @@
+<style>
+    /* .cdk-overlay-pane{height: 90vh;}  */
+    .mat-dialog-container{
+        padding: 0;
+    }
+</style>
+
+
+<div class="review-video-popup">
+    <span class="closebtn" matDialogClose>X</span>
+    <form [formGroup]="reviewForm">
+    <div class="review-video-popup-inner pl-20 pr-20 pt-20 pd-20">
+
+        <h1 *ngIf="order.stage ==2 && order.action_taken !== 'Approved'" class="font-bold videoscript-header text-3xl mb-8 text-center"><span class="redrtext">{{ headerText }}</span> <span></span></h1>
+        <h1 *ngIf="headerText==='Review Video Preview' && order.stage ==3 && order.stage != 2  && userDetail.userType==='brand' "  class="font-bold videoscript-header text-3xl mb-8 text-center"><span >Video Preview </span> <br> <br>
+            <span class="redrtext"> <a *ngIf="order.stage === 3" role="button" target="_blank" class="cursor-pointer"
+            [href]="order.video_preview"> <u> Click to view </u> </a> </span></h1>
+        <h1 *ngIf="headerText==='Review Live Video' && order.stage ==4 && order.stage != 2  && userDetail.userType==='brand'" class="font-bold videoscript-header text-3xl mb-8 text-center"><span >Live Video </span> <br>
+            <span class="redrtext"> <a *ngIf="order.stage === 4" role="button" target="_blank" class="cursor-pointer"
+            [href]="order.live_video"> <u> Click to view </u> </a> </span></h1>
+
+        <ng-container *ngIf="(order?.stage === 1 && order?.action_taken === 'Approved') 
+        || (order?.stage === 2 && order?.stage === '2' 
+            && (order?.action_taken === 'Submit' 
+                || order?.action_taken === 'RequestChange')); else stageThree">
+            <div class="whitebg-section mb-10" *ngIf="order?.video_script_desc !='null'&& order.video_script_desc !=null">
+                <p [innerHtml]=" order.video_script_desc" ></p> 
+            </div>
+            <div class="text-center"  *ngIf="order?.video_script">
+                <a role="button" target="_blank" class="cursor-pointer downloadbtn" [href]="order.video_script">
+                Download file 
+                </a>
+            </div>
+        </ng-container>
+
+        <ng-template #stageThree>
+            <h1 *ngIf="headerText==='Review Video Script'"class="font-bold videoscript-header text-3xl mb-8 text-center"><span ></span>
+                <!-- {{headerText}} -->
+            </h1>
+            <!-- <div class="whitebg-section mb-10" *ngIf="headerText==='Review Video Script'|| order?.video_script_desc !='null' || order.video_script ==='null' || order.video_script_desc !=null && order?.stage !=3 && order?.stage !=4"> -->
+            <div class="whitebg-section mb-10" *ngIf="headerText==='Review Video Script' && order?.video_script_desc !='null' &&order?.video_script_desc !=null  && order?.stage !=3 && order?.stage !=4">
+                <p [innerHtml]=" order.video_script_desc" ></p> 
+            </div>
+            <div class="text-center"  *ngIf="headerText==='Review Video Script' && order?.video_script">
+                <a role="button" target="_blank" class="cursor-pointer downloadbtn" [href]="order.video_script">
+                Download file 
+                </a>
+            </div>
+        </ng-template>
+
+        <div class="inputarea-section mt-4" *ngIf=" order.stage != 2 && order.stage != 4 && userDetail.userType==='brand'" >
+            <textarea matInput placeholder="Enter Promo text and link" required formControlName="promo_text_link" col="8"></textarea>
+            <span *ngIf=" order.stage != 2 && order.stage != 4 && userDetail.userType==='brand'">
+                <mat-error *ngIf="submitted && reviewForm.get('promo_text_link').hasError('required')">
+                    Please enter Promo text and link.
+                </mat-error>
+            </span>
+        </div>
+
+        <div class="inputarea-section  mt-4" *ngIf="userDetail.userType==='brand'">
+            <input matInput placeholder="Mention your comments here" required formControlName="comment">
+            <mat-error *ngIf="errorShow !=1 && submitted && reviewForm.get('comment').hasError('required')">
+                Please enter comment.
+            </mat-error>
+        </div>
+
+        <div class="text-center my-2 px-3 rounded-full text-sm font-medium text-red-600"
+            *ngIf="order.payment_term == 1 && order.stage == 2 && userDetail.user_type==='brand'">
+            {{ "Balance deal amount of " + (order.pay_amount | currency : (order.currency ? order.currency : 'INR')
+            : 'symbol' : '1.0-2') + " is due for payment on approval of video concept/script." }}
+            <!-- {{ "Amount to pay " + (order.pay_amount | currency : (order.currency ? order.currency : 'INR')
+            : 'symbol' : '1.0-2') + " will be deducted from you wallet if available otherwise from wallet and your bank account" }} -->
+        </div> 
+
+        <div class="buttonarea-section text-center" *ngIf="userDetail.userType==='brand'">
+            <button  *ngIf="order.payment_term == 1" type="button" class="requestbtn" (click)="paywalletPayment()" >
+                Pay With Wallet
+            </button>
+            <button  *ngIf="order.payment_term == 1" type="button" class="requestbtn"  (click)="payUpiPayment()">
+                Pay With UPI
+            </button>
+            <button  class="requestbtn" (click)="requestChange();" >
+                Request Change
+            </button>
+            <button class="apprvbtn" *ngIf="order.payment_term == 0" (click)="approve();" >
+                Approve
+            </button>
+        </div>
+
+    </div>
+    </form>
+</div>

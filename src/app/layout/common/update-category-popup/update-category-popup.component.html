@@ -1,0 +1,59 @@
+<div class="flex flex-col flex-auto md:w-160 md:min-w-160">
+    <form [formGroup]="categoryForm" autocomplete="off">
+        <div class="m-4">
+            <div>
+                <ng-container *ngIf="preferences.length > 0; else firstTimeUser">
+                    <div class="text-center mb-4 py-0.5 px-3 rounded-full text-2xl font-bold text-black-600">
+                        Update Preferences
+                    </div>
+                </ng-container>
+                <ng-template #firstTimeUser>
+                    <div class="text-center py-0.5 px-3 rounded-full text-2xl font-bold text-black-600">
+                        What are you interested in?
+                    </div>
+                    <div class="text-center mb-4 py-0.5 text-lg font-medium">
+                        Select some categories you are interested in to help personalize your BookMyInfluencers
+                        experience,
+                        starting with finding influencers to invite.
+                    </div>
+                </ng-template>
+                <div class="checkbox-input">
+                    <div *ngFor="let item of categoriesData; let i=index">
+                        <label>
+                            <input type="checkbox" [value]="item.name" [checked]="checkIfValueSelected(item.name)"
+                                (change)="onSelectionChange($event)" />
+                            {{ item.name }}
+                        </label>
+                    </div>
+                </div>
+                <mat-error *ngIf="this.categoryForm.controls['category'].value.length < 1 || this.categoryForm.controls['category'].value.length > 5"
+                    class="flex justify-center">
+                    Please select min 1 and max 5 categories.
+                </mat-error>
+            </div>
+        </div>
+        <div class="flex items-center justify-center mt-4">
+            <ng-container *ngIf="preferences.length > 0; else firstTimeButtons">
+                <button mat-flat-button matDialogClose class="mr-2">
+                    Cancel
+                </button>
+                <button mat-flat-button [color]="'primary'" (click)="proceed('/dashboard');"
+                    [disabled]="this.categoryForm.controls['category'].value.length < 1 || this.categoryForm.controls['category'].value.length > 5">
+                    Update
+                </button>
+            </ng-container>
+            <ng-template #firstTimeButtons>
+                <button mat-flat-button [color]="'warn'" *ngIf="preferences.length === 0" class="mr-2"
+                    (click)="proceed('/apps/campaigns/post');"
+                    [disabled]="this.categoryForm.controls['category'].value.length < 1 || this.categoryForm.controls['category'].value.length > 5">
+                    Launch Your First Campaign
+                </button>
+                <button mat-flat-button [color]="'primary'" *ngIf="preferences.length === 0"
+                    (click)="proceed('/dashboard');"
+                    [disabled]="this.categoryForm.controls['category'].value.length < 1 || this.categoryForm.controls['category'].value.length > 5">
+                    Start Exploring Influencers
+                </button>
+            </ng-template>
+        </div>
+    </form>
+</div>

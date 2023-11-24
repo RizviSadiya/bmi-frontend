@@ -1,0 +1,273 @@
+<!-- <div class="flex flex-col flex-auto w-full">
+    <div class="mx-4">
+        <div class="text-center py-0.5 px-3  text-2xl font-medium text-black-600">
+            <mat-stepper [linear]="true" orientation="horizontal" labelPosition="bottom" [selectedIndex]="orderStage"
+                #progressStepper>
+                <ng-template matStepperIcon="edit">
+                    <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
+                </ng-template>
+                <mat-step [completed]="orderStatus.stage == 2 || orderStatus.stage == 3 || orderStatus.stage == 4">
+                    <ng-template matStepLabel>Campaign Resource</ng-template>
+                </mat-step>
+                <mat-step [completed]="orderStatus.stage == 3 || orderStatus.stage == 4">
+                    <ng-template matStepLabel>Video Script</ng-template>
+                </mat-step>
+                <mat-step [completed]="orderStatus.stage == 4">
+                    <ng-template matStepLabel>Video Preview</ng-template>
+                </mat-step>
+                <mat-step [completed]="orderStatus.stage == 4 && orderStatus.action_taken === 'Approved'">
+                    <ng-template matStepLabel>Live Video</ng-template>
+                </mat-step>
+            </mat-stepper>
+        </div>
+    </div>
+</div> -->
+
+<div class="container">
+    <ul class="progressbar">
+        <li [ngClass]="{'completed': (orderStatus.stage == 1 && orderStatus.action_taken === 'Approved' && orderStatus.action_taken === 'Submit')
+                        || orderStatus.stage == 2 || orderStatus.stage == 3 || orderStatus.stage == 4,
+                        'active': orderStatus.stage == 1 && orderStatus.action_taken !== 'Approved'}">
+                        Campaign brief  <br>
+             {{orderStatus.camp_script_approval_date | date}}
+            <span *ngIf="(orderStatus.stage == 1 && orderStatus.action_taken === 'Approved')
+            || orderStatus.stage == 2 || orderStatus.stage == 3 || orderStatus.stage == 4">Approved</span>
+            <!-- (click)="onReviewCampaignResourceClick();" -->
+            <ng-container *ngIf="userType === 'INFLUENCER'">
+                <span *ngIf="orderStatus.stage == 1 && orderStatus.action_taken === 'Submit'
+                && (orderStatus.job_description !=null || orderStatus.template_script !=null )">
+                <!-- && (orderStatus.action_taken === 'Place' || orderStatus.action_taken === 'Submit')"> -->
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer" (click)="onReviewCampaignResourceClick();"
+                        matTooltip="review Campaign brief">
+                        <span class="leading-relaxed whitespace-nowrap" style="width: 100px;">Review</span>
+                        
+                    </span>
+                </span>
+                <!-- <span *ngIf="orderStatus.stage == 1 || orderStatus.action_taken === 'Submit'" class="leading-relaxed whitespace-nowrap" style="width: 100px;">Approved</span> -->
+
+                <span *ngIf="orderStatus.stage == 1 
+                && (orderStatus.job_description ===null && orderStatus.template_script ===null || orderStatus.template_script ==='')">
+                <!-- && (orderStatus.action_taken === 'Place' || orderStatus.action_taken === 'Submit')"> -->
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer"
+                        matTooltip="Awaited Campaign brief">
+                        <span class="leading-relaxed whitespace-nowrap" style="width: 100px;">Awaiting</span>
+                    </span>
+                </span>
+                <!-- <span *ngIf="orderStatus.stage == 1 || orderStatus.action_taken === 'Approved'
+                && (orderStatus.job_description !=null|| orderStatus.template_script !=null)">
+                && (orderStatus.action_taken === 'Place' || orderStatus.action_taken === 'Submit')">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer"
+                        matTooltip="Awaited Campaign Resource">
+                        <span class="leading-relaxed whitespace-nowrap" style="width: 100px;">Approved</span>
+                    </span>
+                </span> -->
+                <span *ngIf="orderStatus.stage == 1 && orderStatus.action_taken === 'RequestChange'">
+                    <div class="items-center leading-5 font-bold text-orange-600">
+                        Changes requested
+                    </div>
+                </span>
+            </ng-container>
+            <ng-container *ngIf="userType === 'BRAND'">
+                <span *ngIf="orderStatus.stage === 1 && orderStatus.action_taken === 'Submit'">
+                    <div class="items-center leading-5 font-bold text-orange-600" (click)="onReviewCampaignResourceClick();">
+                        Pending approval 
+                        <!-- Campaign brief submitted -->
+                    </div>
+                </span>
+                <span *ngIf="orderStatus.stage == 1 && (orderStatus.job_description === null && orderStatus.template_script===null || orderStatus.template_script ==='')">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer" (click)="onSubmitCampaignResourceClick();"
+                        matTooltip="re-submit campaign brief">
+                        <span class="leading-relaxed whitespace-nowrap">Campaign brief submit</span>
+                    </span>
+                </span>
+                <span *ngIf="orderStatus.stage == 1 && orderStatus.action_taken === 'RequestChange'">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer" (click)="onSubmitCampaignResourceClick();"
+                        matTooltip="re-submit campaign brief">
+                        <span class="leading-relaxed whitespace-nowrap">Re Submit</span>
+                    </span>
+                </span>
+                <span *ngIf="orderStatus.stage == 1 && orderStatus.action_taken === 'Submit'">
+                    <div class="items-relaxed leading-5 font-bold text-orange-600" (click)="onReviewCampaignResourceClick();">
+                        Pending approval
+                            <!-- Campaign brief submitted    -->
+                 </div>
+                </span>
+            </ng-container>
+        </li>
+        <li [ngClass]="{'completed': (orderStatus.stage == 2 && orderStatus.stage == '2' && orderStatus.action_taken === 'Approved')
+                                    || orderStatus.stage == 3 || orderStatus.stage == 4,
+                        'active': orderStatus.stage == 2 && orderStatus.action_taken !== 'Approved'}">
+                        
+            video script <button *ngIf="orderStatus.action_taken === 'Submit' && orderStatus.stage == 2 && orderStatus.stage == '2' && userType !=='INFLUENCER' && orderStatus.action_taken === 'Approved'
+            && order.payment_term===0 || order?.video_script_approval_date ==''"  style="height: 34px; width: 49px;" [matTooltip]="'Mark As Approved'"(click)="markAsApproved()"><mat-icon>check_box</mat-icon></button> <br/>
+            
+            {{orderStatus.video_script_approval_date | date}}
+            
+            <span *ngIf="(orderStatus.stage == 2 && orderStatus.stage == '2' && orderStatus.action_taken === 'Approved')
+                        || orderStatus.stage == 3 || orderStatus.stage == 4" >Approved</span>
+                        <!-- (click)="onReviewVideoScriptClick('Review Video Script');" -->
+            <ng-container *ngIf="userType === 'INFLUENCER'">
+                <span *ngIf="orderStatus.stage == 1 && orderStatus.action_taken === 'Approved'">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer"
+                        (click)="onUploadScriptClick('Upload Video Script');" matTooltip="Upload Video Script">
+                        <span class="leading-relaxed whitespace-nowrap">Submit Script</span>
+                    </span>
+                </span>
+                <span *ngIf="orderStatus.stage == 2 && orderStatus.action_taken === 'Submit'">
+                    <div class="items-center leading-5 font-bold text-orange-600"  (click)="onReviewVideoScriptClick('Review Video Script');">
+                       Script Submitted
+                        <!-- <span class="leading-relaxed whitespace-nowrap">Review</span> -->
+                    </div>
+                    <!-- <span *ngIf="orderStatus.stage == 2 && orderStatus.action_taken === 'Submit'">
+                        <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                                bg-orange-600 text-on-warn-600 cursor-pointer"
+                            (click)="onReviewVideoScriptClick('Review Video Script');" matTooltip="Review Video Script">
+                            <span class="leading-relaxed whitespace-nowrap">Review</span>
+                        </span>
+                    </span> -->
+                </span>
+              
+                <span *ngIf="orderStatus.stage == 2 && orderStatus.action_taken === 'RequestChange'">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer"
+                        (click)="onUploadScriptClick('Re-submit video script');" matTooltip="Re-Submit Video Script">
+                        <span class="leading-relaxed whitespace-nowrap">Re-Submit</span>
+                    </span>
+                </span>
+            </ng-container>
+            <ng-container *ngIf="userType === 'BRAND'">
+                <span *ngIf="orderStatus.stage == 1 && orderStatus.action_taken === 'Approved'">
+                    <div class="items-center font-bold text-orange-600">
+                        Awaited 
+                        <!-- Approval -->
+                    </div>
+                </span>
+                <span *ngIf="orderStatus.stage == 2 && orderStatus.action_taken === 'Submit'">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer"
+                        (click)="onReviewVideoScriptClick('Review Video Script');" >
+                        <span class="leading-relaxed whitespace-nowrap" >Review</span>
+                        <!-- matTooltip="Review Video Script" -->
+                    </span>
+                </span>
+                <span *ngIf="orderStatus.stage == 2 && orderStatus.action_taken === 'RequestChange'">
+                    <div class="items-center leading-5 font-bold text-orange-600">
+                        Changes requested
+                    </div>
+                </span>
+            </ng-container>
+        </li>
+
+        
+        <li [ngClass]="{'completed': (orderStatus.stage == 3 && orderStatus.action_taken === 'Approved') || orderStatus.stage == 4,
+                        'active': orderStatus.stage == 3 && orderStatus.action_taken !== 'Approved'}">
+            video preview <br>
+              {{orderStatus.video_prev_approval_date | date}}
+            <span *ngIf="(orderStatus.stage == 3 && orderStatus.action_taken === 'Approved') || orderStatus.stage == 4" >Approved</span>
+            <!-- (click)="onviewprevideo();" -->
+            <ng-container *ngIf="userType === 'INFLUENCER'">
+                <span *ngIf="orderStatus.stage == 2 && orderStatus.action_taken === 'Approved'">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer"
+                        (click)="onUploadScriptClick('Video Preview');" matTooltip="Video Preview">
+                        <span class="leading-relaxed whitespace-nowrap">Submit</span>
+                    </span>
+                </span>
+                <span *ngIf="orderStatus.stage == 3 && orderStatus.action_taken === 'Submit'">
+                    <span class="items-center leading-5 font-bold text-orange-600">
+                        Submitted
+                    </span>
+                </span>
+                <span *ngIf="orderStatus.stage == 3 && orderStatus.action_taken === 'RequestChange'">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer"
+                        (click)="onUploadScriptClick('Submit Video Preview');" matTooltip="Re-Submit Preview">
+                        <span class="leading-relaxed whitespace-nowrap">Re-Submit</span>
+                    </span>
+                </span>
+            </ng-container>
+            <ng-container *ngIf="userType === 'BRAND'">
+                <span *ngIf="orderStatus.stage == 2 && orderStatus.action_taken === 'Approved'">
+                    <div class="items-center font-bold text-orange-600">
+                        Awaited 
+                        <!-- Approval -->
+                    </div>
+                </span>
+                <span *ngIf="orderStatus.stage == 3 && orderStatus.action_taken === 'Submit'">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer"
+                        (click)="onReviewVideoScriptClick('Review Video Preview');" matTooltip="Review Video Preview">
+                        <span class="leading-relaxed whitespace-nowrap">Review</span>
+                    </span>
+                </span>
+                <span *ngIf="orderStatus.stage == 3 && orderStatus.action_taken === 'RequestChange'">
+                    <div class="items-center leading-5 font-bold text-orange-600">
+                        Changes Requested
+                    </div>
+                </span>
+            </ng-container>
+        </li>
+        <li [ngClass]="{'completed': orderStatus.stage == 4 && orderStatus.action_taken === 'Approved',
+                        'active': orderStatus.stage == 4 && orderStatus.action_taken !== 'Approved'}">
+            <ng-container *ngIf="orderStatus.stage == 4 && orderStatus.action_taken === 'Approved'; else nonClickableLink">
+                <a  placeholder="View live video" class="link"  (click)="onviewlivevideo();" >
+                    live video &nbsp;
+                    <mat-icon class="icon-size-4" [svgIcon]="'heroicons_outline:play'" style="vertical-align: middle;margin-top: -4px;"></mat-icon> <br>
+                     {{orderStatus.live_video_approval_date | date}}
+                </a>
+            </ng-container>
+            <ng-template #nonClickableLink>
+                live video
+            </ng-template>
+            <span *ngIf="orderStatus.stage == 4 && orderStatus.action_taken === 'Approved'"> Approved</span>
+            <!-- (click)="onviewlivevideo();" -->
+            <ng-container *ngIf="userType === 'INFLUENCER'">
+                <span *ngIf="orderStatus.stage == 3 && orderStatus.action_taken === 'Approved'">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer"
+                        (click)="onUploadScriptClick('Submit Live Video');" matTooltip="Submit Live Video">
+                        <span class="leading-relaxed whitespace-nowrap">Submit</span>
+                    </span>
+                </span>
+                <span *ngIf="orderStatus.stage == 4 && orderStatus.action_taken === 'Submit'">
+                    <div class="items-center leading-5 font-bold text-orange-600" >
+                        Submitted
+                    </div>
+                </span>
+                <span *ngIf="orderStatus.stage == 4 && orderStatus.action_taken === 'RequestChange'">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer"
+                        (click)="onUploadScriptClick('Re-Submit Live Video');" matTooltip="Re-Submit Video">
+                        <span class="leading-relaxed whitespace-nowrap">Re-Submit</span>
+                    </span>
+                </span>
+            </ng-container>
+            <ng-container *ngIf="userType === 'BRAND'">
+                <span *ngIf="orderStatus.stage == 3 && orderStatus.action_taken === 'Approved'" >
+                    <div class="items-center font-bold text-orange-600">
+                        Awaited 
+                        <!-- Approval -->
+                    </div>
+                </span>
+                <span *ngIf="orderStatus.stage == 4 && orderStatus.action_taken === 'Submit'">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5  tracking-wide
+                            bg-orange-600 text-on-warn-600 cursor-pointer"
+                        (click)="onReviewVideoScriptClick('Review Live Video');" matTooltip="Review Live Video">
+                        <span class="leading-relaxed whitespace-nowrap">Review</span>
+                    </span>
+                </span>
+                <span *ngIf="orderStatus.stage == 4 && orderStatus.action_taken === 'RequestChange'">
+                    <div class="items-center leading-5 font-bold text-orange-600" >
+                        Changes Requested
+                    </div>
+                </span>
+            </ng-container>
+        </li>
+    </ul>
+</div>

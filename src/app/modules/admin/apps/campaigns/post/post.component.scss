@@ -1,0 +1,89 @@
+.radio-input {
+    padding: 10px;
+    input[type="radio"] {
+        display: none;
+        &:not(:disabled) ~ label {
+            cursor: pointer;
+            &:hover {
+                background: rgb(250, 248, 248);
+            }
+        }
+        &:disabled ~ label {
+            cursor: not-allowed;
+            color: gray;
+            background: lightgray;
+        }
+        &:checked + label {
+            background: var(--fuse-primary-300);
+            color: var(--fuse-on-primary);
+            &:hover {
+                background: #818cf8;
+            }
+            &::after {
+                color: #3d3f43;
+                font-family: FontAwesome;
+                border: 2px solid #473fce;
+                content: "✔";
+                font-size: 24px;
+                position: absolute;
+                top: -25px;
+                left: 50%;
+                transform: translateX(-50%);
+                height: 50px;
+                width: 50px;
+                line-height: 50px;
+                text-align: center;
+                border-radius: 50%;
+                background: white;
+                box-shadow: 0px 2px 5px -2px rgb(0 0 0 / 25%);
+            }
+        }
+    }
+    label {
+        display: block;
+        background: white;
+        border: 1px solid #473fce;
+        border-radius: 5px;
+        padding: 2rem;
+        text-align: center;
+        justify-content: center;
+        box-shadow: 0px 3px 10px -2px rgb(161 170 166 / 50%);
+        position: relative;
+        font-weight: 400;
+    }
+    .img-circle {
+        border-radius: 50%;
+    }
+    .img-lg {
+        width: 44px !important;
+        height: 44px !important;
+    }
+}
+
+.custom-tooltip {
+    background: var(--fuse-primary);
+    color: var(--fuse-on-primary);
+    font-size: 16px;
+    white-space: pre-line;
+    text-align: center;
+}
+
+.mat-mb {
+    -webkit-user-select: auto;
+    user-select: auto;
+    display: inline-block;
+    order: 0;
+    line-height: inherit;
+    padding-left: 8px;
+    padding-right: 0;
+    font: initial;
+}
+
+.namesection li img {
+    width: 20px;
+    height: 20px;
+}
+
+.textcolorred{
+    color:red;
+}

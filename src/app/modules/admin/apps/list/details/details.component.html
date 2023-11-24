@@ -1,0 +1,90 @@
+<div class="addlistpopup">
+    <ng-container *ngIf="list==1">
+        <div class="m-4">
+            <!-- List -->
+            <mat-form-field style="width: 100%;">
+                <mat-label class="flex flex-row font-medium mb-2">
+                    Platform type
+                </mat-label>
+                <mat-select [value]="1">
+                    <mat-option [value]="1" (click)="plateform('1')">Youtube</mat-option>
+                    <mat-option [value]="2" (click)="plateform('2')">Instagram</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <!-- <mat-error *ngIf="errorMsg" class="-mt-4 text-sm">
+                {{ errorMsg }}
+            </mat-error> -->
+            <mat-form-field style="width: 100%;">
+                <mat-label class="flex flex-row font-medium mb-2">
+                    List Name
+                </mat-label>
+                <input matInput placeholder="List Name" [(ngModel)]="listname" (input)="onListNameChange();" />
+            </mat-form-field>
+            <mat-error *ngIf="errorMsg" class="-mt-4 text-sm">
+                {{ errorMsg }}
+            </mat-error>
+            <!-- Edit Actions --> 
+            <ng-container >
+                <div class="flex items-center justify-between mt-4">
+                    <!-- Close -->
+                    <button mat-flat-button [color]="'primary'" [disabled]="listname?.length > 25" (click)="createListName();">
+                    <!-- <button mat-flat-button [color]="'primary'" [disabled]="listname ==''" (click)="createListName();"> -->
+                        Create
+                    </button>
+                    <button mat-flat-button matDialogClose>
+                        Close
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+</div>
+
+
+<div class="addlistpopup">
+    <ng-container *ngIf="list !=1">
+        <div class="m-4">
+            <!-- List -->
+            <mat-form-field style="width: 100%;">
+                <mat-label class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                    List Name
+                </mat-label>
+                <input matInput placeholder="List Name" [(ngModel)]="list.name" (input)="onListNameChange();" />
+            </mat-form-field>
+            <mat-error *ngIf="errorMsg" class="-mt-4 text-sm">
+                {{ errorMsg }}
+            </mat-error>
+
+            <!-- <h6 class="mt-2"><u>Channel(s) added to the List:</u></h6>
+            <ng-container *ngFor="let channel of list.list_data; trackBy: trackByFn">
+                <div class="flex flex-wrap items-center mt-2">
+                    <div
+                        class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-gray-500 bg-gray-100">
+                        <span class="text-md font-medium whitespace-nowrap">{{ channel.channel.title }}</span>
+                    </div>
+                </div>
+            </ng-container> -->
+
+            <!-- Edit Actions -->
+            <ng-container *ngIf="list.id">
+                <div class="flex items-center justify-between mt-4">
+                    <!-- <div class="flex items-center space-x-2"> -->
+                        <!-- Delete -->
+                        <!-- <button mat-icon-button [color]="'warn'" (click)="deleteList(list)">
+                            <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                        </button> -->
+                    <!-- </div> -->
+                    <!-- Close -->
+                    <button mat-flat-button [color]="'primary'" (click)="updateListName();">
+                        Update
+                    </button>
+                    <button mat-flat-button matDialogClose>
+                        Close
+                    </button>
+                </div>
+            </ng-container>
+          
+        </div>
+    </ng-container>
+
+</div>

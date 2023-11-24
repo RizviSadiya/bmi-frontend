@@ -1,0 +1,46 @@
+<div class="grid grid-cols-1 w-full min-w-0" #topdiv id="topdiv" >
+    <div *ngFor="let channel of channels">
+        <influencer-channel [channel]="channel" [creditCost]="creditCost" (defaultChannelChanged)="defaultChannelChanged($event);"
+        (channelDeleted)="channelDeleted($event);">
+        </influencer-channel>
+        
+    </div>
+    <div class="grid grid-cols-1 w-full min-w-0" #focus>
+            <!-- <mat-paginator #paginator  [pageSize]="pageSize"  
+            [showFirstLastButtons]="false" [length]="channels.totalCount"
+            [pageIndex]="currentPage" (page)="getPaginatorData($event)"  href="#home-top" target="_top">
+            <button onClick="window.scrollTo(0, 0)"> [pageSizeOptions]="[5, 10, 20]"</button>
+        </mat-paginator> -->
+        <ng-container *ngIf="channels?.length>0">
+            <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+            [length]="total" [pageIndex]="currentPage" (page)="onChangePage($event)"
+            href="#_top" target="_top" (click)="scroll(topdiv)">
+        
+
+        </mat-paginator>
+        </ng-container>
+     
+
+       </div>
+</div>
+<!-- <div class="grid grid-cols-1 w-full min-w-0" #topdiv id="topdiv" *ngIf="filter==='insta'" >
+    <div *ngFor="let channel of channels">
+        <insta-channel-list [channel]="channel" (defaultChannelChanged)="defaultChannelChanged($event);"
+        (channelDeleted)="channelDeleted($event);">
+        </insta-channel-list>
+        
+    </div>
+    <div class="grid grid-cols-1 w-full min-w-0" #focus>
+         
+        <ng-container *ngIf="pagination==true">
+            <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+            [length]="total" [pageIndex]="currentPage" (page)="onChangePage($event)"
+            href="#_top" target="_top" (click)="scroll(topdiv)">
+        
+
+        </mat-paginator>
+        </ng-container>
+     
+
+       </div>
+</div> -->

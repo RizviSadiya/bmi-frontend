@@ -1,0 +1,390 @@
+<div class="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0">
+    <div
+        class="md:flex md:items-center md:justify-end w-full sm:w-auto md:h-full md:w-1/2 py-8 px-4 sm:p-12 md:p-16 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card">
+        <div class="divcenter">
+            <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
+                <!-- Logo -->
+                <div class="flex text-center items-center justify-center">
+                    <div class="w-40 cursor-pointer" [routerLink]="['/home']">
+                        <img src="assets/images/logo/bmi-logo.png" alt="BMI Logo">
+                    </div>
+                </div>
+    
+                <!-- Alert -->
+                <bmi-alert class="mt-8 -mb-4" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false"
+                    [type]="alert.type" [@shake]="alert.type === 'error'">
+                    {{alert.message}}
+                </bmi-alert>
+    
+                <!-- Sign Up form -->
+                <form class="mt-2" [formGroup]="signUpForm" #signUpNgForm="ngForm" autocomplete="off" novalidate>
+    
+                    <div class="flex items-center justify-center py-3 mb-2" *ngIf="selectedEmail">
+                        <span
+                            class="flex w-7 h-full font-bold text-sm px-2.5 py-1 rounded-full uppercase bg-red-200 text-red-800">
+                            {{ selectedEmail.charAt(0) }}
+                        </span>
+                        <span class="ml-1">{{ selectedEmail }}</span>
+                    </div>
+                    <div *ngIf="!userType" class="card-radio">
+                        <div class="user-type-input">
+                            <input type="radio" id="influencer" name="type" value="influencer"
+                                (change)="selectUserType('influencer');">
+                            <label for="influencer">
+                                <h6 class="text-bold my-2">I'M AN INFLUENCER</h6>
+                            </label>
+                        </div>
+                        <div class="user-type-input">
+                            <input type="radio" id="brand" name="type" value="brand" (change)="selectUserType('brand');">
+                            <label for="brand">
+                                <h6 class="text-bold my-2">I'M A BRAND</h6>
+                            </label>
+                        </div>
+    
+                        <button class="btn btn-primary" routerLink="/sign-up">Back To SignUp Page</button>
+                    </div>
+                    <div *ngIf="userType === 'influencer'">
+    
+                        <div class="flex items-center justify-center mb-4">
+                            <span
+                                class="flex w-25 h-full font-bold text-xs px-2.5 py-0.5 rounded-full uppercase bg-green-200 text-green-800">
+                                Influencer
+                            </span>
+                        </div>
+                        
+    
+                        <!-- Name field -->
+                        <mat-form-field class="w-full">
+                            <!-- <mat-label>Full name</mat-label> -->
+                            <input id="name" matInput formControlName="name" placeholder="Full name">
+                            <mat-error *ngIf="signUpForm.get('name').hasError('required')">
+                                Full name is required
+                            </mat-error>
+                            <mat-error *ngIf="signUpForm.get('name').hasError('pattern')">
+                                Enter valid name
+                            </mat-error>
+                        </mat-form-field>
+    
+                        <!-- Whatsapp Number field -->
+                        <mat-form-field class="w-full">
+                            <!-- <mat-label>Whatsapp Number</mat-label> -->
+                            <input id="mobile" matInput formControlName="phone" placeholder="Whatsapp Number">
+                            <ng-container matPrefix class="flex items-center">
+                                <span [matTooltip]="'India'" class="hidden sm:flex w-6 h-4 mr-1 overflow-hidden"
+                                    [style.background]="'url(\'/assets/images/apps/contacts/flags.png\') no-repeat 0 0'"
+                                    [style.backgroundSize]="'24px 3876px'"
+                                    [style.backgroundPosition]="'-1px -2245px'"></span>
+                                <span class="sm:ml-3 font-mono">+91</span>
+                            </ng-container>
+                            <mat-error *ngIf="submitted && signUpForm.get('phone').hasError('required')">
+                                Whatsapp number is required
+                            </mat-error>
+                            <mat-error *ngIf="submitted && signUpForm.get('phone').hasError('pattern')">
+                                Invalid Whatsapp number
+                            </mat-error>
+                        </mat-form-field>
+    
+                        <!-- <div class="flex">
+                          
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-icon matPrefix [svgIcon]="'heroicons_outline:search'"></mat-icon>
+                                <input matInput formControlName="channel_link" #typevalue [matAutocomplete]="matAutocomplete"
+                                    [placeholder]="'https://youtube.com/c/'" (keyup)="onKeydown(typevalue.value)"  (keyup.enter)="onEnter()">
+                               
+                            </mat-form-field>
+                            <mat-autocomplete class="max-h-128 mt-1 rounded" #matAutocomplete="matAutocomplete"
+                                (optionSelected)="onResultSelection($event.option.value)">
+                                <mat-option *ngFor="let result of filteredOptions"
+                                    class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
+                                    [value]="result.title">
+                                    {{ result.title }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                        <span *ngIf="submitted && channel.channel_link.errors" class="flex error-block">
+                            <span *ngIf="channel.channel_link.errors.required">Channel Name is required</span>
+                        </span> -->
+                        <!-- Channel Name field -->
+                        <!-- <mat-form-field class="w-full">
+                            <mat-label>Channel Name</mat-label>
+                            <input id="channelName" matInput formControlName="channel_url">
+                            <span matPrefix>https://youtube.com/c/</span>
+                           
+                        </mat-form-field> -->
+                        <!-- <mat-form-field class="w-full" *ngIf="allChannels?.length>0" >
+                            <mat-label>Channels/Profile</mat-label>
+                            <mat-select formControlName="channel_url">
+                                <mat-option value="">- Please Select -</mat-option>
+                              
+                                <mat-option *ngFor="let channel of allChannels " [value]="channel.canonical_name">{{channel.canonical_name}}</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submitted && signUpForm.get('language').hasError('required')">
+                                Language is required
+                            </mat-error>
+                        </mat-form-field> -->
+                        <!-- <mat-form-field class="w-full" *ngIf="!allChannels?.length">
+                            <mat-label>Social Profile</mat-label>
+    
+                            <mat-icon matPrefix svgIcon="feather:youtube" class="text-red-600 pt-1"></mat-icon>
+                            <input matInput formControlName="channel_url" #typevalue [matAutocomplete]="matAutocomplete"
+                                [placeholder]="'Your Social Handle'" (keyup)="onKeydown(typevalue.value)"  (keyup.enter)="onEnter()">
+                                <span matPrefix>https://youtube.com/c/</span>
+                        </mat-form-field> -->
+                        <!-- <mat-select>
+                            <mat-option *ngFor="let result of filteredOptions"  [value]="result.title">  {{ result.title }}</mat-option>
+                        </mat-select> -->
+                        <!-- <mat-autocomplete class="max-h-128 mt-1 rounded" #matAutocomplete="matAutocomplete"
+                                (optionSelected)="onResultSelection($event.option.value)">
+                                <mat-option *ngFor="let result of filteredOptions"
+                                    class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
+                                    [value]="result.title">
+                                    {{ result.title }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-error *ngIf="submitted && signUpForm.get('channel_url').hasError('required')">
+                                Channel Name is required
+                            </mat-error>
+                            <mat-error *ngIf="submitted && signUpForm.get('channel_url').hasError('pattern')">
+                                Invalid Channel Name
+                            </mat-error> -->
+                        <!-- Language field -->
+                        <mat-form-field class="w-full">
+                            <!-- <mat-label>Channel Language</mat-label> -->
+                            <mat-select formControlName="language">
+                                <mat-option value=""> Choose language </mat-option>
+                                <mat-option value="Hindi">Hindi</mat-option>
+                                <mat-option value="English">English</mat-option>
+                                <mat-option value="Odia">Odia</mat-option>
+                                <mat-option value="Malayalam">Malayalam</mat-option>
+                                <mat-option value="Tamil">Tamil</mat-option>
+                                <mat-option value="Bengali">Bengali</mat-option>
+                                <mat-option value="Kannada">Kannada</mat-option>
+                                <mat-option value="Punjabi">Punjabi</mat-option>
+                                <mat-option value="Assamese">Assamese</mat-option>
+                                <mat-option value="Gujarati">Gujarati</mat-option>
+                                <mat-option value="Marathi">Marathi</mat-option>
+                                <mat-option value="Telugu">Telugu</mat-option>
+                                <mat-option value="Nagpuri">Nagpuri</mat-option>
+                                <mat-option value="Chinese">Chinese</mat-option>
+                                <mat-option value="Santali">Santali</mat-option>
+                                <mat-option value="bh">Bhojpuri</mat-option>
+                                <mat-option value="Kumaoni">Kumaoni</mat-option>
+                                <mat-option value="Garhwali">Garhwali</mat-option>
+                                <mat-option value="Rajasthani">Rajasthani</mat-option>
+                                <mat-option value="Haryanvi">Haryanvi</mat-option>
+                                <mat-option value="Sanskrit">Sanskrit</mat-option>
+                                <mat-option value="Spanish">Spanish</mat-option>
+                                <mat-option value="Indonesian">Indonesian</mat-option>
+                                <mat-option value="Croatian">Croatian</mat-option>
+                                <mat-option value="Japanese">Japanese</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submitted && signUpForm.get('language').hasError('required')">
+                                Language is required
+                            </mat-error>
+                        </mat-form-field>
+    
+                        <!-- video promotion price field -->
+                        <!-- <mat-form-field class="w-full">
+                            <mat-label>Video Promotion Price</mat-label>
+                            <input matInput type="number" placeholder="Video Promotion Price" formControlName="promotion_price">
+                            <mat-select matPrefix formControlName="currency">
+                                <mat-option [value]="'INR'">INR</mat-option>
+                                <mat-option [value]="'USD'">USD</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="signUpForm.get('promotion_price').hasError('required')">
+                                Video Promotion Price is required
+                            </mat-error>
+                            <mat-error *ngIf="signUpForm.get('promotion_price').hasError('pattern')">
+                                Invalid Video Promotion Price
+                            </mat-error>
+                        </mat-form-field> -->
+    
+                        <mat-checkbox class="text-sm mb-1" [color]="'primary'" [checked]="true"
+                            formControlName="detail_in_exchange">
+                            I accept deals in exchange of products
+                        </mat-checkbox>
+                        <mat-checkbox class="text-sm" [color]="'primary'" [checked]="true"
+                            formControlName="whats_app_notification">
+                            Send notifications over Whatsapp
+                        </mat-checkbox>
+    
+                    </div>
+    
+                    <div *ngIf="userType === 'brand'">
+    
+                        <div class="flex items-center justify-center mb-4">
+                            <span
+                                class="flex w-14 h-full font-bold text-xs px-2.5 py-0.5 rounded-full uppercase bg-green-200 text-green-800">
+                                Brand
+                            </span>
+                        </div>
+    
+                        <!-- Name field -->
+                        <mat-form-field class="w-full">
+                            <!-- <mat-label>Full name</mat-label> -->
+                            <input id="name" matInput formControlName="name" placeholder="Full name">
+                            <mat-error *ngIf="signUpForm.get('name').hasError('required')">
+                                Full name is required
+                            </mat-error>
+                            <mat-error *ngIf="signUpForm.get('name').hasError('pattern')">
+                                Enter valid name
+                            </mat-error>
+                        </mat-form-field>
+    
+                        <!-- Whatsapp Number field -->
+                        <mat-form-field class="w-full">
+                            <!-- <mat-label>Whatsapp Number</mat-label> -->
+                            <input id="mobile" matInput formControlName="phone" placeholder="Whatsapp Number">
+                            <ng-container matPrefix class="flex items-center">
+                                <span [matTooltip]="'India'" class="hidden sm:flex w-6 h-4 mr-1 overflow-hidden"
+                                    [style.background]="'url(\'/assets/images/apps/contacts/flags.png\') no-repeat 0 0'"
+                                    [style.backgroundSize]="'24px 3876px'"
+                                    [style.backgroundPosition]="'-1px -2245px'"></span>
+                                <span class="sm:ml-3 font-mono">+91</span>
+                            </ng-container>
+                            <!-- <mat-error *ngIf="submitted && signUpForm.get('phone').hasError('required')">
+                                Whatsapp number is required
+                            </mat-error>
+                            <mat-error *ngIf="submitted && signUpForm.get('phone').hasError('pattern')">
+                                Invalid Whatsapp number
+                            </mat-error> -->
+                        </mat-form-field>
+                        <mat-form-field class="w-full">
+                            <!-- <mat-label>Skype Id</mat-label> -->
+                            <input id="skype" matInput formControlName="skype"  placeholder="Skype Id">
+                            <!-- <ng-container matPrefix class="flex items-center">
+                                <span [matTooltip]="'India'" class="hidden sm:flex w-6 h-4 mr-1 overflow-hidden"
+                                    [style.background]="'url(\'/assets/images/apps/contacts/flags.png\') no-repeat 0 0'"
+                                    [style.backgroundSize]="'24px 3876px'"
+                                    [style.backgroundPosition]="'-1px -2245px'"></span>
+                                <span class="sm:ml-3 font-mono">+91</span>
+                            </ng-container> -->
+                            <!-- <mat-error *ngIf="submitted && signUpForm.get('phone').hasError('required')">
+                                Whatsapp number is required
+                            </mat-error>
+                            <mat-error *ngIf="submitted && signUpForm.get('phone').hasError('pattern')">
+                                Invalid Whatsapp number
+                            </mat-error> -->
+                        </mat-form-field>
+    
+                        <!-- Currency field -->
+                        <mat-form-field class="w-full">
+                            <!-- <mat-label>Preferred Currency</mat-label> -->
+                            <mat-select formControlName="currency">
+                                <mat-option value="">Choose currency</mat-option>
+                                <mat-option value="INR">Indian Rupee</mat-option>
+                                <mat-option value="USD">US Dollar</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submitted && signUpForm.get('currency').hasError('required')">
+                                Currency is required
+                            </mat-error>
+                        </mat-form-field>
+    
+                        <!-- Company Name field -->
+                        <!-- <mat-form-field class="w-full">
+                                <mat-label>Company Name</mat-label>
+                                <input id="companyName" matInput formControlName="company_name">
+                                <mat-error *ngIf="submitted && signUpForm.get('company_name').hasError('required')">
+                                    Company Name is required
+                                </mat-error>
+                                <mat-error *ngIf="submitted && signUpForm.get('company_name').hasError('pattern')">
+                                    Invalid Company Name
+                                </mat-error>
+                            </mat-form-field> -->
+    
+                        <!-- Company Address field -->
+                        <!-- <mat-form-field class="w-full">
+                                <mat-label>Company Address<.0   /mat-label>
+                                <input id="companyAddress" matInput formControlName="company_address">
+                                <mat-error *ngIf="submitted && signUpForm.get('company_address').hasError('required')">
+                                    Company Address is required
+                                </mat-error>
+                                <mat-error *ngIf="submitted && signUpForm.get('company_address').hasError('pattern')">
+                                    Invalid Company Address
+                                </mat-error>
+                            </mat-form-field> -->
+    
+                        <!-- GST field -->
+                        <!-- <mat-form-field class="w-full">
+                                <mat-label>GST No.</mat-label>
+                                <input id="gstNo" matInput formControlName="gst">
+                                <mat-error *ngIf="submitted && signUpForm.get('gst').hasError('required')">
+                                    GST No. is required
+                                </mat-error>
+                            </mat-form-field> -->
+    
+                        <!-- PAN No. field -->
+                        <!-- <mat-form-field class="w-full">
+                                <mat-label>PAN No.</mat-label>
+                                <input id="panNo" matInput formControlName="pan">
+                                <mat-error *ngIf="submitted && signUpForm.get('pan').hasError('required')">
+                                    PAN No. is required
+                                </mat-error>
+                            </mat-form-field> -->
+    
+                    </div>
+                    <ng-container *ngIf="userType">
+                        <!-- Signup button -->
+                        <button class="fuse-mat-button-large w-full mt-1" mat-flat-button [color]="'primary'"
+                            [disabled]="signUpForm.disabled" (click)="signUp()">
+                            <span *ngIf="!signUpForm.disabled">
+                                Signup
+                            </span>
+                            <mat-progress-spinner *ngIf="signUpForm.disabled" [diameter]="24" [mode]="'indeterminate'">
+                            </mat-progress-spinner>
+                        </button>
+                    </ng-container>
+    
+                </form>
+            </div>
+        </div>
+    </div>
+    <div
+        class="relative hidden md:flex flex-auto items-center justify-center w-1/2 h-full p-16 lg:px-28 overflow-hidden bg-gray-800 dark:border-l">
+        <!-- Background - @formatter:off -->
+        <!-- Rings -->
+        <svg class="absolute inset-0 pointer-events-none" viewBox="0 0 960 540" width="100%" height="100%"
+            preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+            <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
+                <circle r="234" cx="196" cy="23"></circle>
+                <circle r="234" cx="790" cy="491"></circle>
+            </g>
+        </svg>
+        <!-- Dots -->
+        <svg class="absolute -top-16 -right-16 text-gray-700" viewBox="0 0 220 192" width="220" height="192"
+            fill="none">
+            <defs>
+                <pattern id="837c3e70-6c3a-44e6-8854-cc48c737b659" x="0" y="0" width="20" height="20"
+                    patternUnits="userSpaceOnUse">
+                    <rect x="0" y="0" width="4" height="4" fill="currentColor"></rect>
+                </pattern>
+            </defs>
+            <rect width="220" height="192" fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)"></rect>
+        </svg>
+        <!-- @formatter:on -->
+        <!-- Content -->
+        <div class="z-10 relative w-full max-w-2xl">
+            <div class="text-7xl font-bold leading-none text-gray-100">
+                <div>Welcome to</div>
+                <div>BookMyInfluencers</div>
+            </div>
+            <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400">
+                We Rocket-boost Your Influencer Research, Audit, Outreach & Promotions.
+            </div>
+            <div class="flex items-center mt-8">
+                <div class="flex flex-0 items-center -space-x-1.5">
+                    <img class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
+                        src="assets/images/avatars/icn1.PNG">
+                    <img class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
+                        src="assets/images/avatars/icn2.PNG">
+                    <img class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
+                        src="assets/images/avatars/icn3.PNG">
+                    <img class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
+                        src="assets/images/avatars/icn4.PNG">
+                </div>
+                <div class="ml-4 font-medium tracking-tight text-gray-400">More than 10k people joined us, it's your
+                    turn</div>
+            </div>
+        </div>
+    </div>
+</div>

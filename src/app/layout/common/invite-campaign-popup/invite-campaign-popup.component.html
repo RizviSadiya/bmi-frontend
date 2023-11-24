@@ -1,0 +1,54 @@
+<div class="flex flex-col flex-auto md:w-160 md:min-w-160">
+    <form [formGroup]="inviteForm" autocomplete="on" novalidate>
+        <div class="m-4">
+            <div>
+                <div class="text-center mb-4 py-0.5 px-3 rounded-full text-2xl font-medium text-black-600">
+                    <ng-container *ngIf="influencerList.length; else invitationSent">
+                        Invitation Sent to Below Influencers
+                    </ng-container>
+                    <ng-template #invitationSent>Send Invitation(s)</ng-template>
+                </div>
+
+                <ng-container *ngIf="influencerList.length">
+                    <div class="flex flex-wrap items-center mt-2">
+                        <ng-container *ngFor="let influencer of influencerList; trackBy: trackByFn">
+                            <div
+                                class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100">
+                                <span class="text-md font-medium whitespace-nowrap">{{ influencer.channel.title }}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <mat-divider class="mt-2 mb-4"></mat-divider>
+                </ng-container>
+
+                <ng-container *ngIf="channelList.length > 0; else noChannels">
+                    <mat-form-field style="width: 100%" [floatLabel]="'always'">
+                        <!-- <mat-label>Send new invitations to:</mat-label> -->
+                        <mat-select placeholder="Select Influencer(s)" formControlName="influencer" multiple>
+                            <!-- <input formControlName="searchTxt" matInput placeholder="search"
+                            (keyup)="searchTextChanged();" autocomplete="off"> -->
+                            <!-- <mat-option value="">- Please Select -</mat-option> -->
+                            <mat-option *ngFor="let item of channelList | search : searchTxt" [value]="item.id">
+                                {{ item.title }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngIf="submitted && inviteForm.get('influencer').hasError('required')">
+                        Please select at least one influencer.
+                    </mat-error>
+                </ng-container>
+                <ng-template #noChannels>
+                    <h3 class="text-danger text-2xl font-bold text-center">You donot have any revealed channel to send
+                        invite to the selected campaign Category.</h3>
+                </ng-template>
+            </div>
+        </div>
+        <div class="flex items-center justify-end mt-4">
+            <button mat-flat-button matDialogClose class="mr-2">
+                Cancel
+            </button>
+            <button mat-flat-button [color]="'primary'" (click)="proceed();" *ngIf="channelList.length > 0">
+                Invite
+            </button>
+        </div>
+    </form>
+</div>

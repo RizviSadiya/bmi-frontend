@@ -1,0 +1,138 @@
+<div class="w-full max-w-3xl">
+
+    <!-- Form -->
+    <form [formGroup]="accountForm">
+        <!-- Section -->
+        <div class="w-full">
+            <div class="text-xl">Payment Details</div>
+            <div class="text-secondary ntboldtext">Update your payment information. Make sure to set your account details correctly
+                as it could affect your payment.</div>
+        </div>
+        <div class="grid grid-cols-4 gap-6 w-full mt-8">
+            <!-- Country -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Country</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:location-marker'" matPrefix></mat-icon>
+                    <mat-select [formControlName]="'country_id'">
+                        <mat-option [value]="country.id" *ngFor="let country of countries">{{ country.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="submitted && accountForm.get('country_id').hasError('required')">
+                    Country is required.
+                </mat-error>
+            </div>
+            <!-- UPI ID -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">UPI ID</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:finger-print'" matPrefix></mat-icon>
+                    <input [formControlName]="'upi_id'" matInput>
+                </mat-form-field>
+                <mat-error *ngIf="submitted && accountForm.get('upi_id').hasError('required')">
+                    UPI ID is required.
+                </mat-error>
+                <mat-error *ngIf="submitted && accountForm.get('upi_id').hasError('pattern')">
+                    Invalid UPI ID.
+                </mat-error>
+            </div>
+            <!-- Bank Account Holder -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Bank Account Holder</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'" matPrefix></mat-icon>
+                    <input [formControlName]="'account_holder'" matInput>
+                </mat-form-field>
+                <mat-error *ngIf="submitted && accountForm.get('account_holder').hasError('required')">
+                    Account Holder is required.
+                </mat-error>
+                <mat-error *ngIf="submitted && accountForm.get('account_holder').hasError('pattern')">
+                    Invalid Name.
+                </mat-error>
+            </div>
+            <!-- Bank Name -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Bank Name</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:library'" matPrefix></mat-icon>
+                    <input [formControlName]="'bank_name'" matInput>
+                </mat-form-field>
+                <mat-error *ngIf="submitted && accountForm.get('bank_name').hasError('required')">
+                    Bank Name is required.
+                </mat-error>
+                <mat-error *ngIf="submitted && accountForm.get('bank_name').hasError('pattern')">
+                    Invalid Bank Name.
+                </mat-error>
+            </div>
+            <!-- Bank Account Number -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Bank Account Number</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:annotation'" matPrefix></mat-icon>
+                    <input [formControlName]="'account_number'" matInput>
+                </mat-form-field>
+                <mat-error *ngIf="submitted && accountForm.get('account_number').hasError('required')">
+                    Account Number is required.
+                </mat-error>
+                <mat-error *ngIf="submitted && accountForm.get('account_number').hasError('pattern')">
+                    Invalid Account Number.
+                </mat-error>
+            </div>
+            <!-- Branch IFSC Code -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Branch IFSC Code</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:ticket'" matPrefix></mat-icon>
+                    <input [formControlName]="'ifsc_code'" matInput>
+                </mat-form-field>
+                <mat-error *ngIf="submitted && accountForm.get('ifsc_code').hasError('required')">
+                    IFSC is required.
+                </mat-error>
+                <mat-error *ngIf="submitted && accountForm.get('ifsc_code').hasError('pattern')">
+                    Invalid IFSC.
+                </mat-error>
+            </div>
+            <!-- PAN Number -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">PAN Number</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:identification'" matPrefix></mat-icon>
+                    <input [formControlName]="'pan_no'" matInput>
+                </mat-form-field>
+                <mat-error *ngIf="submitted && accountForm.get('pan_no').hasError('required')">
+                    PAN Number is required.
+                </mat-error>
+                <mat-error *ngIf="submitted && accountForm.get('pan_no').hasError('pattern')">
+                    Invalid PAN Number.
+                </mat-error>
+            </div>
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">GST Number</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:identification'" matPrefix></mat-icon>
+                    <input [formControlName]="'gst_no'" matInput>
+                </mat-form-field>
+                <!-- <mat-error *ngIf="submitted && accountForm.get('gst').hasError('required')">
+                    GST Number is required.
+                </mat-error>
+                <mat-error *ngIf="submitted && accountForm.get('gst').hasError('pattern')">
+                    Invalid GST Number.
+                </mat-error> -->
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="mt-11 mb-10 border-t"></div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-end">
+            <button mat-stroked-button type="button">
+                Cancel
+            </button>
+            <button class="ml-4" mat-flat-button type="button" [color]="'primary'" (click)="updateSettings();">Save
+            </button>
+        </div>
+    </form>
+
+</div>

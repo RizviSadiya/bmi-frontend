@@ -1,0 +1,103 @@
+<!-- Wrapper -->
+<div class="flex flex-col flex-auto w-full">
+
+    <!-- Content -->
+    <div class="flex flex-col flex-auto">
+
+        <!-- Header starts -->
+        <nav class="navbar navbar-expand-lg navbar-light py-0">
+            <div class="container">
+                <a class="navbar-brand" routerLink="home">
+                    <img src="assets/images/logo/bmilogo.png" class="w-40" alt="BookMyInfluencers logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                        <li class="nav-item mr-3"><a class="nav-link fw-600" routerLink="home" routerLinkActive="active">Home</a></li>
+                        <li class="nav-item mr-3"><a class="nav-link fw-600" routerLink="influencer" routerLinkActive="active">Influencers</a></li>
+                        <li class="nav-item mr-3"><a class="nav-link fw-600" routerLink="brand" routerLinkActive="active">Brands</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link fw-600" routerLink="sign-up" routerLinkActive="active">Sign Up</a></li> -->
+                        <li class="nav-item"><a class="nav-link fw-600" routerLink="/sign-in" routerLinkActive="active">Login </a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Header ends -->
+
+        <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
+             Otherwise, layout changes won't be registered and the view won't be updated! -->
+        <router-outlet *ngIf="true"></router-outlet>
+
+        <!-- Footer Starts -->
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 text-center">
+                        <a href="#">
+                            <img src="assets/images/logo/infinitylogo.png" class="w-20 m-auto mb-2"
+                                alt="BMI Infinity Logo">
+                        </a>
+                        <p class="text-justify px-3">BookMyInfluencers is the best Influencer Marketing Platform
+                            available for growing your brand advocacy through user generated content via influencers.
+                            From creating a custom campaign to competitive analysis. BMI is your one-stop shop for your
+                            Influencer Marketing Strategy.
+                        </p>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <h6 class="mb-3">Getting Started</h6>
+                        <ul class="footer-links">
+                            <li><a routerLink="sign-up">Register</a></li>
+                            <li><a routerLink="sign-in">Login</a></li>
+                            <li><a routerLink="contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <h6 class="mb-3">Important Links</h6>
+                        <ul class="footer-links">
+                            <li><a routerLink="privacy-policy">Privacy Policy</a></li>
+                            <li><a routerLink="terms-of-use">Terms of use</a></li>
+                            <!-- <li><a href="#">Blog</a></li> -->
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-sm-6 col-12">
+                        <p class="copyright-text">Copyright © 2021 All Rights Reserved by<a class="text-decoration-none"
+                                target="_blank" href="/"><strong class="text-white"> BookMyInfluencers</strong></a>.</p>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-12">
+                        <ul class="social-icons">
+                            <li>
+                                <a target="_blank" href="https://www.facebook.com/bookmyinfluencers/">
+                                    <mat-icon class="icon-size-5 text-white" [svgIcon]="'feather:facebook'"
+                                        style="vertical-align: middle;"></mat-icon>
+                                </a>
+                            </li>
+                            <li>
+                                <a target="_blank" href="https://www.linkedin.com/company/bookmyinfluencers/">
+                                    <mat-icon class="icon-size-5 text-white" [svgIcon]="'feather:linkedin'"
+                                        style="vertical-align: middle;"></mat-icon>
+                                </a>
+                            </li>
+                            <li>
+                                <a target="_blank" href="https://www.instagram.com/bookmyinfluencers/">
+                                    <mat-icon class="icon-size-5 text-white" [svgIcon]="'feather:instagram'"
+                                        style="vertical-align: middle;"></mat-icon>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Footer Ends -->
+    </div>
+
+</div>

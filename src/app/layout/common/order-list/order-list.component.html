@@ -1,0 +1,498 @@
+<!-- order list -->
+<!-- <style>
+    .cdk-overlay-connected-position-bounding-box {
+    left: 1170.8px !important;
+}
+</style> -->
+<div class="z-20 items-center px-0 py-0 mb-3 px-0">
+    <div class="orderhedar text-left">
+        <span><b>Order ID : </b>{{ order?.orderRandId }}</span>
+    </div>
+    <div class="orderhedar text-right  py-2 ">
+        <div class="" *ngIf="order.status === '0'">
+            <button *ngIf="!completedtab" mat-icon-button [matMenuTriggerFor]="editOrderOptions">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:dots-vertical'">
+                </mat-icon>
+            </button>
+            <mat-menu #editOrderOptions="matMenu" class="px-2 py-2">
+                <!-- <button mat-menu-item *ngIf="userType === 'INFLUENCER'"
+                    [routerLink]="['/apps/chat', order.brand_id]">Message</button>
+                <button mat-menu-item *ngIf="userType === 'BRAND' && order.channel.is_revealed"
+                    [routerLink]="['/apps/chat', order.channel.channel_id]">Message</button> -->
+                <div class="mb-2" *ngIf="userType === 'BRAND'"><b class="">Approve order stages</b></div>
+                <div class="flex mb-2" *ngIf="userType === 'BRAND'">
+                    <div class="pr-2"><input type="checkbox"></div>
+                    <div>Video Script</div>
+                </div>
+                <div class="flex mb-2" *ngIf="userType === 'BRAND'">
+                    <div class="pr-2"><input type="checkbox"></div>
+                    <div>Video Preview</div>
+                </div>
+                <div class="flex mb-2" *ngIf="userType === 'BRAND'">
+                    <div class="pr-2"><input type="checkbox"></div>
+                    <div>Live Video </div>
+                </div>
+                <!-- <div class="flex mb-2" *ngIf="userType === 'BRAND'">
+                    <div class="pr-2"><input type="checkbox"></div>
+                    <div>I have received consent </div>
+                </div> -->
+                <div class="text-center py-2" *ngIf="userType === 'BRAND'">
+                    <button mat-flat-button [color]="'primary'">
+                        Submit</button>
+                </div>
+                <!-- *ngIf="userType === 'BRAND'" -->
+                <div class="text-center py-2" >
+                    <button mat-menu-item  *ngIf="order.status === '0'" (click)="raiseDispute(order);"> <b style="color: red;">Raise a
+                        Dispute</b> </button>
+                </div>
+               
+                <!-- <button mat-menu-item *ngIf="order.status === '0'" (click)="cancelOrder(order);">Cancel
+                    Order</button> -->
+            </mat-menu>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="grid grid-cols-12 sm:grid-cols-12 gap-x-2 gap-y-2 lg:grid-cols-12 lg:gap-2 w-full mt-0 px-6 py-2 rounded-1xl shadow bg-white">
+        <div class="col-span-2 xs:col-span-12 sm:col-span-12 lg:col-span-2 pr-2">
+            <div class="relative flex-col items-center text-center">
+                <ng-container *ngIf="userType === 'BRAND' && order?.is_revealed">
+                    <ng-container *ngIf="order.image">
+                        <img class="object-contain rounded-full" [src]="order?.image"
+                            onError="this.src = 'assets/images/logo/logo.png'" [alt]="'Channel Logo'" />
+                    </ng-container>
+                    <ng-container *ngIf="!order?.image">
+                        <div *ngIf="order.plateform_type===1"
+                            class="flex items-center justify-center w-20 h-20 rounded-full text-lg uppercase bg-gray-200 text-gray-600">
+                            {{ order.channel_name }}
+                           
+                        </div>
+                        <div *ngIf="order.plateform_type===2"
+                            class="flex items-center justify-center w-20 h-20 rounded-full text-lg uppercase bg-gray-200 text-gray-600">
+                         
+                            {{ order.name }}
+                        </div>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="userType === 'BRAND' && !order?.is_revealed">
+                    <ng-container *ngIf="order?.blur_image">
+                        <img class="object-contain rounded-full" [src]="order?.blur_image"
+                            onError="this.src = 'assets/images/logo/logo.png'" [alt]="'Channel Logo'" />
+                    </ng-container>
+                    <ng-container *ngIf="!order?.blur_image">
+                        <div
+                            class="flex items-center justify-center w-20 h-20 rounded-full text-lg uppercase bg-gray-200 text-gray-600">
+                            {{ 'BMI' }}
+                        </div>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="(userType === 'INFLUENCER' && order.brand_logo)">
+                    <img class="object-contain  rounded-full" [src]="order.brand_logo"
+                        onError="this.src = 'assets/images/logo/logo.png'" [alt]="'Brand Logo'" />
+                </ng-container>
+                <ng-container *ngIf="userType === 'INFLUENCER' && !order.brand_logo">
+                    <div
+                        class="flex items-center justify-center w-20 h-20 rounded-full text-lg uppercase bg-gray-200 text-gray-600">
+                        {{ order.brand_name.charAt(0) }}
+                    </div>
+                </ng-container>
+                <!-- Start : Show chat icon if there is new message *ngIf="userType === 'BRAND' && order.channel.is_revealed" -->
+                <button mat-icon-button class="mt-2" (click)="openQuickChat(order);">
+                    <ng-container *ngIf="order.messageCount > 0">
+                        <span class="absolute top-0 right-0 left-0 flex items-center justify-center h-3">
+                            <span
+                                class="flex items-center justify-center flex-shrink-0 min-w-4 h-4 px-1 ml-4 mt-2.5 rounded-full bg-orange-600 text-indigo-50 text-xs font-medium">
+                                {{ order.messageCount }}
+                            </span>
+                        </span>
+                    </ng-container>
+                    <img class="object-contain" src="/assets/images/msgbtn.PNG" />
+                </button>
+                <!-- End : Show chat icon if there is new message -->
+            </div>
+        </div>
+        <div class="col-span-6 xs:col-span-12 sm:col-span-12 lg:col-span-6 flex flex-col  pl-2  pr-2">
+            <div class="min-w-0">
+                <div *ngIf="userType === 'BRAND'" class="font-medium font-bold text-2xl leading-5 mb-2 text-center sm:text-left"
+                    [matTooltip]="order?.channel_name">
+                    <span *ngIf="order.plateform_type===null"  [ngClass]="{'': !order?.is_revealed}">
+                        {{ order?.is_revealed ? order?.channel_name : 'xxxxx' }}</span>
+                    <span *ngIf="order.plateform_type===1"  [ngClass]="{'': !order?.is_revealed}">
+                        {{ order?.is_revealed ? order?.channel_name : 'xxxxx' }} <span style="color: rgb(31, 165, 226);">|| </span> {{order?.brand_name}}</span>
+                    <span *ngIf="order.plateform_type===2 "[ngClass]="{'': !order?.is_revealed}">
+                        {{ order?.is_revealed ? order?.name : 'xxxxx' }} <span style="color: rgb(31, 165, 226);">|| </span> {{order?.brand_name}}</span>
+                    <!-- <mat-icon class="icon-size-5" style="vertical-align: middle;"
+                        [ngClass]="order?.is_verified ? 'text-success' : 'text-warning'" nbsp;
+nbsp;
+nbsp;
+                        [svgIcon]="order?.is_verified ? 'heroicons_solid:badge-check' : 'heroicons_solid:exclamation'">
+                    </mat-icon> -->
+                   
+                </div>
+               
+                <div *ngIf="userType === 'INFLUENCER'"
+                    class="font-medium text-xl leading-5 mb-2 text-center sm:text-left"
+                    [matTooltip]="order.brand_name">
+                    {{ order.brand_name }}
+                </div>
+              
+                <div class="leading-5 text-center sm:text-left text-hint mb-2 text-black">
+                    <b>Campaign Name:</b>&nbsp;<span class="text-gray-600" [matTooltip]="order.camp_title">
+                        {{ order.camp_title }}
+                    </span>
+                </div>
+                
+                <!-- <div class="leading-5 text-hint mb-2 text-black"  *ngIf="userType === 'BRAND'">
+                    <b>Promo Type :</b>&nbsp;<span class="font-bold text-gray-600">
+                        <span *ngIf="order?.promot_product=='Dedicated Video Promotion'" >Dedicated Video</span>
+                        <span *ngIf="order?.promot_product=='Short Video Promotion'">Short Video Promotion</span>
+                        <span *ngIf="order?.promot_product=='In-Video brand integration'" >Brand integration Video</span>
+                    </span>
+                </div> -->
+
+                <div class="leading-5 text-hint text-black">
+                    <b>Description :</b>&nbsp;
+                </div>
+
+                <ng-container *ngIf="order.plateform==='youtube'">
+                    <div class="flex mb-2">
+                        <div class="max-w-none prose prose-sm">
+                            <div class="leading-5 text-hint">
+                                <span class="text-gray-600"><app-more-less-text [text]="order?.camp_desc" [wordLimit]="125"></app-more-less-text></span>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- <div class="leading-5 text-center sm:text-left text-hint mb-2">
+                    Channel :&nbsp;<span class="text-gray-600" [matTooltip]="order?.channel?.title">
+                        {{ order?.channel?.title }}
+                    </span>
+                </div> -->
+                <!-- 
+                <div class="leading-5 text-center sm:text-left text-hint mb-2">
+                    Oder Id :&nbsp;<span class="text-gray-600" [matTooltip]="order?.channel?.title">
+                        {{ order?.order_process?.orderRandId }}
+                    </span>
+                </div> -->
+                <!-- <div class="leading-5 text-center sm:text-left text-hint mb-2">
+                    Oder Id :&nbsp;<span class="text-gray-600" [matTooltip]="order?.channel?.title">
+                        {{ order?.order_process?.orderRandId }}
+                    </span>
+                    <button class="btn btn-primary">Request a Custom Invoice</button>
+                </div> -->
+                
+                <!-- Tags -->
+                <ng-container *ngIf="userType === 'INFLUENCER' && order.reference_videos">
+                    <ng-container *ngIf="order.reference_videos.split(',').length">
+                        <div class="flex flex-wrap items-center my-4">
+                            <!-- Tag -->
+                            <ng-container
+                                *ngFor="let video of order.reference_videos.split(','); let i = index">
+                                <!-- + (i + 1) -->
+                                <a role="button" [href]="video" [matTooltip]="'View Reference Video '"
+                                    target="_blank">
+                                    <div
+                                        class="flex items-center justify-center py-1 px-3 mr-3 mb-3 shadow rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                        <span class="text-sm font-medium whitespace-nowrap text-uppercase" *ngIf="i>0">
+                                            {{ "REFERENCE VIDEO " + (i + 1) }}
+                                        </span>
+                                        <span class="text-sm font-medium whitespace-nowrap text-uppercase" *ngIf="i<1">
+                                            {{ "REFERENCE VIDEO " }}
+                                        </span>
+                                    </div>
+                                </a>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                </ng-container>
+                <!-- Description -->
+                <!-- <ng-container *ngIf="order.camp_desc">
+                    <div class="flex mb-2">
+                        <div class="max-w-none prose prose-sm">
+                            <div class="text-justify">
+                                <app-more-less-text [text]="order.camp_desc" [wordLimit]="125">
+                                </app-more-less-text>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container> -->
+                <!-- Promotion -->
+                <!-- <ng-container>
+                    <div class="flex sm:items-center">
+                        <div class="flex items-center leading-6">
+                            <div class="text-md truncate text-secondary" *ngIf="order.camp_info.subscriber">
+                                <span>
+                                    <span class="font-medium text-hint">Subscribers&nbsp;</span>
+                                    <span class="font-bold">{{
+                                        order.camp_info.subscriber }}</span>
+                                </span>
+                            </div>
+                            <div class="text-md truncate text-secondary" *ngIf="order.camp_info.average_view">
+                                <span class="mx-2">&bull;</span>
+                                <span>
+                                    <span class="font-medium text-hint">Avg Views&nbsp;</span>
+                                    <span class="font-bold">{{ order.camp_info.average_view
+                                        }}</span>
+                                </span>
+                            </div>
+                            <div class="text-md truncate text-secondary" *ngIf="order.camp_info.engagement_rate">
+                                <span class="mx-2">&bull;</span>
+                                <span>
+                                    <span class="font-medium text-hint">Engagement Rate&nbsp;</span>
+                                    <span class="font-bold">{{
+                                        order.camp_info.engagement_rate }}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    *ngIf="order.order_process.stage != 3 && order.order_process.action_taken != 'Approved'"
+                </ng-container> -->
+            </div>
+        </div>
+        <div class=" pr-0 col-span-4 xs:col-span-12 sm:col-span-12 lg:col-span-4 flex flex-col items-center justify-center">
+            <!-- <ng-container>
+                <span class="text-center">
+                    <span class="mb-1 text-md truncate text-secondary">Deal Value</span>&nbsp;<br
+                        class="xs:block sm:hidden lg:block">
+                    <span *ngIf="userDetails.currency==='USD'" class="mb-2 text-md font-bold text-2xl"><u>{{ order?.camp_price |
+                            currency:userDetails.currency :'symbol'}}</u></span> <br>
+                    <span *ngIf="userDetails.currency==='INR'" class="mb-2 text-md font-bold text-2xl"><u>{{ order?.camp_price |
+                            currency:userDetails.currency :'symbol'}} + {{order?.tax}} {{ order?.tax_amount |
+                            currency:userDetails.currency :'symbol'}}</u></span> <br>
+                </span>
+            </ng-container> -->
+            <!-- <ng-container>
+                <span class="text-center">
+                    <span class="mb-1 text-md truncate text-secondary">PlatForm Fees</span>&nbsp;<br
+                        class="xs:block sm:hidden lg:block">
+                    <span class="mb-2 text-md font-bold"><u>15%</u></span> <br> -->
+                    <!-- <span class="mb-2 text-md font-bold"><u>{{ (order?.total_pay*0.15) }}  </u></span> -->
+                <!-- </span>
+            </ng-container> -->
+
+            <!-- <ng-container *ngIf="order.payment_status">
+                <span class="text-center">
+                    <span class="mb-1 text-md truncate text-secondary">Payment Status </span>&nbsp;<br
+                        class="xs:block sm:hidden lg:block">
+                    <span class="mb-2 text-md font-bold"
+                        *ngIf="userDetails.account_number !=='' || userDetails.upi_id !==''"><u>
+                            {{ order.payment_status == 1 ?"Initiated":order.payment_status == 2?" In Process":"
+                            Completed" }}</u></span>
+                    <span class="mb-2 text-md font-bold"
+                        *ngIf="userDetails.account_number=='' || userDetails.upi_id==''"><u>
+                            <a routerLink="/pages/settings" style="color:blue">please add payment details</a></u></span>
+                </span>
+            </ng-container> -->
+
+            <ng-container  *ngIf="completedtab">
+                <span class="text-center">
+                    <span class="leading-5 text-center sm:text-left text-hint mb-2 text-black">Amount paid / Deal Value </span>&nbsp;
+                    <div class="flex dealvalue mb-2" *ngIf="userDetails.userType==='influencer'">
+                        
+                        <span class="flex oreangeprice text-2xl"><span *ngIf="userDetails.currency==='USD'" class=" text-2xl">{{ order?.pay_amount |
+                        currency:userDetails.currency :'symbol':'1.0-0'}}</span> <br>
+                        <span *ngIf="userDetails.currency==='INR'" class=" text-2xl">{{ (order?.pay_amount)-(order?.tax_amount) |
+                        currency:userDetails.currency :'symbol':'1.0-0'}}</span></span>
+                        <span class="flex  font-bold text-2xl"> &nbsp;/&nbsp; {{ (order?.total_pay) -(order?.tax_amount) |currency:userDetails.currency:'symbol':'1.0-0' }}</span>
+                    </div>
+                    <!-- without GST Value -->
+                    <div class="flex dealvalue mb-2" *ngIf="userDetails.userType==='brand'">
+                        
+                        <span class="flex oreangeprice text-2xl"><span *ngIf="userDetails.currency==='USD'" class=" text-2xl">{{ (order?.pay_amount)-(order?.tax_amount) |
+                        currency:userDetails.currency :'symbol':'1.0-0'}}</span> <br>
+                        <span *ngIf="userDetails.currency==='INR'" class=" text-2xl">{{ (order?.pay_amount)-(order?.tax_amount) |
+                        currency:userDetails.currency :'symbol':'1.0-0'}}</span></span>
+                        <span class="flex  font-bold text-2xl"> &nbsp;/&nbsp; {{ order?.price  |currency:userDetails.currency:'symbol':'1.0-0' }}</span>
+                        <!-- <span class="flex  font-bold text-2xl"> &nbsp;/&nbsp; {{ order?.total_pay  |currency:userDetails.currency:'symbol':'1.0-0' }}</span> -->
+                    </div>
+
+                    <!-- with GST Value -->
+                    <!-- <div class="flex dealvalue mb-2" *ngIf="userDetails.userType==='brand'">
+                        
+                        <span class="flex oreangeprice text-2xl"><span *ngIf="userDetails.currency==='USD'" class=" text-2xl">{{ order?.pay_amount |
+                        currency:userDetails.currency :'symbol':'1.0-0'}}</span> <br>
+                        <span *ngIf="userDetails.currency==='INR'" class=" text-2xl">{{ order?.pay_amount |
+                        currency:userDetails.currency :'symbol':'1.0-0'}}</span></span>
+                        <span class="flex  font-bold text-2xl"> &nbsp;/&nbsp; {{ order?.total_pay  |currency:userDetails.currency:'symbol':'1.0-0' }}</span>
+                    </div> -->
+                    <!-- <div class="flex dealvalue mb-2">
+                        
+                        <span class="flex oreangeprice text-2xl"><span *ngIf="userDetails.currency==='USD'" class=" text-2xl">{{ order?.camp_price |
+                        currency:userDetails.currency :'symbol'}}</span> <br>
+                        <span *ngIf="userDetails.currency==='INR'" class=" text-2xl">{{ order?.tax_amount |
+                        currency:userDetails.currency :'symbol'}}</span></span>
+                        <span class="flex  font-bold text-2xl"> &nbsp;/&nbsp; {{ order?.camp_price |currency:userDetails.currency }}</span>
+                    </div> -->
+                    <span class="leading-5 text-center sm:text-left text-hint mb-2 text-black">
+                        <span>Preview Deadline <img [matTooltip]="order.deadlineDate | date" src="/assets/images/nfo.PNG"style="width: 12px;text-align: center;/* float: right; */ht; */right: 0;margin-right: 14px;position: absolute;right: 100px;margin-top: -16px;"></span> 
+                    </span>&nbsp;<br/>
+                    <ng-container *ngIf="order?.new_deadlineDate; else other">
+                        <span class="mb-2 text-md font-bold text-2xl">{{order.new_deadlineDate | date}}</span>
+                    </ng-container>
+                    <ng-template #other>
+                        <span class="mb-2 text-md font-bold text-2xl">{{order.deadlineDate | date}}</span>    
+                    </ng-template><br>
+                </span>
+            </ng-container>
+            <!-- <ng-container *ngIf="completedtab">
+                <span class="text-center">
+                    <span class="leading-5 text-center sm:text-left text-hint mb-2 text-black">Amount paid / Deal Value </span>&nbsp;
+                    <div class="flex dealvalue mb-2">
+                        <span class="flex text-2xl oreangeprice"><span *ngIf="userDetails.currency==='USD'" class="text-2xl">{{ order?.camp_price |
+                        currency:userDetails.currency :'symbol'}}</span> <br>
+                        <span *ngIf="userDetails.currency==='INR'" class="  text-2xl">{{ order?.tax_amount |
+                        currency:userDetails.currency :'symbol'}}</span></span>
+                        <span class="flex blackprice font-bold  text-2xl"> &nbsp; / &nbsp;{{ order?.camp_price |currency:userDetails.currency }}</span> 
+                    </div>  
+                    <span class="leading-5 text-center sm:text-left text-hint mb-2 text-black">Preview Deadline </span>&nbsp;<br
+                    class="xs:block sm:hidden lg:block">
+                    <span class="mb-2 text-md font-bold text-2xl">{{ order.deadlineDate | date }}</span> <br>      
+                </span>
+            </ng-container> -->
+
+            <!-- <ng-container *ngIf="completedtab">
+                <span class="text-center">
+                    <span class="mb-1 text-md truncate text-secondary">PlatForm Fees</span>&nbsp;<br
+                        class="xs:block sm:hidden lg:block">
+                    <span class="mb-2 text-md font-bold"><u>15%</u></span> <br> -->
+                    <!-- <span class="mb-2 text-md font-bold"><u>{{ (order?.total_pay*0.15) }}  </u></span> -->
+                <!-- </span>
+            </ng-container> -->
+
+            <!-- <ng-container *ngIf="order.payment_status">
+                <span class="text-center" *ngIf="completedtab">
+                    <span class="mb-1 text-md truncate text-secondary">Payment Status </span>&nbsp;<br
+                        class="xs:block sm:hidden lg:block">
+                    <span class="mb-2 text-md font-bold"
+                        *ngIf="userDetails.account_number !=='' || userDetails.upi_id !==''"><u>
+                            {{ order.payment_status == 1 ?"Completed":order.payment_status == 2?" In Process":"
+                            Completed" }}</u></span>
+                    <span class="mb-2 text-md font-bold"
+                        *ngIf="userDetails.account_number=='' || userDetails.upi_id==''"><u>
+                            <a routerLink="/pages/settings" style="color:blue">please add payment details</a></u></span>
+                </span>
+            </ng-container>
+             -->
+
+            <ng-container  *ngIf="!completedtab">
+                <span class="text-center">
+                    <span class="leading-5 text-center sm:text-left text-hint mb-2 text-black">Amount paid / Deal Value </span>&nbsp;
+                    <div class="flex dealvalue mb-2" *ngIf="userDetails.userType==='influencer'">
+                        <span class="flex oreangeprice text-2xl"><span *ngIf="userDetails.currency==='USD'" class=" text-2xl">{{ order?.pay_amount |
+                            currency:userDetails.currency :'symbol':'1.0-0'}}</span> <br>
+                            <span *ngIf="userDetails.currency==='INR'" class=" text-2xl">{{ (order?.pay_amount)-(order?.tax_amount) |
+                            currency:userDetails.currency :'symbol':'1.0-0'}}</span></span>
+                            <span class="flex  font-bold text-2xl"> &nbsp;/&nbsp; {{ (order?.total_pay)- (order?.tax_amount) |currency:userDetails.currency :'symbol':'1.0-0' }}</span>
+                    </div>
+                    <div class="flex dealvalue mb-2" *ngIf="userDetails.userType==='brand'">
+                        <span class="flex oreangeprice text-2xl"><span *ngIf="userDetails.currency==='USD'" class=" text-2xl">{{ (order?.pay_amount )-(order?.tax_amount)|
+                            currency:userDetails.currency :'symbol':'1.0-0'}}</span> <br>
+                            <span *ngIf="userDetails.currency==='INR'" class=" text-2xl">{{ (order?.pay_amount)-(order?.tax_amount) |
+                            currency:userDetails.currency :'symbol':'1.0-0'}}</span></span>
+                            <span class="flex  font-bold text-2xl"> &nbsp;/&nbsp; {{ order?.price |currency:userDetails.currency :'symbol':'1.0-0' }}</span>
+                            <!-- <span class="flex  font-bold text-2xl"> &nbsp;/&nbsp; {{ order?.total_pay |currency:userDetails.currency :'symbol':'1.0-0' }}</span> -->
+                    </div>
+                    <!-- <div class="flex dealvalue mb-2" *ngIf="userDetails.userType==='brand'">
+                        <span class="flex oreangeprice text-2xl"><span *ngIf="userDetails.currency==='USD'" class=" text-2xl">{{ order?.pay_amount |
+                            currency:userDetails.currency :'symbol':'1.0-0'}}</span> <br>
+                            <span *ngIf="userDetails.currency==='INR'" class=" text-2xl">{{ order?.pay_amount |
+                            currency:userDetails.currency :'symbol':'1.0-0'}}</span></span>
+                            <span class="flex  font-bold text-2xl"> &nbsp;/&nbsp; {{ order?.total_pay |currency:userDetails.currency :'symbol':'1.0-0' }}</span>
+                    </div> -->
+                    <!-- <div class="flex dealvalue mb-2">
+                        <span class="flex oreangeprice text-2xl"><span *ngIf="userDetails.currency==='USD'" class=" text-2xl">{{ order?.camp_price |
+                        currency:userDetails.currency :'symbol'}}</span> <br>
+                        <span *ngIf="userDetails.currency==='INR'" class=" text-2xl">{{ order?.tax_amount |
+                        currency:userDetails.currency :'symbol'}}</span></span>
+                        <span class="flex  font-bold text-2xl"> &nbsp;/&nbsp; {{ order?.camp_price |currency:userDetails.currency }}</span>
+                    </div> -->
+                    <span class="leading-5 text-center sm:text-left text-hint mb-2 text-black">
+                        <span>Preview Deadline <span class="hover"><img  src="/assets/images/nfo.PNG"style="width: 12px;text-align: center;/* float: right; */ht; */right: 0;margin-right: 14px;position: absolute;right: 100px;margin-top: -16px;"><span class="tooltip">Original deadline : {{order.deadlineDate | date}}</span></span></span> 
+                    </span>&nbsp;<br/>
+                  
+                    <ng-container *ngIf="order?.new_deadlineDate; else other">
+                        <span class="mb-2 text-md font-bold text-2xl">{{order.new_deadlineDate | date}}</span>
+                    </ng-container>
+                    <ng-template #other>
+                        <span class="mb-2 text-md font-bold text-2xl">{{order.deadlineDate | date}}</span>    
+                    </ng-template>
+                    <br>
+                </span>
+            </ng-container>
+
+            <ng-container *ngIf="userType==='INFLUENCER' && order.status !=1 && order.status !=2">
+                <span class="text-center">
+                    <button class="requestextbtn" (click)="increaseOderdDate(order)" >
+                        <span class="ml-2"> Request Extension </span>
+                    </button>
+                    <br>
+                </span>
+            </ng-container>
+
+            <ng-container *ngIf="completedtab && userType==='INFLUENCER'">
+                <br/>
+                <span class="text-center">
+                    <span class="leading-5 text-center sm:text-left text-hint mb-2 text-black">You Will Recieve</span>&nbsp;<br
+                        class="xs:block sm:hidden lg:block">
+                    <span class="mb-2 text-md font-bold text-2xl">{{ (order?.total_pay) -(order?.tax_amount) - (order?.total_pay*0.15)
+                        |currency:userDetails.currency :'symbol':'1.0-0'}}</span> <br>
+                    <!-- <span class="mb-2 text-md font-bold text-2xl">{{ order?.total_pay - (order?.total_pay*0.15)
+                        |currency:userDetails.currency :'symbol':'3.2'}}</span> <br> -->
+                </span>
+            </ng-container>
+
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="col-span-12 items-center justify-center ng-star-inserted text-center mb-4">
+        <!-- *ngIf="order.order_process.stage == 1" [color]="order.status === '5' ? 'accent' : 'primary'"-->
+            <button class="dealteambtn" (click)="onViewClick();"
+                [matTooltip]="'View Order Details'">
+                <span class="ml-0">Deal Terms</span>
+            </button>
+            <mat-icon  matTooltip="Download invoice" *ngIf="userType !='INFLUENCER' && order?.invoice">
+                <a (click)="donloadInvoice(order)" [href]="order.invoice" target="_blank">download</a>
+                <!-- <a [href]="order.invoice" target="_blank">download</a> -->
+            </mat-icon>
+        </div>
+
+        <!-- <div class="col-span-12 items-center justify-center ng-star-inserted text-center mb-4">
+            <button class="dealteambtn" (click)="onViewClick();"
+                [matTooltip]="'View Order Details'">
+                <span class="ml-2">Deal Terms</span>
+            </button>
+        </div> -->
+        <div class="clearfix"></div>
+        <div *ngIf="order.status !='2'" class="col-span-12 items-center justify-center">
+            <order-progress-bar [orderStatus]="order" [order]="order" [userType]="userType">
+            </order-progress-bar>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover {
+  top: 50px;
+  left: 50px;
+}
+
+.tooltip {
+    /* top: -10px; */
+    background-color: #000000c7;
+    color: white;
+    border-radius: 5px;
+    opacity: 0;
+    padding: 7px;
+    /* position: absolute; */
+    -webkit-transition: opacity 0.5s;
+    -moz-transition: opacity 0.5s;
+    -ms-transition: opacity 0.5s;
+    -o-transition: opacity 0.5s;
+    /* transition: opacity 0.5s; */
+}
+
+.hover:hover .tooltip {
+  /* display tooltip on hover */
+  opacity: 1;
+}
+</style>

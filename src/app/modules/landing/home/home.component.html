@@ -1,0 +1,527 @@
+<!-- <div class="flex flex-col items-center justify-center w-full h-full"></div> -->
+<div class="flex flex-col w-full h-full">
+
+    <section class="relative">
+        <svg viewBox="0 0 220 192" width="220" height="192" fill="none"
+            class="position-absolute text-muted bottom-0 start-0">
+            <defs class="ng-tns-c213-0">
+                <pattern id="837c3e70-6c3a-44e6-8854-cc48c737b659" x="0" y="0" width="20" height="20"
+                    patternUnits="userSpaceOnUse" class="ng-tns-c213-0">
+                    <rect x="0" y="0" width="4" height="4" fill="currentColor" class="ng-tns-c213-0"></rect>
+                </pattern>
+            </defs>
+            <rect width="220" height="192" fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)" class="ng-tns-c213-0">
+            </rect>
+        </svg>
+
+        <svg viewBox="0 0 960 540" width="100%" height="100%" preserveAspectRatio="xMidYMax slice"
+            xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 pointer-events-none ng-tns-c213-0 text-muted">
+            <g fill="none" stroke="currentColor" strokeWidth="80"
+                class="text-gray-700 text-muted opacity-25 ng-tns-c213-0">
+                <circle r="234" cx="196" cy="23" class="ng-tns-c213-0"></circle>
+                <circle r="234" cx="890" cy="491" class="ng-tns-c213-0"></circle>
+            </g>
+        </svg>
+
+        <div class="h-full text-center relative">
+            <div class="container p-5">
+                <div class="row">
+                    <div class="col-lg-10 offset-lg-1">
+                        <h1 class="font-bold text-5xl mt-2">We Rocket-boost Your Influencer Research, Audit, Outreach &
+                            Promotions</h1>
+                        <h5 class="my-3 font-bold text-2xl">Get things done in minutes, which otherwise takes weeks
+                        </h5>
+                    </div>
+                    <div class="col-sm-6 offset-sm-3">
+                        <ul class="nav nav-pills mt-3" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <!-- <a class="nav-link active rounded-0 bg-maroon">
+                                    <mat-icon class="icon-size-5 text-white" [svgIcon]="'feather:youtube'"
+                                        style="vertical-align: middle;"></mat-icon>&nbsp;YouTube
+                                </a> -->
+                            </li>
+                        </ul>
+                        <!-- tab-pane fade show active -->
+                        <div class="tab-content">
+                            <div class="" id="pills-home" role="tabpanel"
+                                aria-labelledby="pills-home-tab">
+                                <div class="input-group input-group-lg mb-3 shadow-sm">
+                                    <input type="text" class="form-control shadow-none rounded-0 border-0"
+                                        placeholder="Search Influencers, categories and more"
+                                        aria-describedby="basic-addon2" [formControl]="searchControl">
+                                    <div class="input-group-append">
+                                        <button class="btn bg-maroon rounded-0 shadow-none" type="submit"
+                                            id="button-addon2" (click)="searchInfluencers();">
+                                            <mat-icon class="icon-size-10 text-white"
+                                                [svgIcon]="'heroicons_outline:search'" style="vertical-align: middle;">
+                                            </mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+                        <ng-container *ngIf="noDataFound">
+                            <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide
+                                bg-warn-600 text-on-warn-600">
+                                <span class="leading-relaxed whitespace-nowrap">No result found</span>
+                            </span>
+                        </ng-container>
+
+                        <ng-container *ngIf="influencersList?.length === 0">
+                            <div class="d-flex justify-content-center mt-4">
+                                <img *ngFor="let image of images" src="{{image.image}}" alt="t-5"
+                                    class="rounded-circle img-thumbnail collase w-20" />
+                                <!-- <img src="assets/images/team/team-5.jpg" alt="t-5"
+                                    class="rounded-circle img-thumbnail collase w-20" />
+                                <img src="assets/images/team/team-4.jpg" alt="t-4"
+                                    class="rounded-circle img-thumbnail collase w-20" />
+                                <img src="assets/images/team/team-3.jpg" alt="t-3"
+                                    class="rounded-circle img-thumbnail collase w-20" />
+                                <img src="assets/images/team/team-2.jpg" alt="t-2"
+                                    class="rounded-circle img-thumbnail collase w-20" />
+                                <img src="assets/images/team/team-1.jpg" alt="t-1"
+                                    class="rounded-circle img-thumbnail collase w-20" /> -->
+                            </div>
+                            <h6 class="mt-2 mb-4">More than 10k people joined us, Over 200000+ Influencers are waiting to be discovered</h6>
+                            <div class="d-flex justify-content-center">
+                                <a class="btn btn-dark btn-lg rounded-0 shadow-sm font-weight-bold mr-3" id="brand-btn"
+                                    type="button" [routerLink]="['/sign-up']">SIGN UP FOR FREE</a>
+                                <!-- <a class="btn btn-dark btn-lg rounded-0 shadow-sm font-weight-bold" type="button"
+                                    [routerLink]="['/influencer']">I'M AN INFLUENCER</a> -->
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="col-12 mt-4" *ngIf="influencersList?.length > 0">
+                        <ng-container *ngFor="let channel of influencersList; let k = index; trackBy: trackByFn">
+                            <public-channel [channel]="channel"></public-channel>
+                        </ng-container>
+                        <div class="d-flex justify-content-center">
+                            <a class="btn btn-dark btn-lg rounded-0 shadow-sm font-weight-bold" id="brand-btn"
+                                type="button" [routerLink]="['/sign-in']">Load More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative">
+        <div class="h-full rounded-0 bg-white">
+            <div class="container p-5">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <h2 class="text-4xl font-bold">Reaching out to Influencers was never this easy</h2>
+                        <h5 class="mt-3 p-para">BookMyInfluencers is India's leading influencer marketing platform that
+                            helps businesses to collaborate with best and talented content creators from YouTube who
+                            market your brand and increase your reach to wider audience. There are plenty of reasons why
+                            you as a brand choose us.</h5>
+                        <a class="btn btn-maroon btn-lg rounded-0 shadow-sm font-bold mt-5 text-white" type="button"
+                            [routerLink]="['/sign-up']">GET STARTED</a>
+                    </div>
+                    <div class="col-sm-5">
+                        <img src="assets/images/influencers/influencers.jpg" class="img-fluid collage-img"
+                            alt="influencers">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative">
+        <div class="h-full rounded-0 bg-light">
+            <div class="container p-5">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h1 class="text-4xl font-bold text-center mb-10">The Only Influencer Marketing Platform You Need
+                        </h1>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="row row-cols-1 row-cols-sm-4 g-4">
+                            <div class="col-sm-4 mb-4">
+                                <div class="card h-full text-center shadow">
+                                    <mat-icon class="icon-size-20 text-danger m-auto mt-2"
+                                        [svgIcon]="'feather:youtube'"></mat-icon>
+                                    <div class="card-body pt-5">
+                                        <h4 class="card-title text-3xl font-bold">Create Campaigns</h4>
+                                        <p class="card-text">Launch campaigns and team up with India's leading
+                                            influencers to make your brand big hit among the audience.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mb-4">
+                                <div class="card h-full text-center shadow">
+                                    <mat-icon class="icon-size-20 text-success m-auto mt-2"
+                                        [svgIcon]="'feather:search'"></mat-icon>
+                                    <div class="card-body pt-5">
+                                        <h4 class="card-title text-3xl font-bold">Outreach Influencers</h4>
+                                        <p class="card-text">Explore through 350k+ influencers and decide over the one
+                                            that suits best to your brand.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mb-4">
+                                <div class="card h-full text-center shadow">
+                                    <mat-icon class="icon-size-20 text-primary m-auto mt-2"
+                                        [svgIcon]="'feather:trending-up'"></mat-icon>
+                                    <div class="card-body pt-5">
+                                        <h4 class="card-title text-3xl font-bold">Niche-specific Influencers
+                                        </h4>
+                                        <p class="card-text">We share real-time performance metrics of each influencer
+                                            registered with us which gives an overview of the campaign insights.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mb-4">
+                                <div class="card h-full text-center shadow">
+                                    <mat-icon class="icon-size-20 text-secondary m-auto mt-2"
+                                        [svgIcon]="'feather:monitor'"></mat-icon>
+                                    <div class="card-body pt-5">
+                                        <h4 class="card-title text-3xl font-bold">Trusted Platform</h4>
+                                        <p class="card-text">Transparency and Security makes BookMyInfluencers the most
+                                            trusted influencer marketing platform in the world.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mb-4">
+                                <div class="card h-full text-center shadow">
+                                    <mat-icon class="icon-size-20 text-info m-auto mt-2"
+                                        [svgIcon]="'heroicons_outline:clipboard-check'"></mat-icon>
+                                    <div class="card-body pt-5">
+                                        <h4 class="card-title text-3xl font-bold">Competitor Analysis</h4>
+                                        <p class="card-text">We zero in on your rivals and form a strategy describing in
+                                            which areas you can do better than them.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mb-4">
+                                <div class="card h-full text-center shadow">
+                                    <mat-icon class="icon-size-20 text-warning m-auto mt-2"
+                                        [svgIcon]="'heroicons_outline:chat'"></mat-icon>
+                                    <div class="card-body pt-5">
+                                        <h4 class="card-title text-3xl font-bold">Direct Messaging</h4>
+                                        <p class="card-text">Did you just match with the right influencer for your
+                                            campaign? Just get in on the act of DMing them. It's that easy!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative">
+        <div class="h-full rounded-0 bg-white">
+            <div class="container p-5 text-center">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h1 class="text-4xl font-bold text-center mb-10">Brands Who Believe in Us</h1>
+                    </div>
+                    <div class="carousel col-sm-12">
+                        <app-carousel [slides]="slides"></app-carousel>
+                    </div>
+                </div>
+                <div class="mt-10">
+                    <a class="btn btn-maroon btn-lg rounded-0 shadow-sm font-bold text-white" type="button"
+                        [routerLink]="['/sign-up']">GET STARTED</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative">
+        <div class="h-full rounded-0 bg-light">
+            <div class="container p-5">
+                <div class="row">
+                    <div class="col-sm-7 prose">
+                        <h2 class="text-4xl font-bold">Are You a Social Influencer Scouting Brands To Leverage Your
+                            Audiences?</h2>
+                        <h6 class="mt-3 mb-3 p-para">Register yourself as an influencer with BookMyInfluencers and we
+                            will set you up with leading and appropriate brands.</h6>
+                        <h5 class="text-2xl font-bold">Why should you register with BMI as an influencer?</h5>
+                        <ul>
+                            <li>We allow you to customise your profile the way you want to</li>
+                            <li>We land you up with campaigns relevant to your channel</li>
+                            <li>We don't charge you any registration fee. 100% free registration</li>
+                            <li>We keep the deal transparent between brands and influencers without any mediator</li>
+                        </ul>
+                        <a class="btn btn-maroon btn-lg rounded-0 shadow font-bold mt-3 text-white" type="button"
+                            [routerLink]="['/sign-up']">GET STARTED</a>
+                    </div>
+                    <div class="col-sm-5"><img src="assets/images/influencers/influencers.jpg"
+                            class="img-fluid collage-img" alt="influencers">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative">
+        <div class="h-full rounded-0 bg-white">
+            <div class="container p-5">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h1 class="text-4xl font-bold text-center mb-4">Top Influencers</h1>
+                    </div>
+                    <div class="col-sm-12">
+                        <mat-tab-group class="sm:px-2" [animationDuration]="'0'" [selectedIndex]="'0'">
+                            <mat-tab label="Infotainment">
+                                <ng-template matTabContent>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/infotainment-1.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="infotainment-1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/infotainment-2.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="infotainment-2">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/infotainment-3.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="infotainment-3">
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Fashion">
+                                <ng-template matTabContent>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/fashion-1.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="fashion-1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/fashion-2.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="fashion-2">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/fashion-3.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="fashion-3">
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Entertainment">
+                                <ng-template matTabContent>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/entertainemnt-1.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="entertainemnt-1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/entertainemnt-2.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="entertainemnt-2">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/entertainemnt-3.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="entertainemnt-3">
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Health">
+                                <ng-template matTabContent>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/health-1.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="health-1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/health-2.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="health-2">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/health-3.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="health-3">
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Gaming">
+                                <ng-template matTabContent>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/gaming-1.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="gaming-1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/gaming-2.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="gaming-2">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/gaming-3.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="gaming-3">
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Travel">
+                                <ng-template matTabContent>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/travel-1.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="travel-1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/travel-2.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="travel-2">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/travel-3.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="travel-3">
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Food">
+                                <ng-template matTabContent>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/food-1.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="food-1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/food-2.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="food-2">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/food-3.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="food-3">
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Kids">
+                                <ng-template matTabContent>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/kids-1.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="kids-1">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/kids-2.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="kids-2">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <img src="assets/images/top/kids-3.jpg" class="img-fluid aos-init"
+                                                width="280" height="240" alt="kids-3">
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative">
+        <div class="h-full rounded-0 bg-light">
+            <div class="container p-5">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h1 class="text-5xl font-bold text-center mb-4">Get Paid To Be Creative</h1>
+                    </div>
+                    <div class="col-sm-10 offset-sm-1">
+                        <h4 class="text-center mb-12 text-3xl font-semibold">Register Yourself With BookMyInfluencers
+                            and Get Discovered by Esteemed Brands Flagging Success in Different Industries.</h4>
+                        <div class="text-center">
+                            <a class="btn btn-maroon btn-lg rounded-0 shadow-sm font-bold text-white mt-6" type="button"
+                                [routerLink]="['/sign-up']">GET STARTED</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative">
+        <div class="h-full rounded-0 bg-white">
+            <div class="container py-5 px-4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h1 class="text-5xl font-bold text-center mb-5">Word From Our Clients</h1>
+                    </div>
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <div class="col">
+                            <div class="card h-full text-center shadow">
+                                <div class="card-body">
+                                    <h4 class="card-title text-2xl font-bold">Noah Kalson</h4>
+                                    <h6 class="text-lg font-semibold mb-4">Manager, DoktorABC</h6>
+                                    <p class="card-text"> It's a breeze working with support team at BookMyInfluencers.
+                                        They have an army of talented professionals who are always available to resolve
+                                        any queries we may have. Their execution and output is precise and matches our
+                                        expectations. </p>
+                                    <div class="d-flex justify-content-center mt-10">
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-full text-center shadow">
+                                <div class="card-body">
+                                    <h4 class="card-title text-2xl font-bold">Hyou Jin Bae</h4>
+                                    <h6 class="text-lg font-semibold mb-4">Marketing Manager of VITA, SNOW Corp</h6>
+                                    <p class="card-text"> BookMyInfluencers offers powerful Youtube channels that every
+                                        brand must experience. Its passionate creators with high-quality social
+                                        engagements and unique contents highly contributed to VITA brand. We also loved
+                                        their fast and accurate communication skills, which has been a huge help to the
+                                        promotion of our brand </p>
+                                    <div class="d-flex justify-content-center mt-10">
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-full text-center shadow">
+                                <div class="card-body">
+                                    <h4 class="card-title text-2xl font-bold">Floyd Staller</h4>
+                                    <h6 class="text-lg font-semibold mb-4">Co-Founder</h6>
+                                    <p class="card-text"> Thanks to BookMyInfluencers for all their suggestions and
+                                        assistance at every step. It was an awesome experience to seek guidance for my
+                                        first brand promotion from the talented folks who were easy to communicate with.
+                                    </p>
+                                    <div class="d-flex justify-content-center mt-10">
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                        <mat-icon class="icon-size-5 text-info" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                        <mat-icon class="icon-size-5 text-muted" [svgIcon]="'heroicons_solid:star'">
+                                        </mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

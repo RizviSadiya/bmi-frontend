@@ -1,0 +1,45 @@
+<div class="flex flex-col flex-auto">
+    <form [formGroup]="categoryForm" autocomplete="off">
+        <div class="m-4">
+            <div>
+                <div class="text-center py-0.5 px-3 mb-4 rounded-full text-2xl font-bold text-black-600">
+                    Select Channel Category
+                </div>
+                <div class="checkbox-input">
+                    <div *ngFor="let item of categoriesData; let i=index">
+                        <label>
+                            <input type="checkbox" [value]="item.name" [checked]="checkIfValueSelected(item.name)"
+                                (change)="onSelectionChange($event)" />
+                            {{ item.name }}
+                        </label>
+                    </div>
+                </div>
+                <div *ngIf="otherCategorySelected" class="flex justify-center mt-2">
+                    <mat-form-field style="width: 50%">
+                        <mat-label
+                            class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                            Please Specify Category
+                        </mat-label>
+                        <input matInput placeholder="Enter Category" [formControl]="otherCategory">
+                        <mat-error>
+                            Invalid category
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <mat-error *ngIf="this.categoryForm.controls['category'].value.length < 1" class="flex justify-center">
+                    Please select at least 1 category.
+                </mat-error>
+            </div>
+        </div>
+        <div class="flex items-center justify-center mt-4">
+            <!-- matDialogClose -->
+            <button mat-flat-button  (click)="afterClose()" class="mr-2">
+                Cancel
+            </button>
+            <button mat-flat-button [color]="'primary'" (click)="proceed();"
+                [disabled]="this.categoryForm.controls['category'].value.length < 1">
+                save
+            </button>
+        </div>
+    </form>
+</div>

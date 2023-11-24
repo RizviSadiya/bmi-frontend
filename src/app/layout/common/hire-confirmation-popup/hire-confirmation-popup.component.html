@@ -1,0 +1,188 @@
+
+<!--<div class="flex flex-col flex-auto md:w-160 md:min-w-160">
+    <form [formGroup]="documentForm">
+        <div class="mx-4 my-1">
+            <div>
+          
+
+                <div class="row">
+
+                    <div class="col-12"> <div class="text-center mb-2 py-0.5 px-3 rounded-full text-2xl font-medium text-black-600">
+                        Preview your order
+                    </div></div>
+
+<div class="col-8">
+   
+    <mat-form-field class="w-full" [floatLabel]="'always'">
+        <mat-label>Brand promotion of Cambly adult on Name(Youtube)</mat-label>
+        <textarea matInput [placeholder]="jdCommentDescription" [rows]="8"
+        [(ngModel)]="instruct"  [formControlName]="'instruction'"></textarea>
+    </mat-form-field>
+    <!-- <mat-error class="-mt-2" *ngIf="submitted && documentForm.hasError('atLeastOne')">
+        Either of Job Description or Template Script is required
+    </mat-error> -->
+   <!-- <div class="flex-1 min-w-0 mb-4">
+        <mat-label
+            class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+           please provide campaign resource or attach relevant document 
+        </mat-label>
+        <input type="file" [(ngModel)]="_script" [formControlName]="'template_script'"  placeholder="Upload file"
+            accept=".pdf,.doc,.docx" (change)="onFileSelected($event.target.files)">
+    </div>
+    <mat-error class="-mt-2" *ngIf="submitted && documentForm.hasError('atLeastOne')">
+        Either of Job Description or Template Script is required
+    </mat-error>
+    <mat-form-field class="w-full" [floatLabel]="'always'">
+        <!-- <mat-label>Suggestions (if any)
+        </mat-label> -->
+        <!--<textarea matInput placeholder="Campaign Resource Placeholder"
+            [formControlName]="'suggestions'"></textarea>
+    </mat-form-field>
+
+    <!-- *ngIf="userPlan === 3" -->
+   <!-- <div class="flex flex-col">
+        <mat-label
+            class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+            How would you like to pay?<span class="text-danger">*</span>
+        </mat-label>
+        <mat-radio-group class="flex flex-row" [color]="'primary'"  [formControlName]="'payment_term'"
+            required (change)="onPaymentSelection();">
+            <mat-radio-button class="mb-2 mr-4" [value]="'0'">
+                Pay in full
+            </mat-radio-button>
+            <mat-radio-button [disabled]="userPlan === 1 || userPlan === 2" class="mb-2" [value]="'1'" (click)="notification()">
+                Pay half now (pay half later at Script submission ) 
+            </mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <!-- *ngIf="userPlan == 3" -->
+    <!--<div class="flex flex-col" >
+        <mat-label
+            class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+            Request for GST Invoice
+        </mat-label>
+        <mat-checkbox [color]="'primary'" [formControlName]="'gst_invoice'"></mat-checkbox>
+    </div>
+</div>
+<div class="col-4">
+    <div class="py-2 px-2">
+        <div class="px-4 py-2 leading-none  border border-r-0">
+            <div class="text-sm font-medium text-secondary">Campaign Budget</div>
+            <div class="mt-2 font-mono text-xl">{{ amount | currency : userDetailscurrency : 'symbol' :
+                '1.2-2' }}</div>
+        </div>
+        <div class="px-4 py-2 mt-2 mb-2 leading-none border border-r-0">
+            <div class="text-sm font-medium text-secondary">GST</div>
+            <div class="mt-2 font-mono text-xl">{{ gstAmount | currency : userDetailscurrency : 'symbol' :
+                '1.2-2' }}</div>
+        </div>
+        <div class="px-4 py-2 leading-none  border">
+            <div class="text-sm font-medium text-secondary">Total Amount to Pay</div>
+            <div class="mt-2 font-mono text-xl">{{ payableAmount | currency : userDetailscurrency :
+                'symbol' : '1.2-2' }}</div>
+        </div>
+    </div>
+    <div class="text-center ">
+        <!-- <button class="mt-2" mat-flat-button [color]="'primary'" (click)="submitApplication();">
+           Pay now 100% 
+        </button>
+        <button class="mt-2" mat-flat-button [color]="'primary'" (click)="submitApplication();">
+           Pay 50%
+        </button> -->
+         
+        <!--<button class="mt-2" mat-flat-button [color]="'primary'"  (click)="submitApplication();">
+            {{ 'Pay ' + ((payableAmount/amountDivider) | currency : userDetailscurrency : 'symbol' : '1.2-2') }}
+        </button>
+    </div>
+</div>
+                </div>
+
+                
+               
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <button mat-flat-button matDialogClose class="mr-2">
+                Cancel
+            </button>
+          
+        </div>
+    </form>
+</div>-->
+
+<div class="flex flex-auto justify-center  mx-auto mb-4 text-center campaignlive">
+    <h1 class="text-3xl">Preview Your Order</h1>
+</div>
+<div class="flex flex-auto justify-center  mx-auto">
+    <form [formGroup]="documentForm">
+        <div class="col-md-6 p-3 payplancontent-width">
+            <!-- <div class="text-2xl pb-2">
+                <p  class="font-bold">Order Description: </p>
+            </div> -->
+            <div class="text-2xl pb-2">
+                <p><span class="font-bold">Brand : </span> {{brandname}} </p>
+            </div>
+            <div class="text-2xl pb-2">
+                <p *ngIf="channelname.title"><span class="font-bold">Channel : </span> {{channelname.title}}</p>
+                <p *ngIf="channelname.name"><span class="font-bold">Channel : </span> {{channelname.name}}</p>
+            </div>
+            <div class="text-2xl pb-2">
+                <p><span class="font-bold">Promo type : </span> {{promot_product}}</p>
+            </div>
+            <div class="text-2xl pb-2">
+                <p><span class="font-bold">Terms : </span> As per proposal</p>
+                <!-- <p><span class="font-bold">Terms : </span> As mutually agreed by</p> -->
+            </div>
+            <div class="text-2xl pb-2">
+                <mat-radio-group class="" [color]="'primary'" [value]="'0'"  [formControlName]="'payment_term'"
+                required (change)="onPaymentSelection();">
+                <mat-radio-button class="mr-4" [value]="'0'">
+                    <span class="font-bold">Pay in full</span>
+                </mat-radio-button><br/>
+
+                <mat-radio-button [disabled]="userPlan === 1 || userPlan === 2" class="mb-2" [value]="'1'" (click)="notification()">
+                    <span ><span class="font-bold">Pay 50% now </span> (and 50% after video concept/script is submitted)</span> 
+                </mat-radio-button>
+            </mat-radio-group>
+            </div>
+            
+        </div>
+        <div class="lg:flex flex-col col-md-5 p-5 items-center justify-center pull-right">
+            <div class="text-2xl pb-2 text-center">
+                <p>Deal value: <span> {{ amount | currency : userDetailscurrency : 'symbol' :
+                    '1.0-0' }}</span></p>
+            </div>
+            <div class="text-2xl pb-2 text-center" *ngIf="userDetailscurrency==='INR'">
+                <p>Refundable GST: <span> {{ gstAmount | currency : userDetailscurrency : 'symbol' :
+                    '1.0-0' }}</span></p>
+            </div>
+            <div class="text-2xl pb-2 text-center" *ngIf="userDetailscurrency==='INR'">
+                <p>Amount to pay: <span> {{ payableAmount | currency : userDetailscurrency :
+                    'symbol' : '1.0-0' }}</span></p>
+            </div>
+        </div>
+        <div class="col-md-12  items-center justify-center text-center mb-4" *ngIf="userDetails.wallet_balance >= payableAmount ">
+            <!-- <button class="mt-2 graybtnrg text-sm invite-Hire-btn" style="color: white;"  mat-flat-button   (click)="paymentToUpi();"> -->
+            <button class="mt-2 graybtnrg text-sm invite-Hire-btn" style="color: white;"  mat-flat-button (click)="confirmPopUp();" >
+                <!-- Proceed to payment -->
+                Pay via Wallet (GST not applicable)
+               
+                
+                <!-- {{ 'Pay ' + ((payableAmount/amountDivider) | currency : userDetailscurrency : 'symbol' : '1.2-2') }} -->
+            </button>
+        </div><br/>
+        <div class="col-md-12  items-center justify-center text-center mb-4" >
+            <button class="mt-2 hier-reveal-proceed-btn" mat-flat-button   (click)="paymentToUpi();" >
+               <!-- Wallet payment -->
+               Pay via Gateway
+                <!-- {{ 'Pay ' + ((payableAmount/amountDivider) | currency : userDetailscurrency : 'symbol' : '1.2-2') }} -->
+            </button>
+        </div><br/>
+        <div class="col-md-12  items-center justify-center text-center" style="cursor: pointer;" >
+            <!-- <a  (click)="donloadInvoice()" > <u> Or Download invoice and pay via UPI/NEFT/IMPS </u></a> -->
+            <a  href="https://api.whatsapp.com/send?phone=917565015888&text=I%20want%20to%20place%20an%20order%20on%20BookMyInfluencers.%20May%20I%20request%20for%20an%20invoice%20for%20making%20payment%3F"  target="_blank"> <u>  Request invoice </u></a>
+        </div>
+    </form>
+</div>
+<!-- mat-dialog-close -->
+<!-- mat-dialog-close -->

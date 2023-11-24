@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>BMI - Book My Influencers</title>
+    <meta charset="utf-8">
+    <meta name="description"
+        content="Admin Template and Starter Kit with Angular, Angular Material Components and TailwindCSS">
+    <meta name="keywords"
+        content="Bmi,HTML,CSS,Angular,Angular 2,Angular 10,Angular 11,Angular 12,Material,Material 2,Angular Components,Tailwind,Tailwind CSS,TailwindCSS,Admin Template,Admin Starter Kit">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+
+    <base href="/">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon-16x16.png">
+
+    <!-- Fonts -->
+    <link href="assets/fonts/inter/inter.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon fonts -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Splash screen styles -->
+    <link href="assets/styles/splash-screen.css" rel="stylesheet">
+    <link href="assets/styles/http-loader-screen.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body class="bg-body">
+
+    <!-- Splash screen -->
+    <!-- <bmi-splash-screen>
+        <img src="assets/images/loader/bmiheader-2-Slow-(White)-(1).gif" alt="Bmi logo">
+        <img src="assets/images/loader/loader-white.gif" alt="Bmi logo">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </bmi-splash-screen> -->
+
+    <!-- App root -->
+    <app-root></app-root>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <!-- Razorpay checkout file -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <!-- <div class="custom-chat-widget">
+    <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="a270a98d-e143-4c65-a7ff-a3024f2fcff7";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  </div> -->
+  <div>
+    <script type="text/javascript">
+      window.$crisp=[];
+      window.CRISP_WEBSITE_ID="a270a98d-e143-4c65-a7ff-a3024f2fcff7";
+      (function(){
+        d=document;
+        s=d.createElement("script");
+        s.src="https://client.crisp.chat/l.js";
+        s.async=1;
+        d.getElementsByTagName("head")[0].appendChild(s);
+      })();
+    </script>
+  </div>
+  
+  <script>
+        function openCity(evt, cityName) {
+          var i, tabcontent, tablinks;
+          tabcontent = document.getElementsByClassName("tabcontent");
+          for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+          }
+          tablinks = document.getElementsByClassName("tablinks");
+          for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+          }
+          document.getElementById(cityName).style.display = "block";
+        //   document.getElementById(cityName).style.display = "block";
+          evt.currentTarget.className += " active";
+        }
+        </script>
+
+<!-- <style>
+  /* Custom CSS for aligning Crisp.chat to the left bottom */
+.custom-chat-widget {
+  position: fixed;
+  left: 20px; /* Adjust the left positioning as needed */
+  bottom: 20px; /* Adjust the bottom positioning as needed */
+}
+
+</style> -->
+</body>
+
+</html>

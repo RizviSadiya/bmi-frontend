@@ -1,0 +1,629 @@
+<div class="items-center bg-card shadow  mb-4" >
+    <div class="influencerssection">
+        <div class="influencerssection_inner">
+            <div class="col-12 col-sm-3 col-md-2 text-center p-0">
+                <div class="imagesection">
+                    <ng-container *ngIf="channel?.profile_pic || channel?.blur_profile_pic">
+                        <div style="pointer-events: none;"
+                            class="relative flex flex-0 items-center justify-center w-full h-auto xs:w-26 xs:h-26 md:w-26 md:h-26 rounded-full m-auto">
+                            <img class="w-full h-full object-cover"
+                                [ngClass]="{'img-blurred': (userType === 'BRAND' && !channel.is_revealed)}"
+                                [src]="userType === 'INFLUENCER' || (userType === 'BRAND' && channel.is_revealed) ? channel.profile_pic : channel.blur_profile_pic">
+                               
+                                <!-- <mat-icon>send</mat-icon> -->
+                            <ng-container *ngIf="userType === 'BRAND' && !channel.is_revealed">
+                                <div
+                                    class="absolute m-auto -mt-5 px-1.5 rounded rounded-b-none text-lg font-bold leading-5 text-black bg-green-400">
+                                    <div>{{ channel.credit_cost ? channel.credit_cost : '0' }}</div>
+                                </div>
+                                <div
+                                    class="absolute m-auto mt-5 px-1.5 rounded text-sm font-medium leading-5 text-white bg-amber-600">
+                                    <div>credits</div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!channel?.profile_pic && !channel?.blur_profile_pic">
+                        <div class="flex flex-0 items-center justify-center w-26 h-26 rounded-full overflow-hidden m-auto bg-blue-200 font-bold text-2xl">
+                            <!-- {{ "BMI" }} -->
+                            <img class="w-full h-full object-cover"
+                            [ngClass]="{'img-blurred': (userType === 'BRAND' && channel.is_revealed)}"
+                            onError="this.src = 'assets/images/logo/logo.png'"
+                            [src]="userType === 'INFLUENCER' || (userType === 'BRAND' && channel.is_revealed) ? channel.image : channel.blur_profile_pic">
+                            <ng-container *ngIf="userType === 'BRAND' && !channel?.is_revealed">
+                                <div
+                                    class="absolute m-auto -mt-5 px-1.5 rounded rounded-b-none text-sm font-semibold leading-5 text-white bg-amber-600">
+                                    <div>{{ channel?.credit_cost ? channel?.credit_cost : '0' }}</div>
+                                </div>
+                                <div
+                                    class="absolute m-auto mt-5 px-1.5 rounded text-sm font-medium leading-5 text-white bg-amber-600">
+                                    <div>credits</div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                </div>
+                <ul class="profilelink" >
+                    <!-- <li *ngIf="userType === 'INFLUENCER' || (userType === 'BRAND' && channel?.is_revealed); else unrevealedMediaLink">
+                        <a [href]="channel?.channel ? 'https://bmi.yt/' + channel?.channel  : ''" target="_blank"
+                        >
+                        <img src="/assets/images/iil.PNG" style="width: 1.7rem;padding: 1px;">
+                        </a>
+                    </li> -->
+                      <li *ngIf="userType !== 'INFLUENCER' && (userType === 'BRAND' && channel?.is_revealed); else unrevealedMediaLink">
+                        <a *ngIf="channel?.channel_link != null && channel?.channel_link != ''" [href]="channel?.channel_link" target="_blank">
+                            <mat-icon svgIcon="feather:youtube"class="text-red-600 pt-1" style="margin-left:10px ;">
+                            </mat-icon>
+                        </a>
+                    </li>
+                    <li *ngIf="userType !== 'INFLUENCER' && (userType === 'BRAND' && channel?.is_revealed); else unrevealedMediaLink">
+                        <a *ngIf="channel?.facebook != null && channel?.facebook != ''" [href]="channel?.facebook" target="_blank">
+                            <mat-icon svgIcon="feather:facebook" class="text-blue-600 pt-1" style="margin-left:10px ;">
+                            </mat-icon>
+                        </a>
+                    </li>
+                  
+                    <li *ngIf="userType !== 'INFLUENCER' && (userType === 'BRAND' && channel?.is_revealed); else unrevealedMediaLink">
+                        <a *ngIf="channel?.instagram != null && channel?.instagram != ''" [href]="channel?.instagram" target="_blank">
+                            <mat-icon svgIcon="feather:instagram" class="text-pink-600 pt-1" style="margin-left:10px ;">
+                            </mat-icon>
+                        </a>
+                    </li>
+                    <li *ngIf="userType !== 'INFLUENCER' && (userType === 'BRAND' && channel?.is_revealed); else unrevealedMediaLink">
+                        <a *ngIf="channel?.twitter != null && channel?.twitter != ''" [href]="channel?.twitter" target="_blank">
+                            <mat-icon svgIcon="feather:twitter" class="text-blue-600 pt-1" style="margin-left:10px ;">
+                            </mat-icon>
+                        </a>
+                    </li>
+                    <li *ngIf="userType !== 'INFLUENCER' && (userType === 'BRAND' && channel?.is_revealed); else unrevealedMediaLink">
+                        <a matTooltip="Highly recommended"  target="_blank"
+                            *ngIf="channel.inf_recommend ==='1'">
+                            <img class="w-10 h-5" src="assets/images/firee.jpg" alt="bmi logo">
+                        </a>
+                    </li>
+                    
+                </ul>
+                <ng-template #unrevealedMediaLink></ng-template>
+            </div>
+            <div class="col-12 col-sm-3 col-md-7">
+                <div class="middelsectiontop">
+                    <ul class="namesection">
+                        <li class="infu_name">
+                            <span [ngClass]="{'': (userType === 'BRAND' && !channel?.is_revealed)}">
+                                {{ userType === 'INFLUENCER' || (userType === 'BRAND' && channel?.is_revealed) ? channel?.title :
+                                'xxxxx' }} 
+                            </span>&nbsp;
+                            <mat-icon *ngIf="userType === 'INFLUENCER'" class="icon-size-5" style="vertical-align: middle;"
+                                [matTooltip]="channel?.is_verified ? 'Channel Verified' : 'Channel Not Verified'"
+                                [ngClass]="{'text-success': channel?.is_verified, 'text-warning': !channel?.is_verified, 'cursor-pointer' : userType === 'INFLUENCER' && !channel?.is_verified}"
+                                [svgIcon]="channel?.is_verified ? 'heroicons_solid:badge-check' : 'heroicons_solid:exclamation'"
+                                (click)="userType === 'INFLUENCER' && !channel?.is_verified && verifyInfChannel();">
+                            </mat-icon>
+                        </li>
+                     
+                        <li *ngIf="userType === 'BRAND' && channel?.is_revealed">
+                            <mat-icon *ngIf="channel?.is_favourite === true"
+                            class="flex icon-size-6 mb-2 text-warn cursor-pointer" [svgIcon]="'heroicons_solid:heart'"
+                            matTooltip="Remove from Favourite" (click)="markUnFavourite(channel);">
+                        </mat-icon>
+                        <mat-icon *ngIf="channel?.is_favourite === false" class="flex icon-size-6 mb-2 cursor-pointer"
+                            [svgIcon]="'mat_outline:favorite_border'" matTooltip="Mark as Favourite"
+                            (click)="markFavourite(channel);">
+                        </mat-icon>
+                       </li>
+                        <li  *ngIf="userType === 'BRAND' && channel?.is_revealed">
+                                    <div class="dropdown">
+                                        <a href="#" class="dropdown-toggle" type="button" data-toggle="dropdown">
+                                            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" fill="currentColor" class="bi bi-list"
+                                                viewBox="0 0 16 16" data-bs-toggle="tooltip" data-bs-placement="left" title="" role="button" tabindex="0"
+                                                data-bs-original-title="Add to list">
+                                                <path fill-rule="evenodd"
+                                                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z">
+                                                </path>
+                                            </svg> -->
+                                            <mat-icon class="flex icon-size-6 cursor-pointer" [svgIcon]="'heroicons_solid:view-list'"
+                                   matTooltip="Add to List" (click)="checkListAndAdd(channel.channel_id, channel.title);"> 
+                                </mat-icon>
+                                        </a>
+                                        <ul class="dropdown-menu custom_drop">
+                                            <!-- <form class="bg-light"> -->
+                                                <input type="text" class="cus-form-control" autocomplete="false" placeholder="Search" 
+                                                [(ngModel)]="userFilter.name"
+                                                    id="filter-input_3070684">
+                                            <!-- </form> -->
+                                        <div id="autocom-box">
+                                            <li *ngFor="let list of userLists | filterBy: userFilter">
+                                                <!-- <span *ngFor="let li of selectedList"> -->
+                                                <!-- <div [ngStyle]="{'background-color':li.list_id == list.id ? 'green' : 'white' }"> -->
+                                                    <a  class="dropdown-item d-flex gap-2 align-items-center"  alt="{{getShortName(list.name)}}"   id="collection_15">
+                                                        <span class="badge border border-dark text-dark"  [ngStyle]="{'background-color':list.is_in_list==true ? 'greenyellow' : 'white' }"  id="badge_15" >{{getShortName(list.name) |uppercase}}
+                                                           </span>  
+                                                           <button  (click)="proceed(list)">  {{list.name}}</button>
+                                                           <!-- *ngIf="!li.list_id" -->
+                                                    </a>
+                                                <!-- </div> -->
+                                            <!-- </span> -->
+                                           
+                                            </li>
+                                            <!-- <li>
+                                                <a class="dropdown-item d-flex gap-2 align-items-center" href="#">
+                                                    <span class="badge border border-dark text-dark" id="badge_14">T</span>
+                                                    Test
+                                                </a>
+                                            </li> -->
+                                        </div>
+                                    <li>
+                                        <hr class="dropdown-divider my-0">
+                                    </li>
+                                    <li class="bg-light py-1"><a class="dropdown-item fw-500"  (click)="addToList()"><i
+                                                class="fa fa-plus"></i> Create List</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider my-0">
+                                                </li>
+                                                <li class="bg-light py-1">
+                                                    <a class="dropdown-item fw-500" routerLink="/pages/lists"><i
+                                                            class="fa fa-align-justify"></i> Manage List</a></li>
+                            
+                                        </ul>
+                                    </div>
+                           </li>
+                           <li>
+                            <ng-container *ngIf="userType === 'INFLUENCER' && channel?.is_default">&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide clrlightylw">
+                                    <span class="leading-relaxed whitespace-nowrap Primary">Primary</span>
+                                   
+                                </span>
+                            </ng-container>
+                            <ng-container *ngIf="userType === 'BRAND' && channel?.channel_lang">&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide clrlightylw">
+                                    <span class="leading-relaxed whitespace-nowrap">{{ channel?.channel_lang }}</span>
+                                </span>
+                            </ng-container>
+                        </li>
+                        
+                    </ul>
+                </div>
+                <div class="middelsectioncenter">
+                    <ul class="midiconlink">
+                        <li *ngIf="channel?.EstViews >= 50000" ><img src="/assets/images/i1.PNG"></li>
+                        <!-- <li *ngIf="channel?.influncerInfo?.detail_in_exchange ===1" matTooltip="I accept products"><img src="/assets/images/i2.PNG"></li> -->
+                        <!-- <li><img src="/assets/images/i3.PNG"></li>
+                        <li><img src="/assets/images/i4.PNG"></li>
+                        <li><img src="/assets/images/gift.jpg"></li>
+                        <li><img src="/assets/images/logo.png"></li> -->
+                        <li *ngIf="channel?.onehit ===1" matTooltip="One Hit Wonder"><img src="/assets/images/Logo.png" style="width: 20px;"></li>
+                        <li *ngIf="channel?.videoCount <= 5" matTooltip="Less Videos"><img src="/assets/images/i3.PNG"></li>
+                        <li *ngIf="channel?.oldcontent===1" matTooltip="Old Content"><img src="/assets/images/i4.PNG"></li>
+                        <li *ngIf="channel?.influncerInfo?.detail_in_exchange ===1" matTooltip="I accept products"><img src="/assets/images/gift.jpg"></li>
+                    </ul>
+                </div>
+                <div class="middelsectionbottom text-center">
+                    <div class="col-md-12 text-center ststusborder">
+                        <span class="linetext">Stats</span>
+                    </div>
+                    <div class="col-md-3 text-left p-0">
+                        Subs:{{ channel?.subscriberCount ? (channel?.subscriberCount | thousandSuff : 2) : "--" }}
+                    </div>
+                    <div class="col-md-5 text-center p-0">
+                        Avg. Views:<span class="fxdfont">
+                            {{ channel?.EstViews ? (channel?.EstViews | thousandSuff : 2) : "--" }}</span>
+                    </div>
+                    <div class="col-md-4 text-right p-0">
+                        Eng. Rate:{{ channel?.EngagementRate ? channel?.EngagementRate : "--" }}
+                    </div>
+                    <!-- <button class="graybtn text-sm show-similar-btn"  *ngIf="userType === 'BRAND'"
+                    [matTooltip]="'Show Similar INFLUENCER'"
+                        [svgIcon]="channel?.is_revealed ? 'feather:eye' : ''"
+                        (click)="userType === 'BRAND' && channel?.is_revealed && showSimilar(channel);">Show Similar</button> -->
+                </div>
+
+               
+                <div class="flex flex-0 items-center justify-content-center justify-content-md-start">
+                    <ng-container *ngIf="userType === 'BRAND'">
+                        <span [ngClass]="{'blurred': (userType === 'BRAND' && !channel?.is_revealed)}">
+                            <!-- {{
+                            'Email Not Available' }} -->
+                            <!-- {{channel?.channel_email ? channel?.channel_email :
+                            'Email Not Available' }} -->
+                            <!-- <mat-icon *ngIf="channel?.channel_email" matTooltip="{{channel?.channel_email}}">mail</mat-icon> -->
+
+                    </span>&nbsp;
+                    </ng-container>
+                    <!-- <ng-container>
+                        <a [href]="channel.channel_link" target="_blank">
+                            <mat-icon svgIcon="feather:phone" class="text-green-600 pt-1">
+                            </mat-icon>
+                        </a>
+                    </ng-container> -->
+                </div>
+                <!-- <div class="flex flex-0 items-center justify-content-center justify-content-md-start">
+                    <ng-container *ngIf="userType === 'BRAND'">
+                        <span class="rounded-full tracking-wide
+                       text-green-800" [ngClass]="{'blurred': (userType === 'BRAND' && !channel?.is_revealed)}">
+                            {{channel?.detail_in_exchange ? channel?.detail_in_exchange :
+                            'I accept products' }} 
+                            <mat-icon *ngIf="channel?.influncerInfo?.detail_in_exchange ===1" matTooltip="I accept products">info</mat-icon>
+
+                        </span>&nbsp;
+                    </ng-container>
+                    <ng-container *ngIf="userType === 'BRAND'">
+                        <span [ngClass]="{'blurred': (userType === 'BRAND' && !channel?.is_revealed)}">
+                             {{
+                            'Email Not Available' }} 
+                            {{channel?.channel_email ? channel?.channel_email :
+                            'Email Not Available' }} 
+                            <mat-icon *ngIf="channel?.channel_email" matTooltip="{{channel?.channel_email}}">mail</mat-icon>
+
+                    </span>&nbsp;
+                    </ng-container>
+                </div> -->
+                <!-- <div class="flex flex-0 items-center justify-content-center justify-content-md-start">
+                   
+                    
+                </div> -->
+
+                <!-- <div *ngIf="userType === 'INFLUENCER'"
+                    class="flex flex-0 items-center justify-content-center justify-content-md-start leading-5  text-secondary mat-flat-button p-0 cursor-default">
+                    <!-- <span class="mr-2 mat-button-wrapper" [matTooltip]="channel.followers + ' Followers'">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user-group'"></mat-icon>
+                        <span class="ml-1">{{ channel.followers }}</span>
+                    </span> -->
+                    <!-- <span class="mr-2 mat-button-wrapper"
+                        [matTooltip]="(channel?.viewCount | thousandSuff : 2) + ' Life Time Views'">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:play'"></mat-icon>
+                        <span class="ml-1">
+                            {{ channel?.viewCount ? (channel?.viewCount | thousandSuff : 2) : "--" }}</span>
+                    </span>
+                    <span class="mat-button-wrapper" [matTooltip]="channel?.videoCount + ' Total Videos'">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:video-camera'">
+                        </mat-icon>
+                        <span class="ml-1">
+                            {{ channel?.videoCount ? channel?.videoCount : "--" }}</span>
+                    </span>
+                </div> --> 
+                <!-- <div *ngIf="userType === 'BRAND' && channel?.tags"
+                    class="flex flex-0 items-center justify-content-center justify-content-md-start leading-5  text-secondary mat-flat-button p-0 cursor-default">
+                    <ng-container *ngFor="let tag of channel.tags.split(','); let i = index">
+                        <div
+                            class="flex items-center justify-center py-1 px-3 mr-3 shadow rounded-full leading-normal text-gray-500 bg-gray-100">
+                            <span class="text-sm font-medium whitespace-nowrap">
+                                {{ tag | uppercase }}
+                            </span> 
+                        </div>
+                    </ng-container>
+                </div>
+                <ng-container *ngIf="userType === 'BRAND'">
+                    <ng-container *ngIf=" channel?.cat_percentile_5 ===''">
+                         channel?.cat_percentile_1 || 
+                        <span
+                            class="flex flex-0 items-center justify-content-center justify-content-md-start leading-5  text-secondary p-0 mt-2">
+                            {{ channel?.cat_percentile_1 }}
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf=" channel?.cat_percentile_10 ===''">
+                        channel?.cat_percentile_5 || 
+                        <span
+                            class="flex flex-0 items-center justify-content-center justify-content-md-start leading-5  text-secondary p-0 mt-2">
+                            {{ channel?.cat_percentile_5 }}
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="channel?.cat_percentile_10 !=''">
+                        truncate
+                        <span
+                            class="flex flex-0 items-center justify-content-center justify-content-md-start leading-5  text-secondary p-0 mt-2">
+                            {{ channel?.cat_percentile_10 }}
+                        </span>
+                    </ng-container>
+                </ng-container> -->
+
+                <!-- <ng-container *ngIf="userType === 'BRAND' && channel.is_revealed">
+                    <div class="flex flex-0 items-center justify-content-center justify-content-md-start my-2">
+                        <mat-icon class="mr-4 icon-size-8 cursor-pointer" [svgIcon]="'heroicons_solid:chat-alt'"
+                            matTooltip="Start chat" (click)="openQuickChat(channel.influ_id);">
+                        </mat-icon>
+                        <mat-icon *ngIf="channel.is_favourite === true"
+                            class="mr-4 icon-size-8 text-warn cursor-pointer" [svgIcon]="'heroicons_solid:heart'"
+                            matTooltip="Remove from Favourite" (click)="markUnFavourite(channel.id);">
+                        </mat-icon>
+                        <mat-icon *ngIf="channel.is_favourite === false" class="mr-4 icon-size-8 cursor-pointer"
+                            [svgIcon]="'mat_outline:favorite_border'" matTooltip="Mark as Favourite"
+                            (click)="markFavourite(channel.id);">
+                        </mat-icon>
+                        <mat-icon class="icon-size-8 cursor-pointer" [svgIcon]="'heroicons_solid:view-list'"
+                            matTooltip="Add to List" (click)="checkListAndAdd(channel.channel_id, channel.title);">
+                        </mat-icon>
+                    </div>
+                </ng-container> -->
+            </div>
+
+            <div class="col-12 col-sm-3 col-md-3 xs:mt-1 pricesection text-center" [ngClass]="{'-mt-2': userType === 'INFLUENCER', '': userType === 'BRAND'}">
+                <div class="flex flex-col text-center mt-2 text-blue-500"
+                    *ngIf="!(mode === 'response' || mode === 'shortlisted' || mode === 'message')  ">
+                    <ng-container>
+                        <div class="clrback"  *ngIf="channel?.promotion_price !=0 && channel?.promotion_price > 100 || userType === 'INFLUENCER'">Promotion Price</div>
+                        <div class="text-2xl font-semibold leading-tight tracking-tight text-red-600" (click)="changePrice(channel)" *ngIf="channel?.promotion_price ==0 && userType != 'BRAND' " matTooltip="set channel price">Set Price</div>
+                    </ng-container>
+                    <ng-container>
+                        <div class="clrback"  *ngIf="(channel?.promotion_price ==0  || channel?.promotion_price < 100 ) && (userType == 'INFLUENCER' || userType == 'BRAND' || userType != 'BRAND' || (userType === 'BRAND' && !channel?.is_revealed))" >Promotion Price</div>
+                        <div class="infu_name"  *ngIf="(channel?.promotion_price ==0 || channel?.promotion_price < 100 ) && (userType == 'INFLUENCER' || userType == 'BRAND' || userType != 'BRAND' || (userType === 'BRAND' && !channel?.is_revealed))" style="color:#000">INR *******</div>
+                    </ng-container>
+                    <ng-container>
+                        <div class="infu_name"  *ngIf="channel?.promotion_price !=0">
+                            <div class="infu_name" *ngIf="channel?.promotion_price > 100 || userType != 'BRAND'" style="color:#000">
+                            {{ userType === 'INFLUENCER' ||  (userType === 'BRAND' && channel?.is_revealed) ?
+                            (channel?.promotion_price | currency : (userDetails.currency ? userDetails.currency : 'INR') :
+                            'symbol' : '1.0-0') : 'INR *******' }}
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                
+                <div class="text-center mt-2 whitespace-nowrap"
+                    *ngIf="!(mode === 'response' || mode === 'shortlisted' || mode === 'message')">
+                    <div class="text-2xl font-semibold leading-tight tracking-tight">
+                        <ng-container *ngIf="userType === 'BRAND' && !channel?.is_revealed">
+                            <div class="">
+                                <ul class="midiconlink" >
+                                    <li>
+                                        <a>
+                                            <img src="/assets/images/i6.PNG">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <img class="" src="assets/icons/whatsapp.png" style="width: 19px;">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <img src="/assets/images/i7.PNG" >
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="text-center mt-0 whitespace-nowrap" *ngIf="mode === 'response' || mode === 'shortlisted' || mode === 'message'">
+                    <ng-container>
+                        <div class="clrback">Bid Value</div>
+                    </ng-container>
+                    <div class="text-2xl infu_name" *ngIf="userDetails.currency === 'USD'" style="color:#000">  
+                        <ng-container>{{ bidAmount ? (bidAmount | currency : (userDetails.currency ? userDetails.currency :
+                            'USD') : 'symbol' : '1.0-0') : "USD *******" }}
+                        </ng-container>
+                    </div>
+                    <div class="text-2xl infu_name" *ngIf="userDetails.currency === 'INR'" style="color:#000">
+                        <ng-container>{{ bidAmount ? (bidAmount | currency : (userDetails.currency ? userDetails.currency :
+                            'INR') : 'symbol' : '1.0-0') : "INR *******" }}
+                        </ng-container>
+                    </div>
+                    <!-- <div>
+                        <button class="fuse-mat-button-rounded" mat-flat-button [color]="'accent'"
+                            [disabled]="!channel.is_revealed">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:chat'"></mat-icon>
+                            <span class="ml-1">Message</span>
+                        </button>
+                    </div> -->
+                </div>
+
+                <div class="ml-auto top-0 absolute right-0" *ngIf="userType === 'INFLUENCER'">
+                    <button mat-icon-button [matMenuTriggerFor]="editChannelOptions">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                    </button>
+                    <mat-menu #editChannelOptions="matMenu">
+                        <button mat-menu-item (click)="changePrice(channel)">Change Price</button>
+                        <button mat-menu-item (click)="openRemoveChannelDialog(channel)">Remove Channel</button>
+                        <button mat-menu-item *ngIf="!channel.is_default"
+                            (click)="openMarkDefaultChannelDialog(channel)">Make
+                            as Primary</button>
+                    </mat-menu>
+                </div>
+                <div class="clearfix"></div>
+                <div class="text-center mt-2 whitespace-nowrap" *ngIf="mode === 'response' || mode === 'shortlisted' || mode === 'message'">
+                   
+                    <div *ngIf="mode === 'response'">
+                        <button class="fuse-mat-button-rounded mb-2" mat-flat-button [color]="'accent'"
+                            (click)="ProposalClick();" [disabled]="!channel.is_revealed" >
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                            <span class="ml-1" >Proposal</span>
+                        </button>
+                    </div>
+                    <div *ngIf="mode === 'response'" style="color:#fff!important">
+                        <button class="fuse-mat-button-rounded mb-2" mat-flat-button [color]="'primary'"
+                            (click)="onShortlistClick();" [disabled]="!channel.is_revealed || application.status=='2'" >
+                            <!-- style="background: #4f46e5;color: #fff!important;color:#fff!important" -->
+                            <span class="ml-1" style="color:#fff!important"> + Shortlist</span>
+                        </button>
+                    </div>
+                  
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-12">
+                    <ul class="midiconlink" *ngIf="userType === 'BRAND' && channel?.is_revealed">
+                        <li  *ngIf="userType === 'BRAND'">
+                            <a *ngIf="channel?.channel_email" matTooltip="{{channel?.channel_email}}">
+                                <img src="/assets/images/i6.PNG">
+                            </a>
+                        </li>
+                        <li *ngIf="userType === 'INFLUENCER' || (userType === 'BRAND' && channel?.is_revealed); else unrevealedMediaLink">
+                            <a *ngIf="userType === 'BRAND'" (click)="whatsappRequest()">
+                                <img class="" src="assets/icons/whatsapp.png" style="width: 19px;">
+                            </a>
+                        </li>
+                        <li>
+                            <a matTooltip="Start chat" (click)="openQuickChat(channel);">
+                                <img src="/assets/images/i7.PNG" >
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-12">    
+                    <div *ngIf="userType === 'BRAND'" class="text-center mt-2">
+                        <!-- && mode === 'dashboard' -->
+                        <ng-container *ngIf="channel?.is_revealed; else revealInfuencerChannel">
+                            <ng-container *ngIf="mode === 'response' || mode === 'shortlisted'; else notResponseScreen">
+                                <span (click)="onHireClick();"
+                                    [matTooltip]="'Hire ' + channel?.title">
+                                    <button class="graybtnrg text-sm invite-Hire-btn">Hire</button>
+                                </span>
+                            </ng-container>
+                            <ng-template #notResponseScreen>
+                                <!-- <span *ngIf="channel?.channel_email !=''" 
+                                    (click)="inviteChannel(channel);" matTooltip="Invite">
+                                    <button class="graybtnrg text-sm">Invite</button>
+                                </span> -->
+                                <span  (click)="inviteChannel(channel);" matTooltip="Invite">
+                                    <button class="graybtnrg text-sm invite-Hire-btn">Invite</button>
+                                </span>
+                            </ng-template>
+                        </ng-container>
+                        <ng-template #revealInfuencerChannel>
+                            <span *ngIf="channel?.credit_cost && channel?.credit_cost > 0" 
+                                (click)="revealChannel(channel?.id, channel?.credit_cost,channel);" matTooltip="Reveal Channel">
+                                <button class="graybtnrg text-sm reveal-btn">Reveal</button>
+                            </span>
+                        </ng-template>
+                    </div>
+                    <div *ngIf="userType === 'INFLUENCER'" class="text-center mt-2">
+                        <ng-container *ngIf="!channel?.is_verified">
+                            <span (click)="verifyInfChannel();"
+                                matTooltip="Verify Channel">
+                                <button class="graybtnrg text-sm">Verify</button>
+                            </span>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!-- <ng-container *ngIf="similarInfluencer?.length; else noChannel">
+        <ng-container *ngFor="let channel of similarInfluencer.channel_list; let k = index; trackBy: trackByFn">
+            <Suggested-Invite-List *ngIf="channel" [similarInfluencer]="similarInfluencer"></Suggested-Invite-List>
+           
+            <influencer-channel *ngIf="channel" [channel]="channel"></influencer-channel>
+        </ng-container>
+        <ng-container *ngIf="totalChannels > 10">
+            <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="false"
+                [length]="totalChannels" [pageIndex]="currentPage" (page)="getPaginatorData($event)">
+            </mat-paginator>
+        </ng-container>
+    </ng-container>
+    <ng-template #noChannel>
+        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There is no similar Influencer
+            channel!</div>
+    </ng-template> -->
+</div>
+<style>
+    .dropdown-toggle::after{
+        display: none;
+    }
+    body{
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    .custom_drop{
+        min-width: 250px;
+    /* position: absolute;
+    inset: 0px 0px auto auto;
+    margin: 0px;
+    transform: translate3d(0px, 25px, 0px); */
+    padding: 0;
+    }
+    .bg-light{
+        background: #F8F9FA;
+        padding: 0.5rem!important;
+            border-bottom: 1px solid #dee2e6!important;
+    }
+   .cus-form-control {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    appearance: none;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    box-shadow: none;
+}
+#autocom-box{
+max-height: 160px;overflow:auto;
+}
+.align-items-center {
+    align-items: center!important;
+}
+
+.gap-2 {
+    gap: 0.5rem!important;
+}
+.d-flex {
+    display: flex!important;
+}
+.dropdown-menu{
+    right: 0;
+    left: auto;
+}
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 1rem !important;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
+.badge {
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: .75em;
+    font-weight: 700;
+    line-height: 1;
+    color: #080c15;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    background: transparent;
+}
+.border-dark {
+    border-color: #212529!important;
+}
+a:hover{
+    text-decoration: none;
+}
+.border {
+    border: 1px solid #212529!important;
+}
+.dropdown-item:focus, .dropdown-item:hover {
+    color: #1e2125 !important;
+    background-color: #e9ecef !important;
+}
+hr:not([size]) {
+    height: 1px;
+}
+li.bg-light.py-1 {
+    padding: 0.25rem 0 !important;
+
+}
+.my-0 {
+    margin-top: 0!important;
+    margin-bottom: 0!important;
+}
+.dropdown-divider {
+    height: 0;
+    margin: 0.5rem 0;
+    overflow: hidden;
+    border-top: 1px solid rgba(0,0,0,.15);
+}
+</style>

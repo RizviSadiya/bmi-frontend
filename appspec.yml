@@ -1,0 +1,8 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/html/auto-deploy/bmi-front-end
+    overwrite: true
+    owner: ubuntu
+    mode: 755

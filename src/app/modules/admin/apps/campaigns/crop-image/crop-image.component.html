@@ -1,0 +1,33 @@
+<div class="flex flex-col flex-auto md:w-160 md:min-w-160">
+    <div class="m-4">
+        <div>
+            <div class="text-center mb-4 py-0.5 px-3 rounded-full text-2xl font-medium text-black-600">
+                Select an image
+            </div>
+        </div>
+        <div class="flex-auto">
+            <input type="file" accept="image/*" class="form-control" (change)="fileChangeEvent($event)" />
+            <div class="row" style="margin-top: 15px;">
+                <div class="text-center col-md-8 border-r-2">
+                    <h5 class="mb-2">Crop Image</h5>
+                    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" roundCropper="true"
+                        [aspectRatio]="4 / 4" [resizeToWidth]="256" format="png" (imageCropped)="imageCropped($event)"
+                        (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady()"
+                        (loadImageFailed)="loadImageFailed()"></image-cropper>
+                </div>
+                <div class="text-center col-md-4">
+                    <h5 class="mb-2">Preview</h5>
+                    <img [src]="croppedImage" class="items-center justify-center w-full h-auto rounded-full overflow-hidden m-auto" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex items-center justify-end mt-4">
+        <button mat-flat-button matDialogClose class="mr-2">
+            Cancel
+        </button>
+        <button mat-flat-button [color]="'primary'" (click)="selectImage();">
+            Select Image
+        </button>
+    </div>
+</div>

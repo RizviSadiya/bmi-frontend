@@ -1,0 +1,45 @@
+<!-- <div class="flex flex-col flex-auto min-w-60 sm:min-w-100 md:w-160 md:min-w-160"> -->
+    <form >
+        <!-- <ng-container *ngIf="data.plan_id===1 ;else startetplan"> -->
+        <div class="m-8" *ngIf="( data.plan_id===1) || (data.liveCampaignsCount===1) ">
+            <div>
+                <!-- <div class="text-center mb-4 py-0.5 px-3 rounded-full text-2xl font-medium text-black-600"> -->
+                <div class="text-center  rounded-full text-2xl font-medium text-black-600">
+                    You Need to Upgrade to 'Starter' or 'Business' plan for creating more 
+                    then 1 Live campaign. 
+                </div>
+              <hr>
+                  
+                </div>
+            </div>
+        <!-- </ng-container>
+        <ng-template #startetplan> -->
+        <div class="m-8" *ngIf=" (data.plan_id===2 )|| (data.liveCampaignsCount===2)">
+            <div>
+                <!-- <div class="text-center mb-4 py-0.5 px-3 rounded-full text-2xl font-medium text-black-600"> -->
+                <div class="text-center  rounded-full text-2xl font-medium text-black-600">
+                    You Need to Upgrade to "Business" plan for creating more 
+                    then 2 Live campaigns. 
+                </div>
+              <hr>
+                  
+                </div>
+            </div>
+     
+        <!-- </ng-template> -->
+   
+        <div class="flex items-center justify-end mt-4">
+            <!-- Close -->
+            <button mat-flat-button matDialogClose class="mr-2">
+                Go Back
+            </button>
+            <!-- Save -->
+            <button mat-flat-button [color]="'primary'"  routerLink="/choose-plan" matDialogClose>
+                Upgrade Now
+            </button>
+        </div>
+        <div class="flex items-center justify-end mt-4" *ngIf="data.plan_id===2 || data.liveCampaignsCount===2">
+           <span class="text-danger">*You will be receive cashback of Rs.9000 when you Upgrade from Starter to Business plan</span>
+        </div>
+    </form>
+<!-- </div> -->

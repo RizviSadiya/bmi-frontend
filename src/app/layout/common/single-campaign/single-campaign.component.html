@@ -1,0 +1,406 @@
+<!-- single campaign -->
+<div class="items-center " [ngClass]="{'md-4': mode !== 'box'}" style="margin-bottom: 15px;">
+    <div class="wrapper invited" *ngIf="campaign?.invite_only === 1"></div>
+    
+    <div class="clearfix pt-2 pr-4 pd-2 bg-white text-right" *ngIf="!reviewMode && userType != 'INFLUENCER'">
+        <ng-container *ngIf="campaign?.visibility; else other">
+            <span>
+                Visibility: <b  *ngIf="campaign?.visibility == 1" >Public</b>
+            </span>
+        </ng-container>
+        <ng-template #other>
+            <span >
+                Visibility: <b>Private</b>
+            </span>       
+        </ng-template>
+    </div>
+
+    <div  *ngIf="status != '5'" class="flex-auto grid grid-cols-12 gap-x-4 gap-y-4 xs:grid-cols-12 sm:grid-cols-12 lg:grid-cols-12 lg:gap-4 w-full  p-4  bg-white">
+        <div class="col-span-2 xs:col-span-12 sm:col-span-3 lg:col-span-2">
+            <div class="relative flex-col items-center text-center">
+                <ng-container *ngIf="campaign?.brand_logo">
+                    <img class="items-center justify-center w-full h-auto xs:w-26 xs:h-26 md:w-26 md:h-26 rounded-full overflow-hidden m-auto mb-2" [src]="safeHtml(campaign?.brand_logo)"
+                        onError="this.src = 'assets/images/logo/logo.png'" alt="campaign avatar" />
+                        <!-- <img class="items-center justify-center w-full h-auto xs:w-26 xs:h-26 md:w-26 md:h-26 rounded-full overflow-hidden m-auto" src="assets/images/cards/avatar-400x400.jpg" alt="campaign avatar" /> -->
+                </ng-container>
+                <ng-container *ngIf="!campaign?.brand_logo">
+                    <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                        {{campaign?.brand_name.charAt(0)}}
+                    </div>
+                </ng-container>  
+                <ng-container *ngIf="!reviewMode">
+                    <span class="status_check textbtn"  *ngIf="campaign?.status == '1' && userType === 'BRAND'">Active</span>
+                    <span class="status_check textbtn" *ngIf="campaign?.status == '0'  && userType === 'BRAND'">Pending review</span>
+                    <span class="status_check textbtn" *ngIf="campaign?.status == '5'  && userType === 'BRAND'">Expired</span>
+                    <span class="status_check textbtn" *ngIf="campaign?.status == '4'  && userType === 'BRAND'">Rejected</span>
+                    <span class="status_check textbtn" *ngIf="campaign?.status == '3'  && userType === 'BRAND'">Draft</span>
+                </ng-container>   
+                <div class="crealfix"></div>  
+                <a *ngIf="userType === 'BRAND' && mode !=='review' && campaign?.status != 0  && campaign?.status != '4'" class="w-full mt-2 font-semibold text-sm cursor-pointer" 
+                     (click)="inviteList(campaign)"
+                    matTooltip="View invitation list">
+                    <!-- (click)="viewInvitationList();" -->
+                    <!-- (click)="inviteChannel(campaign)" -->
+                    <br>
+                    <span  *ngIf="campaign?.status != '3' && campaign.status !='5'"  class="text-black-800"><u>Send invites</u></span>
+                </a>
+                <div class="crealfix"></div>  
+                <div *ngIf="createdAt" class="w-full text-center">Applied As</div>
+                <div *ngIf="application ;else campChannel" class="w-full text-center font-bold">{{application?.channel?.title}}</div>
+                <div *ngIf="createdAt" class="w-full text-center">{{ (createdAt | date) }}</div>
+            </div>
+        </div>
+        <div class="col-span-8 xs:col-span-12 sm:col-span-8 lg:col-span-8 flex flex-col">
+            <div class="min-w-0" >
+                <!-- <span style="color: rgb(251, 31, 31);  text-align:center; margin-left: 100px;" *ngIf="campaign?.status==='2'">you have received an invitation for this campaign</span><br><br> -->
+                <div class="font-medium text-xl leading-5 mb-2 tilleCamp" [ngClass]="{'': mode === 'small'}" style="display:flex;">
+                    
+              
+                    <ul class="namesection mb-0">
+                        <li [matTooltip]="campaign?.camp_title">{{campaign?.camp_title}} <span style="font-weight: 300;">by</span> {{campaign?.brand_name}}</li>
+                        <!-- <li><mat-icon *ngIf="campaign?.plateform==='youtube'" class="text-danger" [svgIcon]="'feather:youtube'"></mat-icon><br>
+                            <mat-icon *ngIf="campaign?.plateform==='instagram'" svgIcon="feather:instagram" class="text-pink-600 pt-1" style="margin-left:10px ;">
+                            </mat-icon></li> -->
+                        <!-- <li *ngIf="reviewMode" ><img src="assets/images/brands/youtube.png" class="img-circle img-lg m-auto imgMargin" alt="youtube"></li> -->
+                    </ul>
+                </div>
+
+                <div class="leading-5 text-hint">
+                    Influencers Type :&nbsp;<span class="font-bold text-gray-600">
+                        <!-- <span *ngIf="Promotype.plateform==='youtube'" >Youtube</span>
+                        <span *ngIf="Promotype?.plateform==='instagram'">Instagram</span> -->
+                        <!-- <span *ngIf="campaign?.plateform==='youtube'" >Youtube</span>
+                        <span *ngIf="campaign?.plateform==='instagram'">Instagram</span>
+                        <ng-template #youtubesec>
+                            <span *ngIf="Promotype?.plateform==='youtube'" >Youtube</span>
+                            <span *ngIf="Promotype?.plateform==='instagram'">Instagram</span>
+                        </ng-template> -->
+
+                        <span *ngIf="campaign?.plateform==='youtube'" >Youtube</span>
+                        <span *ngIf="campaign?.plateform==='instagram'">Instagram</span>
+                        <span *ngIf="plateform==='youtube'" >Youtube</span>
+                        <span *ngIf="plateform==='instagram'">Instagram</span>
+
+                        <!-- <ng-template #youtubesec>
+                            Youtube
+                           
+                        </ng-template> -->
+                    </span>
+                </div>
+
+                <div class="leading-5 text-hint">
+                    Promo Type :&nbsp;<span class="font-bold text-gray-600">
+                        <span *ngIf="campaign?.promot_product=='Dedicated Video Promotion'" >Dedicated Video</span>
+                        <span *ngIf="campaign?.promot_product=='Short Video Promotion'">Short Video Promotion</span>
+                        <span *ngIf="campaign?.promot_product=='In-Video brand integration'" >Brand integration Video</span>
+                        <span *ngIf="campaign?.promot_product=='Reels'" >Reels</span>
+                        <span *ngIf="campaign?.promot_product=='Posts'">Posts</span>
+                        <span *ngIf="campaign?.promot_product=='Stories'" >Stories</span>
+                    </span>
+                </div>
+
+                <!-- Description -->
+                <ng-container *ngIf="campaign?.camp_desc">
+                    <div class="flex mb-2">
+                        <div class="max-w-none prose prose-sm">
+                            <div class="leading-5 text-hint">
+                                Description :<br/><span class="text-gray-600"><app-more-less-text [text]="campaign?.camp_desc" [wordLimit]="125"></app-more-less-text></span>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="campaign?.reference_videos">
+                    <div class="flex flex-wrap items-center my-4">
+                        <div class="max-w-none prose prose-sm" *ngFor="let video of campaign?.reference_videos.split(','); let i = index">
+                            <a role="button" [href]="video" [matTooltip]="'View Reference Video ' + (i + 1)"
+                            target="_blank">
+                            <div
+                                class="flex items-center justify-center py-1 px-3 mr-3 mb-3 shadow rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                <span x class="text-sm font-medium whitespace-nowrap text-uppercase">
+                                    {{ "REFERENCE VIDEO " + (i + 1) }} 
+                                </span>
+                            </div>
+                        </a>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="application ;else campChannel"> 
+                </ng-container>
+                <ng-template #campChannel>
+                </ng-template>
+             
+                <!-- Promotion -->
+                <ng-container *ngIf="campaign?.promot_product">
+                    <div class="flex items-center justify-center">
+                        <div class="flex-0 mr-4 text-sm font-medium leading-5 text-secondary">
+                            Minimum Requirement
+                        </div>
+                        <div class="flex-auto border-b"></div>
+                    </div>
+                    <div class="flex sm:items-center">
+                        <div *ngIf="plateform !='instagram'"
+                            class="grid grid-cols-12 xs:grid-cols-12 sm:grid-cols-12 lg:grid-cols-12 flex-auto items-center leading-6">
+                            <!-- <div class="text-md truncate text-secondary font-bold">{{
+                                campaign.promotionType }}</div> -->
+                            <div class="col-span-4 xs:col-span-12 sm:col-span-4 lg:col-span-4 text-md text-secondary"
+                                *ngIf="campaign?.subscriber">
+                                <!-- <span class="mx-2">&bull;</span> -->
+                                <span> 
+                                    <span class="font-medium text-hint">Subscribers&nbsp;</span><strong>&gt;</strong>
+                                    <span class="font-bold"
+                                        [ngClass]="{'text-green-600': campaign?.is_subscriber || userType === 'BRAND',
+                                                'text-orange-600': !campaign?.is_subscriber && userType === 'INFLUENCER'}">
+                                        {{ campaign?.subscriber | thousandSuff }}</span>
+                                </span>
+                            </div>
+                            <div class="col-span-4 xs:col-span-12 sm:col-span-3 lg:col-span-4 text-md text-secondary"
+                                *ngIf="campaign.average_view">
+                                <!-- <span class="mx-2">&bull;</span> -->
+                                <span>
+                                    <span class="font-medium text-hint">Avg Views&nbsp;</span><strong>&gt;</strong>
+                                    <span class="font-bold"
+                                        [ngClass]="{'text-green-600': campaign?.is_average_view || userType === 'BRAND',
+                                        'text-orange-600': !campaign?.is_average_view && userType === 'INFLUENCER'}">
+                                        {{ campaign.average_view | thousandSuff }}</span>
+                                </span>
+                            </div>
+                            <div class="col-span-4 xs:col-span-12 sm:col-span-5 lg:col-span-4 text-md text-secondary"
+                                *ngIf="campaign.engagement_rate">
+                                <!-- <span class="mx-2">&bull;</span> -->
+                                <span>
+                                    <span class="font-medium text-hint">Eng.&nbsp;Rate&nbsp;</span>
+                                    <!-- <strong *ngIf="campaign.engagement_rate === '5'">&lt;</strong> -->
+                                    <!-- <strong *ngIf="campaign.engagement_rate === '5-10'">&gt;</strong> -->
+                                    <!-- <strong *ngIf="campaign.engagement_rate === '10'">&gt;</strong> -->
+                                    <strong>&gt;</strong>
+                                    <span class="font-bold"
+                                        [ngClass]="{'text-green-600': campaign?.is_engagement || userType === 'BRAND',
+                                        'text-orange-600': !campaign?.is_engagement && userType === 'INFLUENCER'}">
+                                        {{ campaign?.engagement_rate + "%" }}</span>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- *ngIf="plateform !='youtube' && campaign?.plateform_type ===2" -->
+                        <div *ngIf="plateform !='youtube'"
+                            class="grid grid-cols-12 xs:grid-cols-12 sm:grid-cols-12 lg:grid-cols-12 flex-auto items-center leading-6">
+                            <!-- <div class="text-md truncate text-secondary font-bold">{{
+                                campaign.promotionType }}</div> -->
+                            <div class="col-span-4 xs:col-span-12 sm:col-span-4 lg:col-span-4 text-md text-secondary"
+                                *ngIf="campaign?.followers">
+                                <!-- <span class="mx-2">&bull;</span> -->
+                                <span> 
+                                    <span class="font-medium text-hint">Followers&nbsp;</span><strong>&gt;</strong>
+                                    <span class="font-bold"
+                                        [ngClass]="{'text-green-600': campaign?.followers || userType === 'BRAND',
+                                                'text-orange-600': !campaign?.followers || userType === 'INFLUENCER'}">
+                                        {{ campaign?.followers | thousandSuff }}</span>
+                                </span>
+                            </div>
+                           
+                        </div>
+                        <!-- *ngIf="plateform !='youtube' && campaign?.plateform_type ===2" -->
+                        <div *ngIf="plateform !='youtube'"
+                            class="grid grid-cols-12 xs:grid-cols-12 sm:grid-cols-12 lg:grid-cols-12 flex-auto items-center leading-6">
+                            <!-- <div class="text-md truncate text-secondary font-bold">{{
+                                campaign.promotionType }}</div> -->
+                            <div class="col-span-4 xs:col-span-12 sm:col-span-4 lg:col-span-4 text-md text-secondary"
+                                *ngIf="campaign?.inf_score">
+                                <!-- <span class="mx-2">&bull;</span> -->
+                                <span> 
+                                    <span class="font-medium text-hint">Influencer Score&nbsp;</span><strong>&gt;</strong>
+                                    <span class="font-bold"
+                                        [ngClass]="{'text-green-600': campaign?.inf_score || userType === 'BRAND',
+                                                'text-orange-600': !campaign?.inf_score || userType === 'INFLUENCER'}">
+                                        {{ campaign?.inf_score | thousandSuff }}</span>
+                                </span>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </ng-container>
+                <!-- categories -->
+                <ng-container *ngIf="mode === 'review' && campaign?.category.length > 0">
+                    <br/>
+                    <strong>Tags</strong>&nbsp; 
+                    <div class="flex flex-wrap items-center my-4">
+                        <ng-container *ngFor="let cteg of campaign.category; let i = index">
+                                <div
+                                    class="flex items-center justify-center py-1 px-3 mr-2 mb-2 shadow rounded-full leading-normal text-gray-500 bg-gray-100">
+                                    <span class="text-sm font-medium whitespace-nowrap text-uppercase">
+                                        {{ cteg }}
+                                    </span>
+                                </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <div class="col-span-2 xs:col-span-12 sm:col-span-12 lg:col-span-2 flex flex-col">
+            <div *ngIf="!bidAmount && userType === 'INFLUENCER'" class="pricesection camppricecenter">
+                <div class="clrback text-center text-hint mb-2">
+                    <div style="color:#000">Budget</div>
+                </div>
+                <div class=" items-center whitespace-nowrap">
+                    <div class="infu_name" *ngIf="userDetails.currency === 'USD'">
+                        <!-- {{ "&lt;&nbsp;" + (campaign.budget | currency : (campaign.currency ? campaign.currency : 'USD')
+                        :
+                        'symbol' : '1.0-0') }} -->
+                        {{campaign.budget | currency : 'USD':'symbol' : '1.0-0' }}
+
+                    </div>
+                    <div class="infu_name" *ngIf="userDetails.currency === 'INR'">
+                        {{  (campaign.budget | currency : (userDetails.currency ? userDetails.currency : 'USD')
+                        :
+                        'symbol' : '1.0-0') }}
+                        <!-- "&lt;&nbsp;" + -->
+                    </div>
+                </div>
+                
+                <button *ngIf="mode !== 'box'" class="primarybtn" [color]="'primary'" (click)="onApplyClick();">
+                    Apply Now
+                </button>
+            </div>
+            <div *ngIf="bidAmount && userType === 'INFLUENCER'" class="flex flex-col items-center justify-center">
+           
+                <div class="clrback text-center text-hint mb-2 ">
+                    <div  style="color:#000">Bid Amount</div>
+                </div>
+
+                <div class="infu_name" *ngIf="userDetails.currency === 'USD'">
+                    <div class="infu_name">
+                        {{ bidAmount | currency : 'INR' : 'symbol' : '1.0-0' }}
+                    </div>
+                </div>
+
+                <div class="infu_name" *ngIf="userDetails.currency === 'INR'">
+                    <div class="infu_name">
+                        {{ bidAmount | currency : 'INR' : 'symbol' : '1.0-0' }}
+                    </div>
+                </div>
+
+                <div class="textcenter">
+                    <mat-icon class="icon-size-5 xs:col-span-6 lg:col-span-12 mx-1" matTooltip="Modify" [svgIcon]="'heroicons_solid:pencil-alt'"  *ngIf="status == '3' || status == '0'" (click)="onApplyClick();"></mat-icon>
+                    <mat-icon class="icon-size-5 xs:col-span-6 lg:col-span-12 mx-1"  matTooltip="Preview" [svgIcon]="'heroicons_solid:eye'"  *ngIf="status == '0'"  (click)="previewProposal();">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </mat-icon>
+                    <mat-icon class="icon-size-5 xs:col-span-6 lg:col-span-12 mx-1" matTooltip="Delete" *ngIf="status == '0'" class="mt-2" (click)="deleteproposal()" >delete</mat-icon>
+                </div>
+
+                <!-- <button *ngIf="status =='5'" class="btn btn-success"> OrderPlaced
+                </button>
+                <button *ngIf="status == '3'" mat-flat-button class="btn btn-maroon" (click)="onApplyClick();">
+                    {{"Modify"}}
+                </button> -->
+                <!-- <button mat-flat-button [color]="status == '3' ? 'warn' : 'success'" (click)="onApplyClick();">
+                    {{ status == '3' || status == '5' ? 'OrderPlaced' :
+                    'Modify' }}
+                </button> -->
+                <button mat-flat-button *ngIf="status == '1'" [color]="'success'" (click)="onApplyClick();">
+                    {{'Hired' }}
+                </button>
+                
+                <!-- <button mat-flat-button *ngIf="status == '3' || status == '0'" [color]="'warn'" (click)="onApplyClick();">
+                    {{'Modify' }}
+                </button> -->
+                <button mat-flat-button *ngIf="status == '5'" [color]="'warn'" (click)="onApplyClick();">
+                    {{'OrderPlaced' }}
+                </button>
+                <!-- <button mat-flat-button [color]="status == '3' ? 'warn' : 'success'" (click)="onApplyClick();">
+                    {{ status == '3' || status == '5' ? 'OrderPlaced' :
+                    'Modify' }}
+                </button> -->
+                <!-- <button mat-flat-button *ngIf="status == '0'" class="mt-2 btncolor" [color]="'accent'" (click)="previewProposal();">
+                    {{"Preview"}}
+                </button> -->
+
+                <!-- <button mat-flat-button *ngIf="status == '0'" class="mt-2" (click)="deleteproposal()" [color]="'warn'">
+                    {{"Delete"}}
+                </button> -->
+            </div>
+            <div *ngIf="userType === 'BRAND' && !(mode === 'review' || mode === 'responses')"
+                class="flex flex-col items-center textcenter pricesection"> 
+                <div class="clrback text-center text-hint mb-2 ">
+                    <div  style="color:#000">Budget</div>
+                </div>
+                <div class="infu_name" *ngIf="userDetails.currency === 'USD'">
+                    <div class="infu_name">
+                        {{campaign.budget | currency : 'USD':'symbol' : '1.0-0' }}
+                        <!-- {{ "&lt;&nbsp;" + (campaign.budget | currency : (campaign.currency ? campaign.currency : 'USD')
+                        :
+                        'symbol' : '1.0-0') }} -->
+                    </div>
+                </div>
+                <div class="flex items-center whitespace-nowrap" *ngIf="userDetails.currency === 'INR'">
+                    <div class="infu_name">
+                        {{ (campaign.budget | currency : (userDetails.currency ? userDetails.currency : 'INR')
+                        :
+                        'symbol' : '1.0-0') }}
+                        <!-- "&lt;&nbsp;" + -->
+                    </div>
+                </div>
+                
+                <div class="flex lg:flex-col">
+                    <div class="textcenter" matTooltip="View Proposal">
+
+                        
+                        <!-- <button   *ngIf="campaign.responseCount===0 && campaign.status !='0'  && campaign.status !='3' && campaign?.status != '5'" [disabled]="!campaign.responseCount || campaign.responseCount===0" class="mb-3 mx-1 disablebtn">Proposals (0)</button> -->
+                        <!-- campaign.status != '3' || campaign.status==1 || -->
+                        <button  *ngIf=" campaign.status !='0'  && campaign.status !='3' && campaign?.status != '5'"  [disabled]="!campaign.responseCount || campaign.responseCount===0"  class="mb-3 mx-1 pinkbtn" (click)="onResponsesClick(campaign);" >
+                        <!-- {{ 'Proposal (' + (campaign.responseCount ? campaign.responseCount : 0) + ')' }} -->
+                        {{campaign.responseCount | i18nPlural: {
+                            '=0' : 'Proposal (0)',
+                            '=1' : 'Proposal (1)',
+                            'other': 'Proposals (' + campaign.responseCount + ')'
+                            } }}
+                        </button>
+                    </div>
+                    <div class="textcenter">
+                        <!-- campaign.status != '3' || campaign.status==1 || -->
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye-alt'" matTooltip="Preview campaign"  *ngIf=" campaign.status !='0'  && campaign.status !='3'" mat-flat-button [color]="'accent'" class="xs:col-span-6 lg:col-span-12 mx-1" (click)="onPreviewClick();"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg></mat-icon>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'" matTooltip="Edit campaign"  *ngIf="campaign.status == '1' || campaign.status==1 || campaign.status =='0' || campaign.status=='3'" mat-stroked-button  class="xs:col-span-6 lg:col-span-12 mx-1" (click)="onEditClick();"></mat-icon>
+                        <mat-icon class="icon-size-5" matTooltip="Delete campaign" *ngIf="campaign.status == '3' || campaign.status==1 || campaign.status =='0'" mat-stroked-button class="xs:col-span-6 lg:col-span-12 mx-1" (click)="deleteCampaignClick();">delete</mat-icon>
+                        <!-- <div class="textcenter" *ngIf="campaign.proposalHistoryCount > 0">
+                            <button   *ngIf="campaign.status != '3' || campaign.status==1" class="xs:col-span-6 lg:col-span-12 mt-3 mb-3 mx-1 pinkbtn" (click)="proposalHistory(campaign);">
+                            {{ 'Work History' }}
+                        </button>
+                        </div> -->
+                    </div>
+                    </div>
+                </div>
+
+            <div *ngIf="userType === 'BRAND' && (mode === 'review' || mode === 'responses')"
+                class="flex flex-col items-center pricesection">
+                <div class="clrback text-center text-hint mb-2">
+                    <div  style="color:#000">Budget</div>
+                </div>
+                <div class="flex items-center whitespace-nowrap" *ngIf="userDetails.currency === 'USD'">
+                    <div class="infu_name">
+                        <!-- {{ "&lt;&nbsp;" + (campaign.budget | currency : (campaign.currency ? campaign.currency : 'USD')
+                        :
+                        'symbol' : '1.0-0') }} -->
+                        {{campaign.budget | currency : 'USD':'symbol' : '1.0-0' }}
+                    </div>
+                </div>
+                <div class="flex items-center whitespace-nowrap">
+                    <div class="infu_name" *ngIf="userDetails.currency === 'INR'">
+                        {{  (campaign.budget | currency : (userDetails.currency ? userDetails.currency : 'INR')
+                        :
+                        'symbol' : '1.0-0') }}
+
+                    </div>
+                </div>
+               
+                <!-- <button *ngIf="mode === 'review'" mat-flat-button [color]="'primary'" disabled>
+                    Apply Now
+                </button> -->
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,212 @@
+<div class="group w-full">
+    <div class="relative flex items-center h-full py-4 border-t">
+        <div class="flex-auto">
+            <div class="font-bold" style="text-align: center;">Applying as:&nbsp;
+                <!-- <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50"> -->
+                <span class="leading-relaxed whitespace-nowrap uppercase font-semibold" *ngIf="plateform_type==1">
+                    <mat-icon [svgIcon]="'feather:youtube'" style="vertical-align: middle;" class="text-danger mr-2"></mat-icon> {{selectedChannel}} {{selectedChannelName?.name}}
+                </span>
+                <span class="leading-relaxed whitespace-nowrap uppercase font-semibold" *ngIf="plateform_type==2" >
+                    <mat-icon [svgIcon]="'feather:instagram'" style="vertical-align: middle;" class="text-danger mr-2"></mat-icon>{{userName.username}}
+                </span>
+                <!-- </span> -->
+            </div>
+        </div>
+    </div>
+    <div class="relative flex items-center h-full py-4 border-t">
+        <div class="flex-auto">
+            <div class="font-bold">Your price bid for this campaign:&nbsp;
+                <!-- <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50"> -->
+                <span [ngClass]="{'text-red-800' : proposalForm.get('step1').get('price').value > campaignPrice,
+                    'text-green-800' : proposalForm.get('step1').get('price').value <= campaignPrice}">
+                    <span class="leading-relaxed whitespace-nowrap font-semibold">{{
+                        proposalForm.get('step1').get('price').value | currency :
+                        proposalForm.get('step1').get('currency').value : 'symbol' : '1.0-0'
+                        }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="relative flex items-center h-full py-4 border-t" *ngIf="proposalForm.get('step1').get('old_duration').value == '1'">
+        <div class="flex-auto">
+            <div class="font-bold" >
+                Brand would prefer the integration to be for 30-60 seconds&nbsp;
+                <span
+                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalForm.get('step1').get('old_duration').value == '0',
+                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalForm.get('step1').get('old_duration').value == '1'}">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalForm.get('step1').get('old_duration').value == '1' ? "Agree" :
+                        "Disagree" }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="proposalForm.get('step1').get('old_duration').value === '0'"
+        class="relative flex items-center h-full py-2 pl-5">
+        <!-- && proposalForm.get('step1').get('old_duration').value == null -->
+        <div class="flex-auto">
+            <div class="font-bold">
+                Your preferred duration selected&nbsp;
+                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                    bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalForm.get('step1').get('new_duration').value !== 'other'
+                        ? proposalForm.get('step1').get('new_duration').value
+                        : proposalForm.get('step1').get('new_other_duration').value }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="relative flex items-center h-full py-4 border-t" *ngIf="proposalForm.get('step1').get('old_duration').value == '1'">
+        <div class="flex-auto" >
+            <div class="font-bold" >
+                Brand prefers the promotion to appear at the start of the video.&nbsp;
+                <span
+                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalForm.get('step1').get('promotion_slot').value == 0,
+                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalForm.get('step1').get('promotion_slot').value == 1}">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalForm.get('step1').get('promotion_slot').value == 1 ? "Agree" :
+                        "Disagree" }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="proposalForm.get('step1').get('promotion_slot').value === '0'"
+        class="relative flex items-center h-full pb-4 pl-4">
+        <!-- && proposalForm.get('step1').get('promotion_slot').value==null" -->
+        <div class="flex-auto">
+            <div class="font-bold">
+                Your preference for promotion to start&nbsp;
+                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                    bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalForm.get('step1').get('new_promotion_slot').value }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="relative flex items-center h-full py-4 border-t">
+        <div class="flex-auto">
+            <div class="font-bold">
+                Can you commit any minimum video views for this campaign?&nbsp;
+                <span
+                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalForm.get('step2').get('view_commitment').value == 0,
+                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalForm.get('step2').get('view_commitment').value == 1}">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalForm.get('step2').get('view_commitment').value == 1 ? "Yes" : "No"
+                        }}</span>
+                </span>
+            </div>
+        </div>
+    </div> -->
+    <div *ngIf="proposalForm.get('step2').get('view_commitment').value == 1"
+        class="relative flex items-center h-full pb-4 pl-4">
+        <div class="flex-auto">
+            <div class="font-bold">
+                Your committed minimum videos views&nbsp;
+                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalForm.get('step2').get('min_views').value }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="relative flex items-center h-full py-4 border-t">
+        <div class="flex-auto">
+            <div class="font-bold">
+                Are you flexible with minor changes after the video is submitted for review?&nbsp;
+                <span
+                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalForm.get('step2').get('minor_changes').value == 0,
+                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalForm.get('step2').get('minor_changes').value == 1}">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalForm.get('step2').get('minor_changes').value == 1 ? "Yes" : "No"
+                        }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="relative flex items-center h-full py-4 border-t">
+        <div class="flex-auto">
+            <div class="font-bold">
+                How soon can you deliver, after the order is confirmed by the brand?&nbsp;
+                <span
+                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalForm.get('step2').get('delivery_days').value === 'other',
+                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalForm.get('step2').get('delivery_days').value !=='other'}">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalForm.get('step2').get('delivery_days').value !=='other'
+                        ? proposalForm.get('step2').get('delivery_days').value + "days"
+                        : (proposalForm.get('step2').get('other_delivery_days').value + " days")
+                        }} </span>
+                </span>
+            </div>
+        </div>
+    </div> -->
+    <div class="relative flex items-center h-full py-4 border-t">
+        <div class="flex-auto">
+            <div class="font-bold">
+                How soon can you deliver, after the order is confirmed by the brand?&nbsp;
+                <span
+                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalForm.get('step2').get('delivery_days').value === 0,
+                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalForm.get('step2').get('delivery_days').value !=0}">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalForm.get('step2').get('delivery_days').value !=0
+                        ? proposalForm.get('step2').get('delivery_days').value +  " days"
+                        : (proposalForm.get('step2').get('other_delivery_days').value +  " days")
+                        }} </span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="relative flex items-center h-full py-4 border-t">
+        <div class="flex-auto">
+            <div class="font-bold">
+                Would you share the video on any of your other social media handles.&nbsp;
+                <span
+                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalForm.get('step2').get('social_media_share').value == 0,
+                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalForm.get('step2').get('social_media_share').value == 1}">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalForm.get('step2').get('social_media_share').value == 0 ? "No" :
+                        "Yes" }}</span>
+                </span>
+                <span *ngIf="proposalForm.get('step2').get('facebook').value === true"
+                    class="inline-flex items-centertracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:facebook'">
+                    </mat-icon>
+                </span>
+                <span *ngIf="proposalForm.get('step2').get('instagram').value === true"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:instagram'">
+                    </mat-icon>
+                </span>
+                <span *ngIf="proposalForm.get('step2').get('twitter').value === true"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:twitter'">
+                    </mat-icon>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="proposalForm.get('step3').get('comment').value" class="relative flex items-center h-full py-4 border-t">
+        <div class="flex-auto">
+            <div class="font-bold">
+                Reasons why your bid should be selected&nbsp;
+                <!-- Additional comments for the Brand&nbsp; -->
+                <span class="inline-flex items-center font-medium text-md px-2.5 py-0.5 rounded-full tracking-wide">
+                    <span class="leading-relaxed">
+                        {{ proposalForm.get('step3').get('comment').value }}
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

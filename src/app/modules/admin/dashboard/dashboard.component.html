@@ -1,0 +1,355 @@
+    <div class="flex flex-col flex-auto min-w-0" id="home-top">
+
+    <!-- Header -->
+    <div class="bg-card">
+        <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6 sm:px-8">
+            <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-8 sm:my-5">
+                <!-- Avatar and name -->
+                <div class="flex flex-auto items-center min-w-0">
+                    <div class="flex-0 w-16 h-16 rounded-full overflow-hidden">
+                        <ng-container *ngIf="data?.default_channel?.image; else noProfileImage">
+                            <img class="w-full h-full object-cover" [src]="data?.default_channel?.image">
+                        </ng-container>
+                        <ng-template #noProfileImage>
+                            <mat-icon class="w-full h-full object-cover" [svgIcon]="'heroicons_outline:user-circle'">
+                            </mat-icon>
+                        </ng-template>
+                    </div>
+                    <div class="flex flex-col min-w-0 ml-4">
+                        <ng-container *transloco="let t">
+                            <div
+                                class="text-2xl md:text-3xl lg:text:5xl font-semibold tracking-tight leading-7">
+                                {{ t('welcome-back') + " " + userName }}</div>
+                        </ng-container>
+                        <div class="flex items-center"
+                            *ngIf="userType === 'INFLUENCER' && data?.unverifiedChannelCound > 0">
+                            <mat-icon class="icon-size-5 text-red-500" [svgIcon]="'heroicons_solid:bell'"></mat-icon>
+                            <div class="ml-1.5 leading-6  text-red-500 cursor-pointer"
+                                (click)="verifyChannel();">
+                                {{ "Please verify your " + data?.unverifiedChannelCound + " channel(s)." }}</div>
+                            <!-- <div *ngIf="userType === 'BRAND'" class="ml-1.5 leading-6 truncate text-red-500">Please
+                                create a campaign.</div> -->
+                        </div>
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
+                    <ng-container *ngIf="userType === 'INFLUENCER'">
+                        <button class="fuse-mat-button-rounded" mat-flat-button [color]="'warn'"
+                            [routerLink]="['/apps/campaigns/all']">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:document-duplicate'"></mat-icon>
+                            <span class="ml-2">Live Campaigns: {{data?.campaignCount}}</span>
+                        </button>
+                        <button class="fuse-mat-button-rounded" mat-flat-button [color]="'primary'"
+                            [routerLink]="['/pages/profile']">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'"></mat-icon>
+                            <span class="ml-2">My Profile</span>
+                        </button>
+                        <!-- <button class="fuse-mat-button-rounded" mat-flat-button [color]="'primary'"
+                            [routerLink]="['privacy-policy']">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user'"></mat-icon>
+                            <span class="ml-2">privacy-policy</span>
+                        </button> -->
+                    </ng-container>
+                    <ng-container *ngIf="userType === 'BRAND'">
+                        <button class="fuse-mat-button-rounded" mat-flat-button [color]="'primary'" (click)="postCampaign()"
+                           >
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                            <span class="ml-2">Post a Campaign</span>
+                        </button>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main -->
+    <div class="flex-auto border-t -mt-px pt-4 sm:pt-6">
+        <div class="w-full max-w-screen-xl mx-auto">
+            <!-- For popular search -->
+            <div class="w-full min-w-0 pl-6 pr-6 sm:pl-8 sm:pr-8" *ngIf="userType === 'BRAND'">
+                <ul class="popularsearch">
+                    <li><strong>Popular searches:</strong></li>
+                    <li class="itemfield"><a href="/apps/influencers/food" >Food</a></li>
+                    <li class="itemfield"><a href="/apps/influencers/Tech" >Tech</a></li>
+                    <li class="itemfield"><a href="/apps/influencers/Vlog" >Vlog</a></li>
+                    <li class="itemfield"><a href="/apps/influencers/Kids" >Kids</a></li>
+                </ul>
+            </div>
+             <!-- For popular search end -->
+            <div *ngIf="userType === 'INFLUENCER'"
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0 p-6 sm:p-8">
+                <!-- Live Campaigns -->
+                <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden cursor-pointer"
+                    [routerLink]="['/apps/campaigns/all']">
+                    <div class="flex flex-col items-center mt-2">
+                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-green-500">
+                            {{ data?.campaignCount }}</div>
+                        <div class="text-lg font-medium text-center text-green-600 dark:text-green-500" matTooltip="Active campaings">Campaigns
+                        </div>
+                        <!-- <div class="text-lg font-medium text-center text-green-600 dark:text-green-500">Live Campaigns
+                        </div> -->
+                    </div>
+                </div>
+                <!-- Proposals Submitted -->
+                <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden cursor-pointer"
+                    [routerLink]="['/apps/applications']">
+                    <div class="flex flex-col items-center mt-2">
+                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500">
+                            {{ data?.proposalCount }}</div>
+                        <div class="text-lg font-medium text-center text-blue-600 dark:text-blue-500" matTooltip="Submitted proposals">Proposals
+                        </div>
+                        <!-- <div class="text-lg font-medium text-center text-blue-600 dark:text-blue-500">Proposals subd
+                        </div> -->
+                    </div>
+                </div>
+                <!-- Invitations Reveived -->
+                <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden cursor-pointer"
+                    [routerLink]="['/apps/campaigns/all']">
+                    <div class="flex flex-col items-center mt-2">
+                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">
+                            {{ data?.invitationCount }}</div>
+                        <div class="text-lg font-medium text-center text-red-600 dark:text-red-500" matTooltip="Invitations received">Invitation
+                        </div>
+                        <!-- <div class="text-lg font-medium text-center text-red-600 dark:text-red-500">Invitation recd
+                        </div> -->
+                    </div>
+                </div>
+                <!-- Orders -->
+                <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden cursor-pointer"
+                    [routerLink]="['/pages/orders']">
+                    <div class="flex flex-col items-center mt-2">
+                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-amber-500">
+                            {{ data?.ordersCount }}</div>
+                        <div class="text-lg font-medium text-center text-amber-600 dark:text-amber-500" matTooltip="Active orders">Orders
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="userType === 'BRAND'"
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0 p-6 sm:p-8">
+                <!-- Active Proposals -->
+                <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden cursor-pointer"
+                    [routerLink]="['/apps/campaigns/all']">
+                    <div class="flex flex-col items-center mt-2">
+                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-green-500">
+                            {{ data?.newProposalCounts }}</div>
+                            <!-- {{ data?.activeProposalsCount }}</div> -->
+                        <div class="text-lg font-medium text-center text-green-600 dark:text-green-500" matTooltip="Received proposals">Proposals
+                        </div>
+                        <!-- <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
+                            <div class="text-md font-medium truncate">New</div>
+                            <div class="ml-1.5 text-lg font-semibold">{{ data.newProposalCounts }}</div>
+                        </div> -->
+                    </div>
+                </div>
+                <!-- Live Campaigns -->
+                <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden cursor-pointer"
+                    [routerLink]="['/apps/campaigns/all']">
+                    <div class="flex flex-col items-center mt-2">
+                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500">
+                            {{ data?.liveCampaignsCount }}</div>
+                        <div class="text-lg font-medium text-center text-blue-600 dark:text-blue-500" matTooltip="Created campaigns">Campaigns
+                        </div>
+                        <!-- <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
+                            <div class="text-md font-medium truncate">Lifetime</div>
+                            <div class="ml-1.5 text-lg font-semibold">{{ data.lifeTimeCampaignsCount }}</div>
+                        </div> -->
+                    </div>
+                </div>
+                <!-- Revealed Channels -->
+                <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden cursor-pointer"
+                    [routerLink]="['/pages/revealed-channels']">
+                    <div class="flex flex-col items-center mt-2">
+                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">
+                            {{ data?.revealedChannelsCount }}</div>
+                        <div class="text-lg font-medium text-center text-red-600 dark:text-red-500" matTooltip="Revealed channels">Revealed Channels
+                        </div>
+                        <!-- <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
+                            <div class="text-md font-medium truncate">Favourites</div>
+                            <div class="ml-1.5 text-lg font-semibold">{{ data.favouritesChannelCount }}</div>
+                        </div> -->
+                    </div>
+                </div>
+                <!-- Orders -->
+                <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden cursor-pointer"
+                    [routerLink]="['/pages/orders']">
+                    <!-- <div class="flex items-start justify-between">
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Orders</div>
+                                    <div class="ml-2 -mr-3">
+                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:cursor-click'">
+                                        </mat-icon>
+                                    </div>
+                                </div> -->
+                    <div class="flex flex-col items-center mt-2">
+                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-amber-500">
+                            {{ data?.activeOrdersCount }}</div>
+                        <div class="text-lg font-medium text-center text-amber-600 dark:text-amber-500" matTooltip="Active orders">Orders
+                        </div>
+                        <!-- <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
+                            <div class="text-md font-medium truncate">Lifetime</div>
+                            <div class="ml-1.5 text-lg font-semibold">{{ data.lifeTimeOrdersCount }}</div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channels : show to INFLUENCER only-->
+            <div class="w-full min-w-0 p-6 sm:p-8" *ngIf="userType === 'INFLUENCER'">
+                <div class="flex flex-col sm:flex-row flex-auto mt-0 mb-4 md:mb-6">
+                    <div
+                        class="flex flex-auto items-center min-w-0 text-3xl md:text-3xl font-bold tracking-tight leading-7 sm:leading-10">
+                        My Channel(s)
+                    </div>
+                    <!-- Add Channel Button Starts -->
+                    <div class="flex items-center text-center">
+                        <div class="flex flex-col items-end">
+                            <button class="fuse-mat-button-rounded" mat-flat-button [color]="'warn'"
+                                (click)="goToAddChannel()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                <span class="ml-2">Add Channel</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Add Channel Button Ends -->
+                </div>
+                <div 
+                class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+                <div class="flex-1 min-w-0">
+                      <!-- <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 ">Filters:</h2> -->
+                </div>
+                <div class="flex-1 min-w-0">
+                    <!-- Tabs Header -->
+                    <div class="mt-2">
+                        <div class="tab">
+                            <button class="tablinks" (click)="filterValue('2')" onclick="openCity(event, 'insta')"><img src="assets/images/brands/instacircle.png"/></button>
+                            <button class="tablinks active" (click)="filterValue('1')" onclick="openCity(event, 'youtube')"><img src="assets/images/brands/youtube.png"/></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <!-- <all-channels [limit]="2" [offset]=""></all-channels> -->
+                <!-- <influencer-channel *ngFor="let channel of data.channel_list" [channel]="channel"
+                    (defaultChannelChanged)="defaultChannelChanged($event);" (channelDeleted)="channelDeleted($event);">
+                    
+                </influencer-channel> -->
+                <div class="mt-4 md:mt-6 p-0 tabcontent active" id="youtube" style="display: block;">
+                    <all-channels [limit]="" [offset]=""></all-channels>
+                </div>
+            
+            <div class="mt-4 md:mt-6 tabcontent" id="insta">
+                <all-insta-channels > </all-insta-channels>
+            </div>
+                <div class="loadmore" style="
+                position: relative;
+                left: 391px;
+            ">
+                <button  class="btn btn-warning" (click)="goAddChannel()">
+                    Load More</button>
+                    </div>
+            </div>
+
+            <!-- Recommended Influencers : show to BRAND only-->
+            <div class="w-full min-w-0 p-6 sm:p-8" *ngIf="userType === 'BRAND'">
+                <div class="flex flex-col sm:flex-row flex-auto mt-0 mb-4 md:mb-6" id="myBtn">
+                    <div
+                        class="flex flex-auto items-center min-w-0 text-3xl md:text-3xl font-bold tracking-tight leading-7 sm:leading-10">
+                        Recommended Influencers&nbsp;
+                        <span class="text-sm font-bold text-gray-600">
+                            <a role="button" (click)="updateCategory();" [matTooltip]="'Update Preferences'">
+                                <u>Update</u>
+                            </a>
+                        </span>
+                    </div>
+
+                    
+                    <!-- Refresh Button Starts -->
+                    <div class="flex items-center text-center" #topdiv id="topdiv">
+                        <div class="flex flex-col items-end">
+                            <button class="fuse-mat-button-rounded" mat-stroked-button [color]="'warn'"
+                                (click)="refreshRecommendedChannels();" [matTooltip]="'Refresh List'">
+                                <mat-icon class="icon-size-5 animate-spin-slow" [svgIcon]="'heroicons_solid:refresh'">
+                                <!-- <img src="/assets/images/refresh-image.png" > -->
+
+                                </mat-icon>
+
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Refresh Button Ends -->
+                </div>
+
+                <div 
+                class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+                <div class="flex-1 min-w-0">
+                      <!-- <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 ">Filters:</h2> -->
+                </div>
+                <div class="flex-1 min-w-0">
+                    <!-- Tabs Header -->
+                    <div class="mt-2">
+                        <div class="tab">
+                            <button class="tablinks" (click)="filterValue('2')" onclick="openCity(event, 'insta')"><img src="assets/images/brands/instacircle.png"/></button>
+                            <button class="tablinks active" (click)="filterValue('1')" onclick="openCity(event, 'youtube')"><img src="assets/images/brands/youtube.png"/></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                  <div class="mt-4 md:mt-6 tabcontent p-0 active" id="youtube" style="display: block;">
+
+                <influencer-channel *ngFor="let channel of recommendedChannels" [channel]="channel"
+                    [mode]="'dashboard'" (channelRevealed)="channelRevealed($event);"></influencer-channel>
+                    </div>
+                    <!-- <div class="mt-4 md:mt-6 tabcontent active" id="youtube" style="display: block;">
+                        <all-channels [limit]="" [offset]=""></all-channels>
+                    </div> -->
+                
+                <div class="mt-4 md:mt-6 tabcontent" id="insta">
+                    <insta-channel-list *ngFor="let channel of recommendedChannels" [channel]="channel" [mode]="'dashboard'" (channelRevealed)="channelRevealed($event);"> </insta-channel-list>
+                </div>
+                    <div class="loadmore" style="position: relative;">
+                        <!-- <button class="btn btn-warning" (click)="loadmoreRecommendedChannels();">
+                           Load More</button> -->
+                       <!-- onClick="window.scrollTo(0, 0)" -->
+                       <ng-container *ngIf="recommendedChannels.length">
+                        <!-- <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+                        [length]="count" [pageIndex]="currentPage" (page)="onChangePage($event)"
+                        href="#_top" target="_top" (click)="scroll(topdiv)">
+                    </mat-paginator> -->
+                    <mat-paginator #paginator [pageSize]="pageSize" [showFirstLastButtons]="false"
+                    [length]="count" [pageIndex]="currentPage" (page)="onChangePage($event)" (click)="scroll(topdiv)">
+                </mat-paginator>
+                    </ng-container>
+                    </div>
+            </div>
+           
+
+            <!-- Getting Started -->
+            <div class="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-1 gap-6 w-full min-w-0 p-6 sm:p-8">
+                <getting-started [userType]="userType"></getting-started>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<!-- <script>
+    //Get the button
+    var mybutton = document.getElementById("myBtn");
+    
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+    
+    function scrollFunction() {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+      } else {
+        mybutton.style.display = "none";
+      }
+    }
+    
+    // When the user clicks on the button, scroll to the top of the document
+    function refreshRecommendedChannels() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+    </script> -->

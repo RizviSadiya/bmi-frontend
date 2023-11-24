@@ -1,0 +1,31 @@
+<!-- single brand -->
+<div class="row w-full p-8 text-left">
+    <div class="col-3">
+        <div class="flex flex-0 items-center justify-center w-32 h-32 rounded-full">
+            <img class="w-full h-full object-contain" [src]="brand.logo" [alt]="brand.name">
+        </div>
+    </div>
+    <div class="col-5">
+        <div class="min-w-0 ml-4">
+            <div class="font-bold leading-5 truncate text-xl">
+                {{ brand.name }}
+            </div>
+            <div class="flex items-center my-2">
+                {{ brand.short_desc }}
+            </div>
+            <div class="flex items-center">
+                <a class="px-3 mr-1" mat-stroked-button [color]="'primary'" [href]="brand.webiste"
+                    target="_blank">
+                    <mat-icon class="icon-size-5 mr-2" [svgIcon]="'heroicons_solid:external-link'">
+                    </mat-icon>
+                    <span>Visit Website</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-4 relative flex-col items-center">
+        <div class="flex flex-col text-center mt-2">
+            <iframe [src]="safeUrl(brand.ref_video_link)" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>

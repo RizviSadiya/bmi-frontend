@@ -1,0 +1,193 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <mat-drawer-container class="flex-auto h-full">
+
+        <!-- Drawer -->
+        <mat-drawer class="w-full md:w-full dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
+            [disableClose]="true" #responseDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+    <mat-drawer-content class="flex flex-col">
+
+            <div class="flex-auto">
+
+                <!-- Header -->
+                <!-- <div
+                    class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-4 px-6 md:px-8 border-b bg-card dark:bg-transparent">
+                    <div>
+                        <div class="text-3xl font-extrabold tracking-tight leading-none">
+                            {{(responsesCount + shortlistedCount) | i18nPlural: {
+                            '=0' : 'Total Response (0)',
+                            '=1' : 'Total Response (1)',
+                            'other': 'Total Responses (' + (responsesCount + shortlistedCount) + ')'
+                            } }}
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="-mt-px pt-4 sm:pt-6 pt-1 px-7 mt-0 mb-4">
+                    <single-campaign [campaign]="campaign" [mode]="'responses'">
+                    </single-campaign>
+                </div>
+
+                <!-- responses list -->
+                <div class="-mt-px pt-4 sm:pt-0">
+                    <!-- <ng-container *ngIf="applications$ | async as applications"> -->
+                    <div class="pt-1 px-7 mt-0 mb-4 text-2xl md:text-2xl font-bold tracking-tight leading-7 sm:leading-10">
+                        <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-4 px-6 md:px-8 border-b bg-card dark:bg-transparent">
+                            <div>
+                                <div class="text-3xl font-extrabold tracking-tight leading-none">
+                                    {{(responsesCount + shortlistedCount) | i18nPlural: {
+                                    '=0' : 'Proposal (0)',
+                                    '=1' : 'Proposal (1)',
+                                    'other': 'Proposals (' + (responsesCount) + ')'
+                                    } }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <mat-tab-group class="sm:px-2" [animationDuration]="'0'" [(selectedIndex)]="selectedTabIndex"
+                        (selectedTabChange)="onTabChanged($event);">
+                        <mat-tab [label]="'All (' + responsesCount + ')'">
+                            <ng-template matTabContent>
+                                <ng-container *ngIf="responseList?.length; else noResponse">
+                                    <ng-container
+                                        *ngFor="let response of responseList; let k = index; trackBy: trackByFn">
+                                        <app-influencer-proposal [channel]="response" [application]="response" [bidAmount]="response.price"
+                                            [mode]="'response'" (hireClicked)="onHireClick(response);" [response]="response"
+                                            (shortlistClicked)="onShortlistClick(response);">
+                                        </app-influencer-proposal>
+                                        <!-- <influencer-channel [channel]="response" [application]="response" [bidAmount]="response.price"
+                                            [mode]="'response'" (hireClicked)="onHireClick(response);" [response]="response"
+                                            (shortlistClicked)="onShortlistClick(response);">
+                                        </influencer-channel> -->
+                                    </ng-container>
+                                </ng-container>
+                                <ng-container *ngIf="instaresponseList?.length; else instanoResponse">
+                                    <ng-container
+                                        *ngFor="let response of instaresponseList; let k = index; trackBy: trackByFn">
+                                        <influencer-insta-proposal [channel]="response" [application]="response" [bidAmount]="response.price"
+                                            [mode]="'response'" (hireClicked)="onHireClick(response);" [response]="response"
+                                            (shortlistClicked)="onShortlistClick(response);">
+                                        </influencer-insta-proposal>
+                                        <!-- <influencer-channel [channel]="response" [application]="response" [bidAmount]="response.price"
+                                            [mode]="'response'" (hireClicked)="onHireClick(response);" [response]="response"
+                                            (shortlistClicked)="onShortlistClick(response);">
+                                        </influencer-channel> -->
+                                    </ng-container>
+                                </ng-container>
+                            </ng-template>
+                        </mat-tab>
+                        <mat-tab [label]="'Pending (' + pendingCount + ')'">
+                            <ng-template matTabContent>
+                                <ng-container *ngIf="responseList.length; else noResponse">
+                                    <ng-container
+                                        *ngFor="let response of responseList; let k = index; trackBy: trackByFn">
+                                        <app-influencer-proposal [channel]="response" [application]="response" [bidAmount]="response.price"
+                                            [mode]="'response'" (hireClicked)="onHireClick(response);"
+                                            (shortlistClicked)="onShortlistClick(response);">
+                                        </app-influencer-proposal>
+                                        <!-- <influencer-channel [channel]="response" [application]="response" [bidAmount]="response.price"
+                                            [mode]="'response'" (hireClicked)="onHireClick(response);"
+                                            (shortlistClicked)="onShortlistClick(response);">
+                                        </influencer-channel> -->
+                                    </ng-container>
+                                </ng-container>
+                                <ng-container *ngIf="instaresponseList?.length; else instanoResponse">
+                                    <ng-container
+                                        *ngFor="let response of instaresponseList; let k = index; trackBy: trackByFn">
+                                        <influencer-insta-proposal [channel]="response" [application]="response" [bidAmount]="response.price"
+                                            [mode]="'response'" (hireClicked)="onHireClick(response);" [response]="response"
+                                            (shortlistClicked)="onShortlistClick(response);">
+                                        </influencer-insta-proposal>
+                                        <!-- <influencer-channel [channel]="response" [application]="response" [bidAmount]="response.price"
+                                            [mode]="'response'" (hireClicked)="onHireClick(response);" [response]="response"
+                                            (shortlistClicked)="onShortlistClick(response);">
+                                        </influencer-channel> -->
+                                    </ng-container>
+                                </ng-container>
+                            </ng-template>
+                        </mat-tab>
+                        <mat-tab [label]="'Shortlisted (' + shortlistedCount + ')'">
+                            <ng-template matTabContent>
+                                <ng-container *ngIf="responseList?.length; else noResponse">
+                                    <ng-container
+                                        *ngFor="let response of responseList; let k = index; trackBy: trackByFn">
+                                        <app-influencer-proposal [channel]="response" [application]="response" [bidAmount]="response.price"
+                                         [mode]="'shortlisted'" (hireClicked)="onHireClick(response);">
+                                        </app-influencer-proposal>
+                                        <!-- <influencer-channel [channel]="response" [application]="response" [bidAmount]="response.price"
+                                         [mode]="'shortlisted'" (hireClicked)="onHireClick(response);">
+                                        </influencer-channel> -->
+                                    </ng-container>
+                                </ng-container>
+                                <ng-container *ngIf="instaresponseList?.length; else instanoResponse">
+                                    <ng-container
+                                        *ngFor="let response of instaresponseList; let k = index; trackBy: trackByFn">
+                                        <influencer-insta-proposal [channel]="response" [application]="response" [bidAmount]="response.price"
+                                            [mode]="'response'" (hireClicked)="onHireClick(response);" [response]="response"
+                                            (shortlistClicked)="onShortlistClick(response);">
+                                        </influencer-insta-proposal>
+                                        <!-- <influencer-channel [channel]="response" [application]="response" [bidAmount]="response.price"
+                                            [mode]="'response'" (hireClicked)="onHireClick(response);" [response]="response"
+                                            (shortlistClicked)="onShortlistClick(response);">
+                                        </influencer-channel> -->
+                                    </ng-container>
+                                </ng-container>
+                            </ng-template>
+                        </mat-tab>
+                        <!-- <mat-tab [label]="'invited (' + invitedCount + ')'">
+                            <ng-template matTabContent>
+                                <ng-container *ngIf="responseList.length; else noResponse">
+                                    <ng-container
+                                        *ngFor="let response of responseList; let k = index; trackBy: trackByFn">
+                                        <influencer-channel [channel]="response.channel" [application]="response" [bidAmount]="response.price"
+                                         [mode]="'shortlisted'" (hireClicked)="onHireClick(response);">
+                                        </influencer-channel>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-template>
+                        </mat-tab> -->
+                        <!-- <mat-tab [label]="'Messages (' + messagesCount + ')'">
+                            <ng-template matTabContent>
+                                <ng-container *ngIf="responseList.length; else noResponse">
+                                    <ng-container
+                                        *ngFor="let response of responseList; let k = index; trackBy: trackByFn">
+                                        <influencer-channel [channel]="response.channel" [mode]="'message'">
+                                        </influencer-channel>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-template>
+                        </mat-tab> -->
+                    </mat-tab-group>
+                    <!-- </ng-container> -->
+
+                    <!-- No campaigns -->
+                    <ng-template #noResponse>
+                        <div *ngIf="responseList"
+                            class="flex flex-auto flex-col items-center justify-center py-4 bg-gray-100 dark:bg-transparent">
+                            <mat-icon class="icon-size-20" [svgIcon]="'iconsmind:search_oncloud'"></mat-icon>
+                            <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">
+                                {{ 'There is no response!' }}
+                            </div>
+                        </div>
+                    </ng-template>
+                    <!-- <ng-template #instanoResponse>
+                        <div *ngIf="instaresponseList"
+                            class="flex flex-auto flex-col items-center justify-center py-4 bg-gray-100 dark:bg-transparent">
+                            <mat-icon class="icon-size-20" [svgIcon]="'iconsmind:search_oncloud'"></mat-icon>
+                            <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">
+                                {{ 'There is no response!' }}
+                            </div>
+                        </div>
+                    </ng-template> -->
+                </div>
+
+            </div>
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
+</div>

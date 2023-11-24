@@ -1,0 +1,33 @@
+<div class="w-full max-w-3xl">
+
+    <!-- Form -->
+    <form [formGroup]="notificationsForm">
+
+        <!-- Section -->
+        <div class="w-full text-xl">My Preferences</div>
+        <div class="grid grid-cols-1 gap-4 w-full mt-4">
+            <!-- exchange -->
+            <div class="flex items-center justify-between">
+                <div class="flex-auto leading-6 cursor-pointer" (click)="exchange.toggle()">
+                    I accept deals in exchange of products as well
+                </div>
+                <mat-slide-toggle class="ml-2" (change)="updateSettings()"[color]="'primary'" [formControlName]="'detail_in_exchange'" #exchange>
+                </mat-slide-toggle>
+            </div>
+            <!-- Whatsapp -->
+            <div class="flex items-center justify-between">
+                <div class="flex-auto leading-6 cursor-pointer" (click)="notification.toggle()">
+                    Send me Whatsapp notifications of all important updates
+                </div>
+                <mat-slide-toggle class="ml-2" [color]="'primary'" (change)="updateSettings()" [formControlName]="'whats_app_notification'"
+                    #notification>
+                </mat-slide-toggle>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="my-10 border-t"></div>
+
+    </form>
+
+</div>

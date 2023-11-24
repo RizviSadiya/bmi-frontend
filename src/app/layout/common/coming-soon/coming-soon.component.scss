@@ -1,0 +1,129 @@
+.coming-soon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFF;
+    overflow: hidden;
+}
+.coming-soon-inner {
+    position: relative;
+}
+.heading {
+    font-size: 30px;
+    text-transform: uppercase;
+    padding: 20px;
+    background: red;
+    color: #fff;
+    transform: skewY(-10deg);
+    font-weight: 500;
+    line-height: 100px;
+}
+.small-heading {
+    font-size: 15px;
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 20px;
+    background: #fece00;
+    color: #000;
+    transform: skewY(-10deg);
+    font-weight: 500;
+    line-height: 30px;
+    box-shadow: 10px 10px 20px rgb(0 0 0 / 0.3);
+    position: absolute;
+    right: 0;
+    bottom: -44px;
+}
+.coming-soon-inner:before {
+    content: "";
+    height: 2px;
+    width: 60%;
+    background: #000;
+    position: absolute;
+    top: -20px;
+    right: 0;
+    transform: skewY(-10deg);
+}
+.coming-soon-inner:after {
+    content: "";
+    height: 2px;
+    width: 60%;
+    background: red;
+    position: absolute;
+    bottom: 0px;
+    right: 0;
+    transform: skewY(-10deg);
+}
+.heading:before {
+    content: "";
+    height: 2px;
+    width: 60%;
+    background: #000;
+    position: absolute;
+    top: -20px;
+    left: 0;
+}
+.heading:after {
+    content: "";
+    height: 2px;
+    width: 60%;
+    background: red;
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+}
+
+@media only screen and (max-width: 583px) and (min-width: 200px) {
+    .coming-soon {
+        height: 200px;
+    }
+}
+
+@media only screen and (max-width: 400px) and (min-width: 200px) {
+    .heading {
+        font-size: 20px;
+        line-height: 40px;
+        text-transform: uppercase;
+        padding: 10px 20px;
+    }
+    .small-heading {
+        font-size: 10px;
+        padding: 10px;
+        bottom: -49px;
+    }
+    .counter-timer li {
+        font-size: 12px;
+    }
+    .coming-soon-inner:before {
+        top: -20px;
+    }
+    .heading:before {
+        top: -20px;
+    }
+    .heading:after {
+        bottom: -100px;
+    }
+}
+@media only screen and (max-width: 767px) and (min-width: 401px) {
+    .heading {
+        font-size: 30px;
+        line-height: 50px;
+        text-transform: uppercase;
+        padding: 10px 20px;
+    }
+    .small-heading {
+        font-size: 15px;
+        padding: 10px;
+        bottom: -48px;
+    }
+    .coming-soon-inner:before {
+        top: -30px;
+    }
+    .heading:before {
+        top: -30px;
+    }
+    .heading:after {
+        bottom: -70px;
+    }
+}

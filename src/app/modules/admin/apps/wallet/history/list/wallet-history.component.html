@@ -1,0 +1,252 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+    <!-- Header -->
+    <div
+        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+        <!-- Loader -->
+        <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+        </div>
+        <!-- Title -->
+        <div class="text-3xl font-extrabold tracking-tight">Transactions</div> 
+        <!-- Actions -->
+        <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4" *ngIf="userType === 'BRAND'">
+            <!-- Search -->
+            <!-- <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                <mat-icon *ngIf="userDetails.currency === 'INR'" class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:currency-rupee'"></mat-icon>
+                <mat-icon *ngIf="userDetails.currency === 'USD'" class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:currency-dollar'"></mat-icon>
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'"
+                    [placeholder]="'Enter Amount > 5000'" (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
+            </mat-form-field> -->
+            <!-- Add product button -->
+            <!-- <button class="ml-4" mat-flat-button [color]="'primary'" (click)="addMoney();"
+                [disabled]="!searchInputControl.value || searchInputControl.value < 5000 || userPlan == 1">
+                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                <span class="ml-2 mr-1">Add</span>
+            </button> -->
+        </div>
+    </div>
+    <div class="grid grid-cols-12 gap-x-1 my-2 mx-6" *ngIf="pagination && userType === 'BRAND'">
+        <div class="col-span-6 self-center font-medium tracking-tight text-secondary">
+            <!-- <span>Total:</span>
+            <span class="inline-flex items-center font-bold text-sm px-2.5 py-0.5 ml-2 rounded-full tracking-wide
+                    bg-primary-200 text-primary-800">
+                <span class="leading-relaxed whitespace-nowrap">{{ (pagination.totalBalance + pagination.totalUsed) |
+                    currency : userDetails.currency : 'symbol'
+                    : '1.2-2' }}</span>
+            </span> -->
+        </div>
+        <div class="col-span-6 text-right">
+            <span>Balance Left: <b>{{ pagination.totalBalance |
+                currency :userDetails.currency : 'symbol' : '1.0-0' }}</b></span>
+            <span class="inline-flex items-center font-bold text-sm px-2.5 py-0.5 ml-2 rounded-full tracking-wide
+                    bg-green-200 text-green-800">
+                <span class="leading-relaxed whitespace-nowrap" style="cursor: pointer;" (click)="addMoney()">Top up</span>
+                <!-- <span class="leading-relaxed whitespace-nowrap">{{ pagination.totalBalance |
+                    currency :userDetails.currency : 'symbol' : '1.2-2' }}</span> -->
+            </span>
+        </div>
+    </div>
+    <div class="grid grid-cols-12 gap-x-1 my-2 mx-6" *ngIf="pagination && userType === 'INFLUENCER'">
+        <div class="col-span-6 self-center font-medium tracking-tight text-secondary">
+            <span>Total:</span>
+            <span class="inline-flex items-center font-bold text-sm px-2.5 py-0.5 ml-2 rounded-full tracking-wide
+                    bg-primary-200 text-primary-800">
+                <span class="leading-relaxed whitespace-nowrap">{{ pagination.totalUsed | currency : userDetails.currency  : 'symbol'
+                    : '1.2-2' }}</span>
+            </span>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex flex-auto overflow-hidden">
+
+        <!-- Products list -->
+        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <ng-container *ngIf="transactions">
+                <ng-container *ngIf="transactions.length > 0; else noProducts">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" matSort matSortDisableClear>
+                            <thead
+                                class="shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 py-4 px-6 md:px-8">
+                                <tr>
+                                    <th>S No.   </th>
+                                    <!-- <th>CampaignId</th>
+                                    <th>OrderId</th> -->
+                                    <th  *ngIf="userType != 'BRAND'">Order ID</th>
+                                    <th  *ngIf="userType != 'BRAND'">Campaign Name</th>
+                                    <th >Date</th>
+                                    <th *ngIf="userType === 'BRAND'">Description</th>
+                                    <th  *ngIf="userType === 'BRAND'">Transaction ID</th>
+                                     <th >Amount</th>
+                                     <th  *ngIf="userType === 'BRAND'">Tax Amount</th>
+                                     <th  *ngIf="userType === 'BRAND'">Total Amount</th>
+
+                                     <!-- <th >Tax</th> -->
+                                    <th  *ngIf="userType != 'BRAND'">Payment After TDS(10%)</th>
+                                    <!-- <th *ngIf="userType != 'BRAND'">Start Date</th> -->
+                                    <!-- <th *ngIf="userType != 'BRAND'">Deadline Date</th> -->
+                                    <th  *ngIf="userType != 'BRAND'">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngIf="transactions">
+                                    <ng-container
+                                        *ngFor="let product of transactions; let i = index; trackBy: trackByFn">
+                                        <tr>
+                                            <td class="border border-slate-700">{{ (pageIndex * pageSize) + (i + 1) +
+                                                '.' }}</td>
+                                                <td *ngIf="userType != 'BRAND'" class="border border-slate-700"
+                                                [matTooltip]="product?.orderRandId">{{
+                                                    product?.orderRandId }}</td>
+                                                    <td *ngIf="userType !== 'BRAND'" class="border border-slate-700"
+                                                    [matTooltip]="product?.camp_title">{{
+                                                        product?.camp_title }}</td>
+                                                        <td class="border border-slate-700">{{ product.created_at | date:'medium' }}
+                                                        </td>
+                                                        <td class="border border-slate-700" *ngIf="userType === 'BRAND'">{{ product.message}}
+                                                        </td>
+                                                        <td *ngIf="userType === 'BRAND'" class="border border-slate-700"
+                                                        [matTooltip]="product.transaction_id">{{
+                                                        product.transaction_id }}</td>
+                                                     
+                                            <td class="border border-slate-700">
+                                                <!-- {{
+                                                (userType === 'BRAND' ? product.amount : product.camp_price)- (userType === 'BRAND' ? product.amount : product.camp_price)*18/100 | currency:userDetails.currency :'symbol':'1.0-0' }}</td> -->
+                                               {{ (userType === 'BRAND' ? product.amount : product.camp_price) | currency:product.currency :'symbol':'1.0-0' }}</td>
+                                          
+                                            <td class="border border-slate-700" *ngIf="product.payment_mode ===1">{{
+                                                (userType === 'BRAND' ? product.amount : product.camp_price)*18/100 | currency:userDetails.currency :'symbol':'1.0-0' }}</td>
+                                            <td class="border border-slate-700" *ngIf="product.payment_mode ===0">{{
+                                               0 }}</td>
+                                            <td class="border border-slate-700" *ngIf="userDetails.currency==='USD'">{{
+                                              0 }}</td>
+                                                <!-- (userType === 'BRAND' ? product.amount : product.camp_price) | currency:product.currency :'symbol':'1.2-2' }}</td> -->
+                                          
+                                                <td class="border border-slate-700"  *ngIf="product.payment_mode ===1">{{
+                                                    (userType === 'BRAND' ? product.amount : product.camp_price) +  (userType === 'BRAND' ? product.amount : product.camp_price)*18/100 | currency:userDetails.currency :'symbol':'1.0-0' }}</td>
+                                                <td class="border border-slate-700"  *ngIf="product.payment_mode ===0">{{
+                                                    (userType === 'BRAND' ? product.amount : product.camp_price) | currency:userDetails.currency :'symbol':'1.0-0' }}</td>
+                                                <td class="border border-slate-700"  *ngIf="userDetails.currency==='USD'">{{
+                                                    (userType === 'BRAND' ? product.amount : product.camp_price) | currency:userDetails.currency :'symbol':'1.0-0' }}</td>
+                                                <td *ngIf="userType !== 'BRAND'" class="border border-slate-700"
+                                                [matTooltip]="product?.camp_title">
+                    <span class="mb-2 text-md font-bold"><u>{{ product?.camp_price - (product?.camp_price*0.1) |currency:userDetails.currency :'symbol':'1.0-0'}}</u></span>
+                    <!-- <span class="mb-2 text-md font-bold"><u>{{ product?.camp_price - (product?.camp_price*0.1) |currency:product.currency :'symbol':'3.2'}}</u></span> -->
+
+                                                <!-- {{
+                                                    product?.camp_title }} -->
+                                                </td>
+                                           
+                                                    <!-- <td *ngIf="userType != 'BRAND'" class="border border-slate-700">{{ product.created_at | date }}
+                                                        <td *ngIf="userType != 'BRAND'" class="border border-slate-700">{{ product.deadlineDate | date }} -->
+                                          
+                                            <!-- <td class="border border-slate-700" *ngIf="userType === 'BRAND'">
+                                                <ng-container *ngIf="product.bal_type === 1">
+                                                    <mat-icon class="text-green-400 icon-size-5" matTooltip="Credit"
+                                                        [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                                        <span class="badge badge-success">Credited</span> 
+                                                </ng-container>
+                                                <ng-container *ngIf="product.bal_type === 2">
+                                                    <mat-icon class="text-warn-400 icon-size-5" matTooltip="Debit"
+                                                        [svgIcon]="'heroicons_solid:minus'"></mat-icon>
+                                                        <span class="badge badge-danger">Debited</span> 
+                                                </ng-container>
+                                            </td> -->
+                                            <td class="border border-slate-700" *ngIf="userType === 'INFLUENCER'">
+                                                <span class="inline-flex items-center font-bold text-sm px-2.5 py-0.5 ml-2 rounded-full tracking-wide"
+                                                        [ngClass]="{'bg-orange-200 text-on-warn-200': product.status == 0,
+                                                        'bg-green-200 text-on-green-200': product.status == 1,
+                                                        'bg-warn-200 text-on-warn-200': product.status == 2 }">
+                                                    <span class="leading-relaxed whitespace-nowrap">
+                                                        {{ product.status == 0 ? "Under Process" : product.status == 1 ? "Completed" : product.status == 2 ? "Cancelled" : "--" }}
+                                                    </span>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!---<div class="grid">
+                        <div class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            matSort matSortDisableClear>
+                            <div class="hidden sm:block" [mat-sort-header]="'#'">
+                                #
+                            </div>
+                            <div [mat-sort-header]="'amount'">Amount</div>
+                            <div class="hidden sm:block" [mat-sort-header]="'date'">
+                                Date
+                            </div>
+                            <div class="hidden sm:block" [mat-sort-header]="'id'">
+                                Transaction ID
+                            </div>
+                            <div class="hidden sm:block">Type</div>
+                            <div class="">Details</div>
+                        </div>
+                        <ng-container *ngIf="transactions">
+                            <ng-container *ngFor="let product of transactions; let i = index; trackBy: trackByFn">
+                                <div class="grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                    <div class="hidden sm:block">
+                                        {{ (pageIndex * pageSize) + (i + 1) + '.' }}
+                                    </div>
+                                    <div class="">
+                                        {{ product.amount | currency:'INR':'symbol':'1.2-2' }}
+                                    </div>
+                                    <div class="hidden sm:block">
+                                        {{ product.created_at | date:'medium' }}
+                                    </div>
+                                    <div class="hidden sm:block" [matTooltip]="product.transaction_id">
+                                        {{ product.transaction_id }}
+                                    </div>
+                                    <div class="hidden sm:block">
+                                        <ng-container *ngIf="product.bal_type === 1">
+                                            <mat-icon class="text-green-400 icon-size-5"
+                                                [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                        </ng-container>
+                                        <ng-container *ngIf="product.bal_type === 2">
+                                            <mat-icon class="text-warn-400 icon-size-5"
+                                                [svgIcon]="'heroicons_solid:minus'"></mat-icon>
+                                        </ng-container>
+                                    </div>
+
+                                    Details button
+                                    <div>
+                                        <button
+                                            class="min-w-10 min-h-7 h-7 px-2 leading-6"
+                                            mat-stroked-button
+                                            (click)="toggleDetails(product.id)">
+                                            <mat-icon
+                                                class="icon-size-5"
+                                                [svgIcon]="selectedProduct?.id === product.id ? 'heroicons_solid:chevron-up' : 'heroicons_solid:chevron-down'"></mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>--->
+
+                    <mat-paginator *ngIf="transactions.length" (page)="onChangePage($event)"
+                        class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                        [ngClass]="{'pointer-events-none': isLoading}" [length]="pagination.total"
+                        [pageIndex]="pagination.current_page - 1" [pageSize]="pagination.per_page"
+                        [showFirstLastButtons]="false"></mat-paginator>
+
+                </ng-container>
+            </ng-container>
+
+            <ng-template #noProducts>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
+                    <mat-icon class="icon-size-20" [svgIcon]="'iconsmind:search_oncloud'"></mat-icon>
+                    <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">
+                        There are no transactions!
+                    </div>
+                </div>
+            </ng-template>
+
+        </div>
+
+    </div>
+
+</div>

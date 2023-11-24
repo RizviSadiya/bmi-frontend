@@ -1,0 +1,53 @@
+<div class="flex flex-col flex-auto min-w-60 sm:min-w-100 md:w-160 md:min-w-160">
+    <form [formGroup]="applicationForm">
+        <div class="m-4">
+            <div>
+                <div class="text-center mb-4 py-0.5 px-3 rounded-full text-2xl font-medium text-black-600">
+                    <!-- Increase your preview Deadline -->
+                    Request Deadline Extension
+                </div>
+                    <mat-label
+                        class=" text-center flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                       How many days of extension are required?
+                        <!-- How soon can you deliver, after the order is confirmed by the brand? -->
+                        <span
+                            class="text-danger">*</span>
+                    </mat-label>
+                    <mat-radio-group class="flex flex-row" [color]="'primary'"
+                        [formControlName]="'delivery_days'" required (change)="deliveryDaysSelection();">
+                        <mat-radio-button class="mb-2 mr-2" [value]="'7'">
+                            Within 7 days
+                        </mat-radio-button>
+                        <mat-radio-button class="mb-2 mr-2" [value]="'15'">
+                            Within 15 days
+                        </mat-radio-button>
+                        <mat-radio-button class="mb-2 mr-2" [value]="'30'">
+                            Within 30 days
+                        </mat-radio-button>
+                        <mat-radio-button class="mb-2" [value]="'other'">
+                            Other
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-form-field class="flex-auto gt-xs:pr-3 pl-5"
+                        *ngIf="this.applicationForm.value.delivery_days === 'other'">
+                        <input matInput [placeholder]="'Enter days'"
+                            [formControlName]="'other_delivery_days'">
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:calculator'">
+                        </mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="flex items-center justify-end mt-4">
+                    <!-- Close -->
+                    <button mat-flat-button matDialogClose class="mr-2">
+                        Cancel
+                    </button>
+                    <!-- Save -->
+                    <button mat-flat-button [color]="'primary'" (click)="increaseOderdDat()">
+                        Save
+                    </button>
+                </div>
+            </div>
+   
+        
+    </form>
+</div>

@@ -1,0 +1,68 @@
+<div class="m-4">
+
+    <!--Design1:-Free plan. Copy code end here -->
+    <div class="cmplivemain mb-4 p-6" *ngIf="userPlan===1">
+        <div class="flex flex-auto justify-center  mx-auto">
+            <div class="lg:flex flex-col col-md-7 p-5 payplancontent-width">
+                <h1 class="mb-4">Your campaign is now awaiting approval.</h1>
+                <ul>
+                    <li>You will have a longer campaign approval queue, which may take upto 24-72 hours. </li>
+                    <li>Campaign visibility will remain private so no influencer can see your campaign till you invite them first. </li>
+                    <li>You will NOT be able to access or invite Premium influencers.  </li>
+                    <li>You can create only 1 campaign at any given time</li>
+                </ul>
+            </div>
+            <div class="lg:flex flex-col col-md-5 p-5 payplancontent-width-right text-right images-right">
+                <p class="mb-6">Your Current Plan : <span>  Free </span></p>
+                <img src="/assets/images/bg1.png"/>
+            </div>
+        </div>
+        <div class="clearfix text-center ">
+            <h3 class="mb-3 colorredtext">Want to remove these restrictions?</h3>
+            <button class="mb-2 upgradebtn font-bold" (click)="upgrade()">Upgrade</button>
+        </div>
+    </div>
+    <!--Design1:-Free plan. Copy code end here -->
+
+    <!--Design2:-starter plan. Copy code end here -->
+    <div class="cmplivemain mb-4 p-6" *ngIf="userPlan===2">
+        <div class="flex flex-auto justify-center  mx-auto">
+            <div class="lg:flex flex-col col-md-7 p-5 payplancontent-width">
+                <h1 class="mb-4">Your campaign is now awaiting approval.</h1>
+                <ul>
+                    <li>You will NOT have auto-approvals of your campaigns.</li>
+                    <li>You can create max 2 campaigns at any given time.</li>
+                    <li>You will NOT be able to access or invite Premium influencers.</li>
+                </ul>
+            </div>
+            <div class="lg:flex flex-col col-md-5 p-5 payplancontent-width-right text-right images-right">
+                <p class="mb-6">Your Current Plan : <span>  Starter </span></p>
+                <img src="/assets/images/bg1.png"/>
+            </div>
+        </div>
+        <div class="clearfix text-center ">
+            <h3 class="mb-3 colorredtext">Want to remove these restrictions?</h3>
+            <button class="mb-2 upgradebtn font-bold" (click)="upgrade()">Upgrade</button>
+        </div>
+    </div>
+    <!--Design2:-starter plan. Copy code end here -->
+
+    <!--Design4:-Campaign live. Copy code end here -->
+    <div class="cmplivemain mb-4 p-11" *ngIf="userPlan===3">
+        <div class="flex flex-auto justify-center  mx-auto mb-4 text-center campaignlive">
+            <h1>Your campaign is now live and open to influencers for submitting proposals.</h1>
+        </div>
+        <div class="flex flex-auto justify-center  mx-auto mb-8 text-center campaignlive">
+            <img src="/assets/images/bg_camp.png" />
+        </div>
+        <div class="flex flex-auto justify-center  mx-auto mb-4 text-center campaignlive">
+            <h2>You should now start inviting influencers to maximise your responses.</h2>
+        </div>
+        <div class="flex flex-auto justify-center  mx-auto">
+            <button  class="camp-live-btn" mat-flat-button (click)="Recommendations()">View Recommendations</button> 
+        </div>
+    </div>
+    <!--Design4:-Campaign live. Copy code end here -->
+
+  
+</div>

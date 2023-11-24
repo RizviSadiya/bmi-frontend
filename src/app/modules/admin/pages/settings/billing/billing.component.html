@@ -1,0 +1,229 @@
+<div class="w-full max-w-3xl">
+
+    <!-- Form -->
+    <form [formGroup]="accountForm">
+        <!-- Section -->
+        <div class="w-full">
+            <div class="text-xl">Billing Details</div>
+            <div class="text-secondary ntboldtext">Update your billing information. Make sure to set your billing details correctly
+                as it could affect your payment.</div>
+        </div>
+        <div class="grid grid-cols-4 gap-6 w-full mt-8">
+            <!-- Full Name -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Full Name</mat-label>
+                    <mat-icon class="icon-size-5"  matPrefix>
+                        <img src="/assets/images/user.png">
+                        <!-- [svgIcon]="'heroicons_solid:pencil'" -->
+                    </mat-icon>
+                    <input [formControlName]="'fullname'" matInput>
+                </mat-form-field>
+                <!-- submitted && -->
+                <!-- <mat-error *ngIf=" accountForm.get('fullname').hasError('required')">
+                    Full Name is required.
+                </mat-error> -->
+                <mat-error *ngIf="fullname.invalid && (fullname.dirty || fullname.touched)"
+                class="alert alert-danger">
+            
+              <mat-error *ngIf="fullname.errors?.['required']">
+                Name is required.
+              </mat-error>
+            </mat-error>
+                <!-- <mat-error *ngIf=" accountForm.get('fullname').hasError('pattern')">
+                    Invalid Name.
+                </mat-error> -->
+            </div>
+            <!-- WhatsApp -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">WhatsApp Number</mat-label>
+                    <mat-icon class="icon-size-5" matPrefix>
+                        <img class="" src="assets/icons/whatsapp.png">
+                        <!-- [svgIcon]="'heroicons_solid:device-mobile'" -->
+                    </mat-icon>
+                    <input [formControlName]="'whats_app'" matInput>
+                </mat-form-field>
+                <!-- <mat-error *ngIf=" accountForm.get('whats_app').hasError('required')">
+                    WhatsApp Number is required.
+                </mat-error> -->
+                <mat-error *ngIf="whats_app.invalid && (whats_app.dirty || whats_app.touched)"
+                class="alert alert-danger">
+            
+              <mat-error *ngIf="whats_app.errors?.['required']">
+                WhatsApp number is required.
+              </mat-error>
+            </mat-error>
+                <!-- <mat-error *ngIf=" accountForm.get('whats_app').hasError('pattern')">
+                    Invalid WhatsApp Number.
+                </mat-error> -->
+            </div>
+            <!-- Skype -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Skype</mat-label>
+                    <mat-icon class="icon-size-5" matPrefix>
+                        <img class="" src="assets/icons/skype.png">
+                        <!-- [svgIcon]="'iconsmind:skype'"  -->
+                    </mat-icon>
+                    <input [formControlName]="'skype'" matInput>
+                </mat-form-field>
+                <!-- <mat-error *ngIf=" accountForm.get('skype').hasError('required')">
+                    Skype ID is required.
+                </mat-error> -->
+                <mat-error *ngIf="skype.invalid && (skype.dirty || skype.touched)"
+                class="alert alert-danger">
+            
+              <mat-error *ngIf="skype.errors?.['required']">
+                Skype is required.
+              </mat-error>
+            </mat-error>
+                <!-- <mat-error *ngIf=" accountForm.get('skype').hasError('pattern')">
+                    Invalid Skype ID
+                </mat-error> -->
+            </div>
+               <!-- GST -->
+               <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">GST</mat-label>
+                    <mat-icon class="icon-size-5"  matPrefix>
+                        <img src="/assets/images/receipt.jpg" >
+                        <!-- [svgIcon]="'heroicons_solid:receipt-tax'" -->
+                    </mat-icon>
+                    <input [formControlName]="'gst'" matInput>
+                </mat-form-field>
+                <!-- <mat-error *ngIf=" accountForm.get('gst').hasError('required')">
+                    GST is required.
+                </mat-error> -->
+                <mat-error *ngIf="gst.invalid && (gst.dirty || gst.touched)"
+                class="alert alert-danger">
+            
+              <mat-error *ngIf="gst.errors?.['required']">
+                GST Number is required.
+              </mat-error>
+            </mat-error>
+                <!-- <mat-error *ngIf=" accountForm.get('gst').hasError('pattern')">
+                    Invalid GST number.
+                </mat-error> -->
+            </div>
+            <!-- PAN Number -->
+            <div class="col-span-4 sm:col-span-2" >
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">PAN Number</mat-label>
+                    <mat-icon class="icon-size-5"  matPrefix>
+                        <img src="/assets/images/identification.jpg" >
+
+                    </mat-icon>
+                    <input [formControlName]="'pan_no'" matInput>
+                    <!-- [svgIcon]="'heroicons_solid:identification'" -->
+                </mat-form-field>
+                <!-- <mat-error *ngIf=" accountForm.get('pan_no').hasError('required')">
+                    PAN Number is required.
+                </mat-error> -->
+                <mat-error *ngIf="pan_no.invalid && (pan_no.dirty || pan_no.touched)"
+                class="alert alert-danger">
+            
+              <mat-error *ngIf="pan_no.errors?.['required']">
+                PAN Number is required.
+              </mat-error>
+            </mat-error>
+                <!-- <mat-error *ngIf=" accountForm.get('pan_no').hasError('pattern')">
+                    Invalid PAN Number.
+                </mat-error> -->
+            </div>
+            <!-- Company Name -->
+            <div class="col-span-4 sm:col-span-2" >
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Company Name</mat-label>
+                    <mat-icon class="icon-size-5"  matPrefix>
+                        <img src="/assets/images/office-building.png" >
+                        <!-- [svgIcon]="'heroicons_solid:office-building'" -->
+                    </mat-icon>
+                    <input [formControlName]="'company_name'" matInput>
+                </mat-form-field>
+                <!-- <mat-error *ngIf=" accountForm.get('company_name').hasError('required')">
+                    Company Name is required.
+                </mat-error> -->
+                <mat-error *ngIf="company_name.invalid && (company_name.dirty || company_name.touched)"
+    class="alert alert-danger">
+
+  <mat-error *ngIf="company_name.errors?.['required']">
+    Name is required.
+  </mat-error>
+</mat-error>
+                <!-- <mat-error *ngIf=" accountForm.get('company_name').hasError('pattern')">
+                    Invalid Company Name.
+                </mat-error> -->
+            </div>
+            <!-- Company Address -->
+            <div class="col-span-4 sm:col-span-2" >
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Company Address</mat-label>
+                    <mat-icon class="icon-size-5" matPrefix>
+                        <img src="/assets/images/location-img.jpg" >
+                        <!-- [svgIcon]="'heroicons_solid:location-marker'" -->
+                    </mat-icon>
+                    <input [formControlName]="'company_address'" matInput>
+                </mat-form-field>
+                <!-- <mat-error *ngIf=" accountForm.get('company_address').hasError('required')">
+                    Company Address is required.
+                </mat-error> -->
+                <mat-error *ngIf="company_address.invalid && (company_address.dirty || company_address.touched)"
+                class="alert alert-danger">
+            
+              <mat-error *ngIf="company_address.errors?.['required']">
+                Company address is required.
+              </mat-error>
+            </mat-error>
+                <!-- <mat-error *ngIf=" accountForm.get('company_address').hasError('pattern')">
+                    Invalid Company Address
+                </mat-error> -->
+            </div>
+         
+            <!-- Country -->
+            <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Country</mat-label>
+                    <mat-icon class="icon-size-5"  matPrefix>
+                        <img src="/assets/images/location-img.jpg" >
+                        <!-- [svgIcon]="'heroicons_solid:location-marker'" -->
+                    </mat-icon>
+                    <mat-select [formControlName]="'country_id'">
+                        <mat-option [value]="country.id" *ngFor="let country of countries">{{ country.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf=" accountForm.get('country_id').hasError('required')">
+                    Country is required.
+                </mat-error>
+            </div>
+            <!-- Currency -->
+            <!-- <div class="col-span-4 sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Currency</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'iconsmind:money_bag'" matPrefix></mat-icon>
+                    <mat-select formControlName="currency">
+                        <mat-option [value]="'INR'">INR</mat-option>
+                        <mat-option [value]="'USD'">USD</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf=" accountForm.get('currency').hasError('required')">
+                    Currency is required
+                </mat-error>
+            </div> -->
+        </div>
+
+        <!-- Divider -->
+        <div class="mt-11 mb-10 border-t"></div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-end">
+            <button mat-stroked-button type="button">
+                Cancel
+            </button>
+            <button class="ml-4" mat-flat-button type="button" [color]="'primary'" (click)="updateSettings();">Save
+            </button>
+        </div>
+    </form>
+
+</div>

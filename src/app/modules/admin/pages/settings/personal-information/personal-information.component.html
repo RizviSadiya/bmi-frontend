@@ -1,0 +1,67 @@
+<div class="w-full max-w-3xl">
+
+    <!-- Form -->
+    <form [formGroup]="securityForm">
+
+        <!-- Section -->
+        <div class="w-full">
+            <div class="text-xl">Personal Information</div>
+            <div class="text-secondary ntboldtext">Communication details in case we want to connect with you. These will be kept
+                private.</div>
+        </div>
+        <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+            <!-- Full Name -->
+            <div class="sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Full Name</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user-circle'" matPrefix></mat-icon>
+                    <input [formControlName]="'fullname'" matInput>
+                </mat-form-field>
+                <mat-error *ngIf="submitted && securityForm.get('fullname').hasError('required')">
+                    Full Name is required.
+                </mat-error>
+            </div>
+            <!-- Phone -->
+            <div class="sm:col-span-2">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label  class="ntboldtext">Phone Number</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:phone'" matPrefix></mat-icon>
+                    <input [formControlName]="'phone'" matInput>
+                </mat-form-field>
+                <mat-error *ngIf="submitted && securityForm.get('phone').hasError('required')">
+                    Phone Number is required.
+                </mat-error>
+                <mat-error *ngIf="submitted && securityForm.get('phone').hasError('pattern')">
+                    Invalid Phone Number.
+                </mat-error>
+            </div>
+            <div class="sm:col-span-2" *ngIf="userProfile.userType==='brand'">
+                <mat-form-field class="fuse-mat-no-subscript w-full">
+                    <mat-label class="ntboldtext">Skype Id</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:skype'" matPrefix> 
+                     <img class="" src="assets/icons/skype.png" style="width:20px; margin-left:20px ;"></mat-icon>      
+                    <input [formControlName]="'skype'" matInput>
+                </mat-form-field>
+                <!-- <mat-error *ngIf="submitted && securityForm.get('skypeId').hasError('required')">
+                    Phone Number is skypeId.
+                </mat-error>
+                <mat-error *ngIf="submitted && securityForm.get('skypeId').hasError('pattern')">
+                    Invalid skypeId.
+                </mat-error> -->
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="my-10 border-t"></div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-end">
+            <button mat-stroked-button type="button">
+                Cancel
+            </button>
+            <button class="ml-4" mat-flat-button type="button" [color]="'primary'" (click)="updateSettings();">Save
+            </button>
+        </div>
+    </form>
+
+</div>

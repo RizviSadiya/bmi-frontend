@@ -1,0 +1,77 @@
+<div class="relative flex flex-auto w-full bg-card dark:bg-transparent">
+
+    <mat-drawer-container class="flex-auto h-full" [hasBackdrop]="false">
+
+        <!-- Drawer content -->
+        <mat-drawer-content class="flex overflow-hidden">
+
+            <!-- Chats list -->
+            <ng-container *ngIf="chats && chats.length > 0; else noChats">
+                <div
+                    class="relative flex flex-auto flex-col w-full min-w-0 lg:min-w-100 lg:max-w-100 bg-card dark:bg-transparent">
+
+                    <!-- Chats -->
+                    <div class="flex-auto overflow-y-auto">
+                        <ng-container *ngIf="filteredChats.length > 0; else noChats">
+                            <ng-container *ngFor="let chat of filteredChats; trackBy: trackByFn">
+                                <div class="z-20 flex items-center py-5 px-8 cursor-pointer border-b"
+                                    [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedChat || selectedChat.contact.id !== chat.receiver_id,
+                                                'bg-primary-50 dark:bg-hover': selectedChat && selectedChat.contact.id === chat.receiver_id}" [routerLink]="[chat.receiver_id]">
+                                    <div class="relative flex flex-0 items-center justify-center w-10 h-10">
+                                        <ng-container *ngIf="chat.unreadCount > 0">
+                                            <div class="absolute bottom-0 right-0 flex-0 w-2 h-2 -ml-0.5 rounded-full ring-2 ring-bg-card dark:ring-gray-900 bg-primary dark:bg-primary-500 text-on-primary"
+                                                [class.ring-primary-50]="selectedChat && selectedChat.contact.id === chat.receiver_id">
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="chat.receiver.profile_photo">
+                                            <img class="w-full h-full rounded-full object-cover"
+                                                [src]="chat.receiver.profile_photo" alt="Contact avatar" />
+                                        </ng-container>
+                                        <ng-container *ngIf="!chat.receiver.profile_photo">
+                                            <div
+                                                class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                                {{chat.receiver.fullname.charAt(0)}}
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <div class="min-w-0 ml-4">
+                                        <div class="font-medium leading-5 truncate">{{chat.receiver.fullname}}</div>
+                                        <div class="leading-5 truncate text-secondary">
+                                            <!-- [class.text-primary]="chat.unreadCount > 0"
+                                            [class.dark:text-primary-500]="chat.unreadCount > 0"> -->
+                                            {{chat.lastMessage}}
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end self-start ml-auto pl-2">
+                                        <div class="text-sm leading-5 text-secondary">{{chat.lastMessageAt}}</div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+
+                </div>
+
+            </ng-container>
+
+            <!-- No chats template -->
+            <ng-template #noChats>
+                <div class="flex flex-auto flex-col items-center justify-center h-full">
+                    <mat-icon class="icon-size-24" [svgIcon]="'iconsmind:speach_bubble'"></mat-icon>
+                    <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">No chats</div>
+                </div>
+            </ng-template>
+
+            <!-- Conversation -->
+            <ng-container *ngIf="chats && chats.length > 0">
+                <div class="flex-auto border-l" [ngClass]="{'z-20 absolute inset-0 lg:static lg:inset-auto flex': selectedChat && selectedChat.contact.id,
+                                'hidden lg:flex': !selectedChat || !selectedChat.contact.id}">
+                    <router-outlet></router-outlet>
+                </div>
+            </ng-container>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
+</div>

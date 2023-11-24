@@ -1,0 +1,46 @@
+<div class="flex flex-col flex-auto" *ngIf="amountFromParent >= 0">
+    <form [formGroup]="amountForm" autocomplete="off">
+        <div class="">
+            <div>
+                <div class="text-center mb-4 py-0.5 px-3 rounded-full text-2xl font-medium text-black-600">
+                    Add money to wallet
+                </div>
+                <mat-form-field style="width: 100%" [floatLabel]="'always'">
+                    <mat-label> Amount to add(Min. INR 5000)
+                    </mat-label>
+                    <input type="number" matInput [placeholder]="'Amount'" (keyup)="inputVlaue($event)" [formControlName]="'amount'">
+                    <mat-select [formControlName]="'currency'" matPrefix>
+                        <mat-option [disabled]="user_currency.currency"  [value]="'INR'">INR</mat-option>
+                        <mat-option [disabled]="user_currency.currency"  [value]="'USD'">USD</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div *ngIf="!amountForm.invalid && user_currency.currency==='INR'">
+                    <!-- <p> <strong>GST: {{gstPer.tax_per}}%</strong></p> -->
+                    <p> <strong>Amount to pay : {{totalAmount}} (Including 18% GST, which is credited back to you)</strong></p>
+                </div>
+              
+                <mat-error *ngIf="submitted && amountForm.get('amount').hasError('required')">
+                    Please enter amount.
+                </mat-error>
+                <mat-error *ngIf="amountForm.get('amount').hasError('pattern')">
+                    Enter only numeric value as amount.
+                </mat-error>
+                <!-- <mat-error *ngIf="submitted && amountForm.get('amount').hasError('min')">
+                    Minimum amount should be 5000
+                </mat-error> -->
+            </div>
+        </div>
+        <div class="flex items-center justify-end mt-4 p-4">
+            <button mat-flat-button matDialogClose (click)="closepopup()" class="mr-2">
+                Cancel
+            </button>
+            <button mat-flat-button [color]="'primary'" (click)="proceed();">
+                Proceed
+            </button>
+        </div>
+    </form>
+</div>
+
+<div *ngIf="amountFromParent == 0">
+    <!-- <h4>processing payment...</h4> -->
+</div>

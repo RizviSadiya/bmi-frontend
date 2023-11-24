@@ -1,0 +1,66 @@
+// mat-dialog-container {
+//     min-width: 250px!important;
+//     min-height: 191px!important;
+//     max-width: 250px!important;
+//   }
+
+.credit-top input {
+    border: 1px solid #ccc;
+    height: 40px;
+    width: 100%;
+    border-right: 0;
+    border-left: 0;
+  }
+  .credit-top button{
+    padding: 0!important;
+    text-align: center;
+    height: auto;
+    width: 100%;
+    
+    opacity:0.5;
+    border-radius: 0!important;
+    border: 1px solid #ccc;
+    
+  }
+  .credit-top button:hover{
+    opacity: 1;
+  }
+  .credit-top .add-btn button{
+    border-top-right-radius: 3px!important;
+    border-bottom-right-radius: 3px!important;
+  
+  }
+  .credit-top .remove-btn button{
+    border-top-left-radius: 3px!important;
+  border-bottom-left-radius: 3px!important;  
+  }
+  .total-bx{
+    padding: 15px 10px;
+    margin-top: 10px;
+      background: rgba(0,0,0,0.05);
+      font-size: 11px;
+  }
+  .total-bx h2{
+    line-height: 24px;
+  }
+  .close-btn{
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    right: 10px;
+    top: 10px;
+  }
+  .close-btn button{
+    padding: 0!important;
+    min-width: 30px;
+    min-height: 30px;
+    max-height: 30px;
+    background: rgba(0, 0, 0, 0.06);
+  }
+  .close-btn .mat-button-focus-overlay{
+    opacity: 1!important;
+  }
+  .mat-dialog-container{
+  position: relative;
+  overflow-x: hidden!important;
+  }

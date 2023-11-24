@@ -1,0 +1,136 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+    <!-- Header -->
+    <div
+        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+        <!-- Loader -->
+        <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+        </div>
+        <!-- Title -->
+       
+        <div class="text-3xl font-extrabold tracking-tight">
+          <span> Credit Ledger </span> 
+        </div>
+        <div class="col-span-6 text-right">
+            <span>Credits Left: <b>{{ pagination?.totalBalance}}</b> </span>
+            <span class="inline-flex items-center font-bold text-sm px-2.5 py-0.5 ml-2 rounded-full tracking-wide
+                    bg-green-200 text-green-800">
+                <span class="leading-relaxed whitespace-nowrap" style="cursor: pointer;" (click)="topUpCredit()">Top Up</span>
+                <!-- <span class="leading-relaxed whitespace-nowrap">{{ pagination?.totalBalance |
+                    currency :userDetails.currency: 'symbol' : '1.0-0' }}</span> -->
+            </span>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex flex-auto overflow-hidden">
+
+        <!-- Products list -->
+        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <ng-container *ngIf="billings">
+                <ng-container *ngIf="billings.length > 0; else noProducts">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="width:100%" matSort matSortDisableClear>
+                            <!-- Header -->
+                            <thead
+                                class="shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 py-4 px-6 md:px-8">
+                                <tr>
+                                    <th>S No.</th>
+                                    <th>Date</th>
+                                    <!-- <th>Channel</th> -->
+                                    <th>Comment</th>
+                                    <th> Type</th>
+
+                                    <th>Credits</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <!-- Rows -->
+                            <tbody>
+                                <ng-container *ngIf="billings">
+                                    <ng-container *ngFor="let product of billings; let i = index; trackBy: trackByFn">
+                                        <tr>
+                                            <td class="border border-slate-700">
+                                                {{ (pageIndex * pageSize ) + i + 1 }}
+                                            </td>
+
+                                              <!-- Date -->
+                                              <td class="border border-slate-700">
+                                                {{ product.created_at | date:'medium' }}
+                                            </td>
+
+                                            <!-- channel name -->
+                                            <!-- <td class="border border-slate-700 truncate">
+                                                {{ product?.data_info?.channel_name }}
+                                            </td> -->
+
+                                            <td class="border border-slate-700 truncate" style="width:300px">
+                                                {{product.message}}
+                                                <!-- {{ product.message.split(' ')[0]}} <br>
+                                                {{ product.message.split(' ')[1]}}  {{ product.message.split(' ')[2]}} {{ product.message.split(' ')[3]}} <br>
+                                                {{ product.message.split(' ')[4]}}  -->
+                                            </td>
+                                          
+                                            <!-- Active -->
+                                            <td class="border border-slate-700">
+                                                <ng-container *ngIf="product.bal_type === 1">
+                                                    <!-- <mat-icon class="text-green-400 icon-size-5" matTooltip="Credit"
+                                                        [svgIcon]="'heroicons_solid:plus'"></mat-icon> -->
+                                                        <span class="badge badge-success">Credited</span> 
+                                                </ng-container>
+                                                <ng-container *ngIf="product.bal_type === 2">
+                                                    <!-- <mat-icon class="text-warn-400 icon-size-5" matTooltip="Debit"
+                                                        [svgIcon]="'heroicons_solid:minus'"></mat-icon> -->
+                                                        <span class="badge badge-danger">Debited</span> 
+                                                </ng-container>
+                                            </td>
+
+                                            <!-- Amount -->
+                                            <td class="border border-slate-700" *ngIf="product.bal_type === 1">
+                                               + {{ product.amount }}
+                                            </td>
+                                            <td class="border border-slate-700" *ngIf="product.bal_type === 2">
+                                               - {{ product.amount }}
+                                            </td>
+
+                                            <!-- Balance -->
+                                            <td class="border border-slate-700">
+                                                {{ product.new_amount }}
+                                            </td>
+
+                                          
+
+                                            <!-- Transaction ID -->
+                                          
+
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <mat-paginator *ngIf="pagination.total > pageSize" (page)="onChangePage($event)"
+                        class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                        [ngClass]="{'pointer-events-none': isLoading}" [length]="pagination.total"
+                        [pageIndex]="pagination.current_page - 1" [pageSize]="pagination.per_page"
+                        [showFirstLastButtons]="false"></mat-paginator>
+
+                </ng-container>
+            </ng-container>
+
+            <ng-template #noProducts>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
+                    <mat-icon class="icon-size-20" [svgIcon]="'iconsmind:search_oncloud'"></mat-icon>
+                    <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">
+                        There is no credit history details!
+                    </div>
+                </div>
+            </ng-template>
+
+        </div>
+
+    </div>
+
+</div>

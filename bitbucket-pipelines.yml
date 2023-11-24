@@ -1,0 +1,73 @@
+image: atlassian/default-image:2
+image: node:16
+
+pipelines:
+  branches:
+    development:
+    - step:
+        name: Deploy to staging server
+        caches:
+          - node
+        script:
+          - apt-get update
+          - npm install
+          - npm run build
+          - apt-get install -y zip
+          - zip -r devcode.zip .
+          - pipe: atlassian/aws-code-deploy:0.2.5
+            variables:
+              AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              APPLICATION_NAME: 'BMICodeDeploy'
+              S3_BUCKET: $S3_BUCKET
+              COMMAND: 'upload'
+              ZIP_FILE: 'devcode.zip'
+              VERSION_LABEL: 'BMI-2.0.0'
+          - pipe: atlassian/aws-code-deploy:0.2.5
+            variables:
+              AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              APPLICATION_NAME: 'BMICodeDeploy'
+              DEPLOYMENT_GROUP: 'BMIStagingDeploymentGroup'
+              S3_BUCKET: $S3_BUCKET
+              COMMAND: 'deploy'
+              WAIT: 'true'
+              VERSION_LABEL: 'BMI-2.0.0'
+              IGNORE_APPLICATION_STOP_FAILURES: 'true'
+              FILE_EXISTS_BEHAVIOR: 'OVERWRITE'
+    master:
+    - step:
+        name: Deploy to prod server
+        caches:
+          - node
+        script:
+          - apt-get update
+          - npm install
+          - npm run prod
+          - apt-get install -y zip
+          - zip -r bmiprod.zip .
+          - pipe: atlassian/aws-code-deploy:0.2.5
+            variables:
+              AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              APPLICATION_NAME: 'BMICodeDeploy'
+              S3_BUCKET: $S3_BUCKET
+              COMMAND: 'upload'
+              ZIP_FILE: 'bmiprod.zip'
+              VERSION_LABEL: 'BMI-PROD-1.0'
+          - pipe: atlassian/aws-code-deploy:0.2.5
+            variables:
+              AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              APPLICATION_NAME: 'BMICodeDeploy'
+              DEPLOYMENT_GROUP: 'BMIProdDeploymentGroup'
+              S3_BUCKET: $S3_BUCKET
+              COMMAND: 'deploy'
+              WAIT: 'true'
+              VERSION_LABEL: 'BMI-PROD-1.0'
+              IGNORE_APPLICATION_STOP_FAILURES: 'true'
+              FILE_EXISTS_BEHAVIOR: 'OVERWRITE'

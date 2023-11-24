@@ -1,0 +1,83 @@
+<style>
+    /* .cdk-overlay-pane{height: 90vh;}  */
+    .mat-dialog-container{
+        padding: 0;
+    }
+
+    textarea.mat-input-element {
+    padding: 15px 12px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: 91%;
+}
+
+.inputarea-section textarea {
+    min-width: 94%;
+}
+</style>
+
+
+<div class="review-video-popup">
+    <span class="closebtn" matDialogClose>X</span>
+    <form [formGroup]="reviewForm">
+    <div class="review-video-popup-inner pl-20 pr-20 pt-20 pd-20">
+        <h1  class="font-bold videoscript-header text-3xl mb-8 text-center"> <span>Review campaign brief</span></h1>
+        <!-- <h1  class="font-bold videoscript-header text-3xl mb-8 text-center"> <span>Campaign Resource Preview</span></h1> -->
+        <!-- <div class="whitebg-section" *ngIf="order.job_description !='undefined' && order.job_description !='null' && order.job_description !=null"> -->
+            <table class="table custometable" >
+                <!-- <thead >
+                    <tr>
+                        <th>Specifications</th>
+                        <th>Details</th>
+                    </tr>
+                </thead> -->
+                <tbody>
+                    <!-- job description commit-->
+                    <!-- <tr >
+                        <td class="font-mono text-md text-secondary">
+                            <div>Job Description</div>
+                        </td>
+                        <td >
+                            {{ order.job_description }}
+                         <p  [innerHTML]="order.job_description"></p>
+
+                        </td>
+                        <td *ngIf="userDetail.user_type==='brand'" >
+                       
+<textarea [innerHTML]="order.job_description" name="" id="" cols="50" rows="20"></textarea>
+                        </td>
+                    </tr> -->
+                    <tr *ngIf="order.comment !='null'">
+                        <td class="font-mono text-md text-secondary">
+                            <div>Suggestions</div>
+                        </td>
+                        <td *ngIf="order.comment !='null'">
+                            {{ order.comment }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        <!-- </div> -->
+        <!-- <br> -->
+
+        <div class="text-center mb-4 mt-4" *ngIf="order.template_script">
+            <a class="downloadbtn" target="_blank" [href]="order.template_script" [download]="order.template_script">
+                Click to Download
+            </a>
+        </div>
+      
+        <div class="inputarea-section" *ngIf="userDetail.user_type==='influencer'">
+            <textarea matInput placeholder="Any Comment for Brand"  formControlName="comment" col="8"></textarea>
+        </div>
+
+        <div class="buttonarea-section text-center" style="color: white;" *ngIf="userDetail.user_type==='influencer'">
+            <button class="requestbtn" (click)="requestChange();">
+                Request Change
+            </button>
+            <button class="apprvbtn"  (click)="approve();">
+                Approve
+            </button>
+        </div>
+    </div>
+    </form>
+</div>

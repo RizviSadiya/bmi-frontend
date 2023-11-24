@@ -1,0 +1,33 @@
+<div class="flex flex-col flex-auto md:w-160 md:min-w-160">
+    <div class="m-4">
+        <div>
+            <div class="text-center mb-4 py-0.5 px-3 rounded-full text-2xl font-medium text-black-600">
+                Stay safe & build your reputation
+            </div>
+            <div class="flex flex-col">
+                <p class="mb-3"><span class="mx-2">&bull;</span>Only accept payment through Bookmyinfluencers, ensuring
+                    payment
+                    protection.</p>
+                <p><span class="mx-2">&bull;</span>Receiving payment outside of Bookmyinfluencer violates your
+                    user agree mentand could result in account suspension.
+                </p>
+                <mat-checkbox class="mt-3 ml-2" [color]="'primary'" (change)="disable =!disable" [checked]="true">
+                    <a [href]="'pages/privacy-policy'" target="_blank"> <u>I accepts company 
+                    <!-- I understand Bookmyinfluencer's.   -->
+                     <!-- <a href="" routerLink="privacy-policy"  target="_blank">policies</a>  -->
+                     <!-- <a href="https://bookmyinfluencers.com/privacy.php" routerLink="terms-of-use"  target="_blank">policies</a>  -->
+                     policies </u></a> 
+                     <!-- <a href="https://stage.bookmyinfluencers.com/privacy-policy" target="_blank">policies</a>  -->
+                </mat-checkbox>
+            </div>
+        </div>
+    </div>
+    <div class="flex items-center justify-end mt-4 p-4">
+        <button mat-flat-button matDialogClose class="mr-2">
+            Cancel
+        </button>
+        <button mat-flat-button [disabled]="!disable" [color]="'primary'" (click)="submitApplication();">
+            Submit
+        </button>
+    </div>
+</div>

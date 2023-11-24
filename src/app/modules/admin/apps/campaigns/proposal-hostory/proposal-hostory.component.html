@@ -1,0 +1,239 @@
+
+<div class="items-center bg-card shadow rounded-2xl mb-4" *ngFor="let channel of proposalhistory">
+    <div class="row w-full p-6 text-left" >
+        <div class="col-12 col-sm-2 col-md-2 mt-0">
+            <ng-container *ngIf="channel.channel.profile_pic">
+                <div
+                    class="relative flex flex-0 items-center justify-center w-full h-auto xs:w-26 xs:h-26 md:w-26 md:h-26 rounded-full overflow-hidden m-auto">
+                    <img class="w-full h-full object-cover" [src]="channel.channel.profile_pic">
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!channel.channel.profile_pic">
+                <div
+                    class="flex flex-0 items-center justify-center w-26 h-26 rounded-full overflow-hidden m-auto bg-blue-200 font-bold text-2xl">
+                    {{ "BMI" }}
+                </div>
+            </ng-container>
+            <span style="margin-left: 34px;" *ngIf="channel.status==='0'" class="badge badge-warning text-dark">Pending</span>
+            <span style="margin-left: 34px;" *ngIf="channel.status==='1'" class="badge badge-primary">Hired</span>
+            <span style="margin-left: 34px;" *ngIf="channel.status==='2'" class="badge badge-success">ShortList</span>
+            <span style="margin-left: 34px;" *ngIf="channel.status==='3'" class="badge badge-danger">Reject</span>
+            <span style="margin-left: 34px;" *ngIf="channel.status==='4'" class="badge badge-info text-dark">Incomplete</span>
+            <span style="margin-left: 34px;" *ngIf="channel.status==='5'" class="badge badge-secondary">Complete</span>
+        </div>
+        <div class="col-12 col-sm-5 col-md-5 mt-0">
+            <div class="min-w-0 ml-0 ml-sm-4 xs:mt-9 sm:mt-0">
+                <div
+                    class="flex flex-0 items-center justify-content-center justify-content-md-start font-bold leading-5 text-xl">
+                    <span>{{ channel.channel.title }}</span>&nbsp;
+                    <mat-icon *ngIf ="channel.channel.is_verified==='1'" class="icon-size-5 text-success" style="vertical-align: middle;"
+                        matTooltip="Channel Verified" [svgIcon]="'heroicons_solid:badge-check'">
+                    </mat-icon>
+                </div>
+                <div
+                    class="flex flex-0 items-center justify-content-center justify-content-md-start font-bold leading-5 text-xl">
+                   <!-- <ng-container *ngIf="channel.cat_percentile_1">
+                        <span
+                            class="flex flex-0 items-center justify-content-center justify-content-md-start leading-5 truncate text-secondary p-0 mt-2">
+                            {{ channel.cat_percentile_1 }}
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="channel.cat_percentile_5">
+                        <span
+                            class="flex flex-0 items-center justify-content-center justify-content-md-start leading-5 truncate text-secondary p-0 mt-2">
+                            {{ channel.cat_percentile_5 }}
+                        </span>
+                    </ng-container> -->
+                    <ng-container *ngIf="channel.channel.cat_percentile_10">
+                        <span
+                            class="flex flex-0 items-center justify-content-center justify-content-md-start leading-5 truncate text-secondary p-0 mt-2">
+                            {{ channel.channel.cat_percentile_10 }}
+                        </span>
+                    </ng-container>
+                </div>
+                <div class="flex flex-0 items-center justify-content-center justify-content-md-start">
+                    <a [href]="channel.channel.channel ? 'https://bmi.yt/' + channel.channel  : ''" target="_blank"
+                        class="mr-4">
+                        <img class="w-6 h-3" src="assets/images/logo/logo.png" alt="bmi logo">
+                    </a>
+                    <a [href]="channel.channel_link" target="_blank">
+                        <mat-icon svgIcon="feather:youtube" class="text-red-600 pt-1">
+                        </mat-icon>
+                    </a>
+                    <a (click)="whatsappRequest()">
+                        <!-- <mat-icon svgIcon="feather:whats_app" class="text-green-600 pt-1">
+                        </mat-icon> -->
+                        <img class="" src="assets/icons/whatsapp.png" style="width:20px; margin-left:20px ;">
+                    </a>
+                </div>
+                <!-- <div class="flex flex-0 items-center justify-content-center justify-content-md-start">
+                    <ng-container *ngFor="let tag of channel.channel?.tags.split(','); let i = index">
+                        <div
+                            class="flex items-center justify-center py-1 px-3 mr-3 shadow rounded-full leading-normal text-gray-500 bg-gray-100">
+                            <span class="text-sm font-medium whitespace-nowrap text-uppercase">
+                                {{ tag }}
+                            </span>
+                        </div>
+                    </ng-container>
+                </div > *ngIf="userType === 'BRAND'" -->
+              
+                <div
+                    class="flex flex-0 items-center justify-content-center justify-content-md-start leading-5 truncate text-secondary mat-flat-button p-0 cursor-default">
+                    <span class="mr-2 mat-button-wrapper"
+                        [matTooltip]="(channel.channel.viewCount) + 'Life Time Views'">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:play'"></mat-icon>
+                        <span class="ml-1">
+                            {{ channel.channel.viewCount ? (channel.channel.viewCount) : "--" }}</span>
+                    </span>
+                    <span class="mat-button-wrapper" [matTooltip]="channel.channel.videoCount + ' Total Videos'">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:video-camera'">
+                        </mat-icon>
+                        <span class="ml-1">
+                            {{ channel.channel.videoCount ? channel.channel.videoCount : "--" }}</span>
+                    </span>
+                </div>
+            </div>
+            <div  class="text-center mt-2 "  style="margin-left: -347px;">
+                
+                <!-- && mode === 'dashboard' -->
+                <!-- <ng-container *ngIf="channel.channel.is_revealed; else revealInfuencerChannel">
+                    <ng-container >
+                        <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide
+                        bg-primary-600 text-primary-50 cursor-pointer "  (click)="onHireClick();"
+                            [matTooltip]="'Hire ' + channel.channel.title">
+                            <span class="leading-relaxed whitespace-nowrap">Hire</span>
+                        </span>
+                    </ng-container> -->
+                    <!-- <ng-template #notResponseScreen>
+                        <span *ngIf="channel.is_invite">
+                            <span  class="inline-flex items-center font-bold text-xs px-2.5 py-0.5
+                                rounded-full tracking-wide bg-primary text-on-primary">
+                                <span class="leading-relaxed whitespace-nowrap">Invited</span>
+                            </span>
+                        </span>
+                        <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5
+                            rounded-full tracking-wide bg-green-600 text-green-50 cursor-pointer"
+                            (click)="inviteChannel(channel.channel);" matTooltip="Invite">
+                            <span class="leading-relaxed whitespace-nowrap">Invite</span>
+                        </span>
+                    </ng-template> -->
+                <!-- </ng-container> -->
+                <!-- <ng-template #revealInfuencerChannel>
+                    <span *ngIf="channel.channel.credit_cost && channel.channel.credit_cost > 0" class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide
+                    bg-warn-600 text-on-warn-600 cursor-pointer"
+                        (click)="revealChannel(channel.channel.id, channel.channel.credit_cost);" matTooltip="Reveal Channel">
+                        <span class="leading-relaxed whitespace-nowrap">Reveal</span>
+                    </span>
+                </ng-template> -->
+            </div>
+            <!-- <div *ngIf="userType === 'INFLUENCER'" class="text-center mt-2">
+                <ng-container *ngIf="!channel.is_verified">
+                    <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide
+                            bg-warn-600 text-on-warn-600 cursor-pointer" (click)="verifyInfChannel();"
+                        matTooltip="Verify Channel">
+                        <span class="leading-relaxed whitespace-nowrap">Verify</span>
+                    </span>
+                </ng-container>
+            </div> -->
+        </div>
+
+        <div class="col-12 col-sm-3 col-md-3 xs:mt-1 mt-0">
+            <div class="flex items-center justify-between text-md font-medium">
+                <div class="text-secondary">Subscribers</div>
+                <div class="text-black">
+                    {{ channel.channel.subscriberCount ? (channel.channel.subscriberCount) : "--" }}</div>
+            </div>
+            <div class="flex items-center justify-between text-md font-medium my-2">
+                <div class="text-secondary">Avg. Views</div>
+                <div class="text-black">
+                    {{ channel.channel.EstViews ? (channel.channel.EstViews) : "--" }}</div>
+            </div>
+            <div class="flex items-center justify-between text-md font-medium my-2">
+                <div class="text-secondary">Engagement Rate</div>
+                <div class="text-black">
+                    {{ channel.channel.EngagementRate ? channel.channel.EngagementRate : "--" }}</div>
+            </div>
+            <div class="flex items-center justify-between text-md font-medium">
+                <div class="text-secondary">CPM</div>
+                <div class="text-black">
+                    {{ channel.channel.cpm ? channel.channel.cpm : "--" }}</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-2 col-md-2 -mt-2 relative flex-col items-center" *ngIf="(channel.channel.promotion_price | currency : (channel.channel.currency ? channel.channel.currency : 'INR') :
+        'symbol' : '1.0-0' )==0">
+            <div class="text-center mt-2 whitespace-nowrap">
+                <div class="text-2xl font-semibold leading-tight tracking-tight text-green-600">
+                    <span >
+                    <!-- <span [ngClass]="{'blurred':(channel.channel.promotion_price) }"> -->
+                    {{ channel.channel.promotion_price | currency : (channel.channel.currency ? channel.channel.currency : 'INR') :
+                    'symbol' : '1.0-0' }}
+                </span>&nbsp;
+                </div>
+            </div>
+            <div class="flex flex-col text-center mt-2 text-blue-500">
+                <ng-container>
+                    <div>Promotion Price</div>
+                </ng-container>
+            </div>
+            <!-- <div class="flex flex-col text-center mt-2 text-blue-500"> -->
+                <ng-container *ngIf="channel"channel.>
+                    <!-- <div class="blurred-2" *ngIf="userType === 'BRAND' && channel.is_revealed">
+                        <mat-icon class="icon-size-5" (click)="pleasesignUP()" [svgIcon]="'heroicons_solid:chat'"></mat-icon>
+                        <mat-icon class="icon-size-5" (click)="pleasesignUP()" [svgIcon]="'heroicons_solid:mail'"></mat-icon>
+                        <mat-icon class="icon-size-5" (click)="pleasesignUP()" [svgIcon]="'heroicons_solid:view-list'"></mat-icon>
+                        <mat-icon class="icon-size-5" (click)="pleasesignUP()" [svgIcon]="'mat_outline:favorite_border'"></mat-icon>
+                        <img class="" src="assets/icons/whatsapp.png" style="width:20px; margin-left:20px ;">
+                    </div> -->
+                    <!-- <div class="ml-auto absolute right-0 -mr-8" > -->
+                        <div class="flex-col mx-4">
+                            <mat-icon class="flex icon-size-6 mb-2 cursor-pointer" [svgIcon]="'heroicons_solid:chat-alt'"
+                                matTooltip="Start chat" (click)="openQuickChat(channel.channel.influ_id);">
+                            </mat-icon>
+                            <mat-icon *ngIf="channel.channel.is_favourite === true"
+                                class="flex icon-size-6 mb-2 text-warn cursor-pointer" [svgIcon]="'heroicons_solid:heart'"
+                                matTooltip="Remove from Favourite" (click)="markUnFavourite(channel.channel.id);">
+                            </mat-icon>
+                            <mat-icon *ngIf="channel.channel.is_favourite === false" class="flex icon-size-6 mb-2 cursor-pointer"
+                                [svgIcon]="'mat_outline:favorite_border'" matTooltip="Mark as Favourite"
+                                (click)="markFavourite(channel.channel.id);">
+                            </mat-icon>
+                            <mat-icon class="flex icon-size-6 cursor-pointer" [svgIcon]="'heroicons_solid:view-list'"
+                                matTooltip="Add to List" (click)="checkListAndAdd(channel.channel.channel_id, channel.channel.title);">
+                            </mat-icon>
+                        </div>
+                    <!-- </div> -->
+                </ng-container>
+            <!-- </div> -->
+        </div>
+        <!-- <div class="col-12 col-sm-2 col-md-2 -mt-2 relative flex-col items-center">
+        <div class="text-2xl font-semibold leading-tight tracking-tight text-green-600">
+            <ng-container *ngIf="channel">
+                <div class="blurred-2">
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:chat'"></mat-icon>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:mail'"></mat-icon>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:view-list'"></mat-icon>
+                    <mat-icon class="icon-size-5" [svgIcon]="'mat_outline:favorite_border'"></mat-icon>
+                </div>
+            </ng-container>
+            <ng-container>
+                <div  *ngIf="channel.promotion_price !=0" [ngClass]="{'blurred': (userType === 'BRAND' && !channel.is_revealed)}">
+                    {{ userType === 'INFLUENCER' || (userType === 'BRAND' && channel.is_revealed) ?
+                    (channel.promotion_price | currency : (channel.currency ? channel.currency : 'INR') :
+                    'symbol' : '1.0-0') : 'xxxxx' }}
+                </div>
+            </ng-container>
+        </div>
+        </div> -->
+    </div>
+</div>
+
+<div *ngIf="proposalhistory.length===0">
+    <h1>
+        {{historyMessage?.message}}
+    </h1>
+    <!-- <bmi-alert class="mt-8" *ngIf="historyMessage?.message" [appearance]="'outline'" [showIcon]="false"
+    [type]="alert.type" [@shake]="alert.type === 'error'">
+    {{historyMessage?.message}}
+</bmi-alert> -->
+</div>

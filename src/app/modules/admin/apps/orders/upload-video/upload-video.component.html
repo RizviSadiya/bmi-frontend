@@ -1,0 +1,101 @@
+<style>
+    .mat-dialog-container{
+        padding: 0;
+    }
+</style>
+
+<div class="review-video-popup">
+    <span class="closebtn" matDialogClose>X</span>
+    <form [formGroup]="uploadForm">
+
+        <div class="review-video-popup-inner pl-10 pr-10 pt-10 pd-10">
+            <h1 *ngIf="orderProcess.stage==1" class="font-bold videoscript-header text-3xl mb-8 text-center"><span ></span> <span class="redrtext"> {{ headerText }}</span></h1>
+            <h1 *ngIf="orderProcess.stage==2" class="font-bold videoscript-header text-3xl mb-8 text-center"><span> {{ headerText }} </span></h1>
+            <h1 *ngIf="orderProcess.stage==3" class="font-bold videoscript-header text-3xl mb-8 text-center"><span > </span> <span class="redrtext"> {{ headerText }} </span></h1>
+            <!-- Submit your -->
+            <h1 *ngIf="orderProcess.stage==4" class="font-bold videoscript-header text-3xl mb-8 text-center"><span ></span> <span class="redrtext"> {{ headerText }} </span></h1>
+            <p  *ngIf="(orderProcess.stage === 1 && orderProcess.action_taken === 'Approved') 
+            || (orderProcess.stage === 2 && orderProcess.action_taken === 'RequestChange')" class="text-center col-span-1 xs:col-span-12 sm:col-span-12 lg:col-span-1 items-center justify-center mb-5 mt-4"  style="font-size: 15px;font-weight: 500;">Provide the <span class="redrtext">video script</span> in the text format or upload an attachment of the same</p>
+            <div class="maincontenarsection grid grid-cols-12 sm:grid-cols-12 gap-x-2 gap-y-2 lg:grid-cols-12 lg:gap-2 w-full"  *ngIf="(orderProcess.stage === 1 && orderProcess.action_taken === 'Approved') 
+            || (orderProcess.stage === 2 && orderProcess.action_taken === 'RequestChange'); else stageThree">
+
+
+                <!-- <div class="col-span-8 xs:col-span-12 sm:col-span-12 lg:col-span-8 bg-white" *ngIf="orderProcess?.video_script_desc !=null">
+            <h1 *ngIf="orderProcess.stage==2" class="font-bold videoscript-header text-3xl mb-8 text-center"><span> Previous submitted script </span></h1>
+
+                   <p [innerHTML]="orderProcess.video_script_desc"></p>
+                    <angular-editor  formControlName="video_script_desc" [(ngModel)]="textarea" [config]="editorConfig"></angular-editor>
+                </div> -->
+                <div class="col-span-8 xs:col-span-12 sm:col-span-12 lg:col-span-8 bg-white">
+                    <angular-editor  formControlName="video_script_desc" [(ngModel)]="textarea" (input)="sanitizeContent()"  [config]="editorConfig" ></angular-editor>
+                    
+                    <div class="text-center" *ngIf="textarea !=null" style="background: #f9e7e7db;">
+                        <button class=" text-center btn btn-dark" style="margin: 7px;" (click)="resetScript()"> Reset script</button>
+                    </div>
+                </div>
+              
+                <div class=" text-center col-span-1 xs:col-span-12 sm:col-span-12 lg:col-span-1 flex flex-col items-center justify-center"  style="font-size: 19px;font-weight: 700; margin-left: 95px;">
+                    or
+                </div>
+                <div class="font-bold col-span-3 xs:col-span-12 sm:col-span-12 lg:col-span-3 flex flex-col items-center justify-center font-2xl">
+                    <div class="text-center" *ngIf="orderProcess.video_script !=null" >
+                        <a role="button" target="_blank" class="cursor-pointer downloadbtn" [href]="orderProcess.video_script">
+                        Download file
+                        </a>
+                    </div>
+                    <div class="">
+                        <input type="file" id="template_scripts" placeholder="Script file" accept=".pdf,.doc,.docx"
+                        (change)="onFileSelected($event.target.files)" class="hidden">
+                        <label for="template_scripts" [matTooltip]="template_script ? 'Click to upload file' : 'Click to change file'"
+                        class="mat-tooltip-trigger cursor-pointer font-bold py-3 px-2 ml-4 bg-gray-200 uploadfilebtn text-center">
+                        {{ template_script ? template_script : 'Upload new file' }}
+                        </label>
+                        <mat-icon *ngIf="template_script" matTooltip="close" style="cursor: pointer;" (click)="templatescript()">close</mat-icon>
+                    </div>
+                </div>
+            </div>
+            <ng-template #stageThree lass="maincontenarsection grid grid-cols-12 sm:grid-cols-12 gap-x-2 gap-y-2 lg:grid-cols-12 lg:gap-2 w-full">
+              
+                <div class="inputsection  mb-5 ">
+                    <input class="inputarea  mb-5 " matInput placeholder="https://www.youtube.com/" [(ngModel)]="videoUrl" formControlName="video">
+                    <mat-error *ngIf="uploadForm.get('video').hasError('required')">
+                        Valid URL is required
+                    </mat-error>
+                    <mat-error *ngIf="uploadForm.get('video').hasError('pattern')">
+                        Invalid Video URL.
+                    </mat-error>
+                </div>
+                <div class="inputsection flex  mb-5 " *ngIf="(orderProcess.stage !=2 || orderProcess.action_taken !='Approved') && (orderProcess.stage !=3 || orderProcess.action_taken !='RequestChange') || (orderProcess.status ==='4' || orderProcess.action_taken ==='Approved') && (orderProcess.stage===4 || orderProcess.action_taken==='Approved') && (orderProcess.stage===4 || orderProcess.action_taken==='RequestChange')">
+                    <div>
+                        <input class="checkboxinput-section" type="checkbox" [value]="1" [(ngModel)]="checkboxvalue"  formControlName="is_text_link_provided">
+                    </div>
+                    <div class="">
+                        <p>I have placed the given "brand promo text and link" in video description as provided</p>
+                    </div>
+                </div>
+            </ng-template>
+
+            <div class="brandwritencomment  mb-4" *ngIf=" orderProcess.stage===3 || orderProcess.comment && orderProcess.action_taken === 'RequestChange'">
+             <span><b>Comment : </b></span>
+             <p>{{ orderProcess.comment }}</p>
+            </div>
+            <div class="brandwritencomment mb-4" *ngIf="orderProcess.stage===3 || orderProcess.promo_text_link && orderProcess.action_taken === 'Approved'">
+                <span *ngIf="headerText!=='Upload Video Script'"><b>Promo text link : </b></span>
+                <!-- <span *ngIf="headerText!=='Upload Video Script'"><b>Video Script Description : </b></span> -->
+                <p [innerHTML]="orderProcess.promo_text_link"></p>
+            </div>
+
+            <div class="items-center mt-4 text-center">
+                <button  class="infl-review-btn" mat-flat-button [disabled] = "textarea == '' && template_script =='' && videoUrl=='' && checkboxvalue !=true"  (click)="upload();"><ng-container
+                    *ngIf="(orderProcess.stage === 1 && orderProcess.action_taken === 'Approved') 
+                    || (orderProcess.stage === 2 && orderProcess.action_taken === 'RequestChange'); else stageThreeButton">
+                    Submit
+                </ng-container>
+                <ng-template #stageThreeButton>
+                    Submit
+                </ng-template></button> 
+            </div>
+        </div>
+    </form>
+</div>
+

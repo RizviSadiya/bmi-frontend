@@ -1,0 +1,160 @@
+<div class="flex flex-col flex-auto min-w-0 bg-accent-300">
+    <div 
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+    <div class="flex-1 min-w-0">
+          <!-- <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 ">Filters:</h2> -->
+    </div>
+    <div class="flex-1 min-w-0">
+        <!-- Tabs Header -->
+        <div class="mt-2">
+            <div class="tab">
+                <!-- <button class="tablinks" (click)="filterValue('2')" onclick="openCity(event, 'insta')"><img src="assets/images/brands/iNSTALOGO.png"/></button>
+                <button class="tablinks active" (click)="filterValue('1')" onclick="openCity(event, 'youtube')"><img src="assets/images/brands/yTLOGO.png"/></button> -->
+                <button class="tablinks" (click)="filterValue('2')" onclick="openCity(event, 'insta')"><img src="assets/images/brands/instacircle.png"/></button>
+                <button class="tablinks active" (click)="filterValue('1')" onclick="openCity(event, 'youtube')"><img src="assets/images/brands/youtube.png"/></button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div
+    class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 md:px-8 border-b sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+   
+    <div class="text-3xl font-extrabold tracking-tight">
+        <ng-container >
+            {{ totalChannels | i18nPlural: {
+            '=0' : 'Revealed Channel (0)',
+            '=1' : 'Revealed Channel (1)',
+            'other': 'Revealed Channels (' + totalChannels + ')'
+            } }}
+        </ng-container>
+        <!-- <ng-container >
+        <button *ngIf="inviteForCamp !=undefined" style="margin-left: 60px" class="btn btn-primary" (click)="suggestedChannel()"> Revealed Channels {{totalChannels}}</button>
+           
+          
+        </ng-container> -->
+        <ng-container >
+        <button *ngIf="inviteForCamp !=undefined" style="margin-left: 60px" class="btn btn-danger" (click)="suggestedChannel()"> Suggested Channels</button>
+           
+          
+        </ng-container>
+      
+      
+          
+       
+    </div>
+    <div class="col-span-6 text-right" *ngIf="totalChannels>0  || liveCamp>0">
+        <button mat-flat-button color="primary" (click)="inviteAll()">Invite All</button>
+    </div>
+</div>
+
+    <!-- Header -->
+
+    <div class="flex flex-col flex-auto p-6 sm:p-8 tabcontent-active"  #topdiv id="topdiv"   id="youtube" style="display: block;">
+        <div class="mt-0 md:mt-0" *ngIf="filter==='1'">
+            <ng-container *ngIf="channels$ | async as channels">
+                <ng-container *ngIf="channels?.length; else noChannel">
+                    <ng-container *ngFor="let channel of channels; let k = index; trackBy: trackByFn" >
+                        <influencer-channel *ngIf="channel" [channel]="channel" [list]="channel.list"></influencer-channel>
+                    </ng-container>
+                    <!-- *ngIf="pagination==true" -->
+                    <ng-container *ngIf="channels.length">
+                        <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="false"
+                            [length]="totalChannels" [pageIndex]="currentPage" (page)="onChangePage($event)" (page)="scroll(topdiv)">
+                        </mat-paginator>
+                        <!-- <mat-paginator *ngIf="pagination?.total > pageSize" (page)="getPaginatorData($event)"
+                            class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                            [ngClass]="{'pointer-events-none': isLoading}" [length]="pagination.total"
+                            [pageIndex]="pagination.current_page - 1" [pageSize]="pagination.per_page"
+                            [showFirstLastButtons]="true"></mat-paginator> -->
+    
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+            <!-- <ng-container *ngIf="suggestedList">
+                <ng-container *ngIf="suggestedList?.length; else nosuggestedChannel">
+                    <ng-container >
+                        <suggested-invite-list *ngIf="channel" [channel]="suggestedList"></suggested-invite-list>
+                    </ng-container>
+                    <ng-container *ngIf="suggestedList?.totalChannels > 10">
+                        <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="false"
+                            [length]="totalChannels" [pageIndex]="currentPage" (page)="getPaginatorData($event)">
+                        </mat-paginator>
+                    </ng-container>
+                </ng-container>
+            </ng-container> -->
+            
+            <ng-template #noChannel>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">You're yet to reveal any channels yet</div>
+            </ng-template>
+        </div>
+    </div>
+    <div class="flex flex-col flex-auto p-6 sm:p-8 tabcontent" #topdiv id="topdiv" id="insta">
+        <div class="mt-0 md:mt-0" *ngIf="filter==='2'">
+            <!-- <ng-container *ngIf="channels$ | async as channels"> -->
+                <ng-container *ngIf="instaChannel?.length; else noinstaChannel">
+                    <!-- <ng-container *ngFor="let channel of channels; let k = index; trackBy: trackByFn" >
+                        <influencer-channel *ngIf="channel" [channel]="channel" [list]="channel.list"></influencer-channel>
+                    </ng-container> -->
+                    <ng-container *ngFor="let channel of instaChannel" >
+                        <insta-channel-list [channel]="channel" (defaultChannelChanged)="defaultChannelChanged($event);"
+                        (channelDeleted)="channelDeleted($event);">
+                        </insta-channel-list>
+                        
+                    </ng-container>
+                    <!-- *ngIf="pagination==true" -->
+                    <ng-container *ngIf="instaChannel.length">
+                        <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="false"
+                            [length]="totalChannels" [pageIndex]="currentPage" (page)="onChangePage($event)" (page)="scroll(topdiv)">
+                        </mat-paginator>
+                        <!-- <mat-paginator *ngIf="pagination?.total > pageSize" (page)="getPaginatorData($event)"
+                            class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                            [ngClass]="{'pointer-events-none': isLoading}" [length]="pagination.total"
+                            [pageIndex]="pagination.current_page - 1" [pageSize]="pagination.per_page"
+                            [showFirstLastButtons]="true"></mat-paginator> -->
+    
+                    </ng-container>
+                </ng-container>
+            <!-- </ng-container> -->
+            <!-- <ng-container *ngIf="suggestedList">
+                <ng-container *ngIf="suggestedList?.length; else nosuggestedChannel">
+                    <ng-container >
+                        <suggested-invite-list *ngIf="channel" [channel]="suggestedList"></suggested-invite-list>
+                    </ng-container>
+                    <ng-container *ngIf="suggestedList?.totalChannels > 10">
+                        <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="false"
+                            [length]="totalChannels" [pageIndex]="currentPage" (page)="getPaginatorData($event)">
+                        </mat-paginator>
+                    </ng-container>
+                </ng-container>
+            </ng-container> -->
+            
+            <ng-template #noinstaChannel>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">You're yet to reveal any channels yet</div>
+            </ng-template>
+        </div>
+    </div>
+    <!-- <div class="flex flex-col flex-auto p-6 sm:p-8">
+        <div class="mt-4 md:mt-6">
+            <ng-container *ngIf="suggestedList">
+                <ng-container *ngIf="suggestedList?.length; else nosuggestedChannel">
+                    <ng-container >
+                        <suggested-invite-list *ngIf="channel" [channel]="suggestedList"></suggested-invite-list>
+                    </ng-container>
+                    <ng-container *ngIf="suggestedList?.totalChannels > 10">
+                        <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="false"
+                            [length]="totalChannels" [pageIndex]="currentPage" (page)="getPaginatorData($event)">
+                        </mat-paginator>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+            
+            <ng-template #nosuggestedChannel>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There is no suggestedList
+                  </div>
+            </ng-template>
+        </div>
+    </div> -->
+
+</div>

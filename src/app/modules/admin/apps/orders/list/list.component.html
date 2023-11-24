@@ -1,0 +1,223 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <mat-drawer-container class="flex-auto h-full" (backdropClick)="onBackdropClicked()">
+
+        <!-- Drawer -->
+        <mat-drawer class="w-full md:w-full dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
+            [disableClose]="true" #orderDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+
+            <!-- Main -->
+            <div class="flex-auto">
+                <div 
+                    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+                    <div class="flex-1 min-w-0">
+                          <!-- <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 ">Filters:</h2> -->
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <!-- Tabs Header -->
+                        <div class="mt-2">
+                            <div class="tab">
+                                <button class="tablinks"  (click)="filterValue('2')" onclick="openCity(event, 'insta')"><img src="assets/images/brands/instacircle.png"/></button>
+                                <button class="tablinks active" (click)="filterValue('1')" onclick="openCity(event, 'youtube')"><img src="assets/images/brands/youtube.png"/></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Header -->
+                <div
+                    class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-4 px-6 md:px-8 border-b bg-card dark:bg-transparent">
+                    <div>
+                        <div class="text-3xl font-extrabold tracking-tight leading-none">
+                            {{ ordersCount | i18nPlural: {
+                            '=0' : 'Order (0)',
+                            '=1' : 'Order (1)',
+                            'other': 'Orders (' + ordersCount + ')'
+                            } }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- orders list -->
+                <div class="relative -mt-px pt-4 sm:pt-6 tabcontent-active"  #topdiv id="topdiv" id="youtube" style="display: block;">
+                    <ng-container *ngIf=" orders$ | async as orders">
+                        <mat-tab-group class="sm:px-2" [animationDuration]="'0'" [(selectedIndex)]="selectedTabIndex"
+                            (selectedTabChange)="onTabChanged($event);">
+                            <mat-tab [label]="'Live (' + liveCount + ')'">
+                                <ng-template matTabContent>
+                                    <ng-container *ngIf="orders?.length; else noOrders">
+                                        <ng-container *ngFor="let order of orders; let k = index; trackBy: trackByFn">
+                                            <order-list class="tabcontent-active" id="youtube" style="display: block;" [order]="order" [bidAmount]="order.price"
+                                                (viewClicked)="onViewClick(order);"></order-list>
+                                            <!-- <insta-order-list id="insta"  class="tabcontent" [order]="order" [bidAmount]="order.price"
+                                                (viewClicked)="onViewClick(order);"></insta-order-list> -->
+                                        </ng-container>
+                                        <ng-container *ngIf="orders?.length">
+                                            <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+                                            [length]="liveCount" [pageIndex]="currentPage" (page)="onChangePage($event)"
+                                            href="#_top" target="_top" (click)="scroll(topdiv)">
+                                        </mat-paginator>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab [label]="'Cancelled (' + cancelledCount + ')'">
+                                <ng-template matTabContent>
+                                    <ng-container *ngIf="orders?.length; else noOrders">
+                                        <ng-container *ngFor="let order of orders; let k = index; trackBy: trackByFn">
+                                            <order-list [order]="order" [bidAmount]="order.price"
+                                                (viewClicked)="onViewClick(order);"></order-list>
+                                            <!-- <insta-order-list id="insta"  class="tabcontent" [order]="order" [bidAmount]="order.price"
+                                                (viewClicked)="onViewClick(order);"></insta-order-list> -->
+                                        </ng-container>
+                                         <ng-container *ngIf="orders?.length">
+                                            <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+                                            [length]="cancelledCount" [pageIndex]="currentPage" (page)="onChangePage($event)"
+                                            href="#_top" target="_top" (click)="scroll(topdiv)">
+                                        </mat-paginator>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab [label]="'Completed (' + completedCount + ')'">
+                                <ng-template matTabContent>
+                                    <ng-container *ngIf="orders?.length; else noOrders">
+                                        <ng-container *ngFor="let order of orders; let k = index; trackBy: trackByFn">
+                                            <order-list [order]="order" [completedtab]="true" [bidAmount]="order.price"
+                                                (viewClicked)="onViewClick(order);"></order-list>
+                                            <!-- <insta-order-list id="insta"  class="tabcontent" [order]="order" [completedtab]="true" [bidAmount]="order.price"
+                                                (viewClicked)="onViewClick(order);"></insta-order-list> -->
+
+                                        </ng-container> 
+                                        <ng-container *ngIf="orders?.length">
+                                            <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+                                            [length]="completedCount" [pageIndex]="currentPage" (page)="onChangePage($event)"
+                                            href="#_top" target="_top" (click)="scroll(topdiv)">
+                                        </mat-paginator>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-template>
+                            </mat-tab>
+                        </mat-tab-group>
+                        <!-- </ng-container> -->
+                        <!-- <ng-container *ngIf="orders?.length">
+                            <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+                            [length]="paginationCount" [pageIndex]="currentPage" (page)="onChangePage($event)"
+                            href="#_top" target="_top" (click)="scroll(topdiv)">
+                        </mat-paginator>
+                        </ng-container> -->
+                    </ng-container>
+
+                    <!-- No orders -->
+                    <ng-template #noOrders>
+                        <div
+                            class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
+                            <!-- <mat-icon class="icon-size-20" [svgIcon]="'iconsmind:search_oncloud'"></mat-icon> -->
+                            <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">
+                                {{ "You don't have any  " + (selectedTabIndex === 0 ? 'Live' : selectedTabIndex === 1 ?
+                                'Cancelled':
+                                'Completed') + ' orders at the moment!' }}
+                                <!-- {{ 'There is no ' + (selectedTabIndex === 0 ? 'Live' : selectedTabIndex === 1 ?
+                                'Cancelled':
+                                'Completed') + ' Order!' }} -->
+                            </div>
+                    <img src="assets/images/loader/WhatsApp_Image.jpeg" style="width: 75%;height: 20%;">
+
+                        </div>
+                    </ng-template>
+
+                </div>
+
+                <!-- InstaOrderList -->
+                <div class="relative -mt-px pt-4 sm:pt-6 tabcontent"  #topdiv id="topdiv" id="insta">
+                    <ng-container *ngIf="instaOrders$ | async as orders">
+                        <mat-tab-group  class="sm:px-2" [animationDuration]="'0'" [(selectedIndex)]="selectedTabIndex"
+                            (selectedTabChange)="onTabChanged($event);">
+                            <mat-tab [label]="'Live (' + liveCount + ')'">
+                                <ng-template matTabContent>
+                                    <ng-container *ngIf="instaOrders?.length; else noinstaOrders">
+                                        <ng-container *ngFor="let order of instaOrders; let k = index; trackBy: trackByFn">
+                                            <insta-order-list [order]="order" [bidAmount]="order.price"
+                                                (viewClicked)="onViewClick(order);"></insta-order-list>
+                                        </ng-container>
+                                        <ng-container *ngIf="instaOrders?.length">
+                                            <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+                                            [length]="liveCount" [pageIndex]="currentPage" (page)="onChangePage($event)"
+                                            href="#_top" target="_top" (click)="scroll(topdiv)">
+                                        </mat-paginator>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab [label]="'Cancelled (' + cancelledCount + ')'">
+                                <ng-template matTabContent>
+                                    <ng-container *ngIf="instaOrders?.length; else noinstaOrders">
+                                        <ng-container *ngFor="let order of instaOrders; let k = index; trackBy: trackByFn">
+                                            <insta-order-list [order]="order" [bidAmount]="order.price"
+                                                (viewClicked)="onViewClick(order);"></insta-order-list>
+                                        </ng-container>
+                                         <ng-container *ngIf="instaOrders?.length">
+                                            <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+                                            [length]="cancelledCount" [pageIndex]="currentPage" (page)="onChangePage($event)"
+                                            href="#_top" target="_top" (click)="scroll(topdiv)">
+                                        </mat-paginator>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab [label]="'Completed (' + completedCount + ')'">
+                                <ng-template matTabContent>
+                                    <ng-container *ngIf="instaOrders?.length; else noinstaOrders">
+                                        <ng-container *ngFor="let order of instaOrders; let k = index; trackBy: trackByFn">
+                                            <insta-order-list [order]="order" [completedtab]="true" [bidAmount]="order.price"
+                                                (viewClicked)="onViewClick(order);"></insta-order-list>
+                                        </ng-container> 
+                                        <ng-container *ngIf="instaOrders?.length">
+                                            <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+                                            [length]="completedCount" [pageIndex]="currentPage" (page)="onChangePage($event)"
+                                            href="#_top" target="_top" (click)="scroll(topdiv)">
+                                        </mat-paginator>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-template>
+                            </mat-tab>
+                        </mat-tab-group>
+                        </ng-container>
+                        <!-- <ng-container *ngIf="instaOrders?.length">
+                            <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+                            [length]="paginationCount" [pageIndex]="currentPage" (page)="onChangePage($event)"
+                            href="#_top" target="_top" (click)="scroll(topdiv)">
+                        </mat-paginator>
+                        </ng-container> -->
+                    <!-- </ng-container> -->
+
+                    <!-- No orders -->
+                    <ng-template #noinstaOrders>
+                        <div
+                            class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
+                            <!-- <mat-icon class="icon-size-20" [svgIcon]="'iconsmind:search_oncloud'"></mat-icon> -->
+                            <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">
+                                <!-- {{ 'There is no ' + (selectedTabIndex === 0 ? 'Live' : selectedTabIndex === 1 ?
+                                'Cancelled':
+                                'Completed') + ' Order!' }} -->
+                                {{ "You don't have any" + (selectedTabIndex === 0 ? 'Live' : selectedTabIndex === 1 ?
+                                'Cancelled':
+                                'Completed') + ' orders at the moment!' }}
+                    <img src="assets/images/loader/WhatsApp_Image.jpeg" style="width: 75%;height: 20%;">
+
+                            </div>
+                        </div>
+                    </ng-template>
+
+                </div>
+
+            </div>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
+</div>

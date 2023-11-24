@@ -1,0 +1,30 @@
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) {
+  .mob-cent {
+    margin: 0 auto !important;
+  }
+}
+.share-button-svg svg {
+  padding-top: 10px;
+}
+
+.sb-circles-dark .sb-wrapper .sb-icon {
+  width: 1.5em !important;
+  min-height: 1.5em !important;
+}
+
+.svg-inline--fa.fa-fw {
+  width: var(--fa-fw-width, .65em) !important;
+}
+
+span.largfont,h3.largfont {
+  font-size: 17px;
+}
+
+
+.tbnewboot>tbody>tr:nth-of-type(odd) {
+  background-color: #fcfcfc;
+}
+
+.tbnewboot>tbody>tr:hover {
+  background-color: #f8f8f8;
+}

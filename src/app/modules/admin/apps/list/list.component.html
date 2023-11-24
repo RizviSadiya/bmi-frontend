@@ -1,0 +1,118 @@
+<div class="flex flex-col flex-auto min-w-0 bg-accent-300">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title -->
+            <div class="mt-2">
+                <div class="headermenusection text-left">
+                    <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 ">
+                        <!-- truncate -->
+                        <ng-container>
+                            {{ totalLists | i18nPlural: {
+                            '=0' : "you're yet to create any list",
+                            '=1' : 'Your List (1)',
+                            'other': 'Your Lists (' + totalLists + ')'
+                            } }}
+                        </ng-container>
+                        <!-- <button mat-flat-button="" style="float: right;" (click)="openListDetails(1)" class="mat-focus-indicator fuse-mat-button-rounded mat-flat-button mat-button-base mat-primary ng-star-inserted" tabindex="0" ng-reflect-color="primary" ><span class="mat-button-wrapper"><mat-icon role="img" class="mat-icon notranslate icon-size-5 mat-icon-no-color" aria-hidden="true" ng-reflect-svg-icon="heroicons_solid:plus" data-mat-icon-type="svg" data-mat-icon-name="plus" data-mat-icon-namespace="heroicons_solid">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
+                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                        </svg></mat-icon><span class="ml-2">Add List</span></span><span matripple="" class="mat-ripple mat-button-ripple" ng-reflect-disabled="false" ng-reflect-centered="false" ng-reflect-trigger="[object HTMLButtonElement]"></span><span class="mat-button-focus-overlay"></span></button> -->
+                        <!-- <button type="button" >Add List</button> -->
+                    </h2>
+                </div>
+                <div class="headermenusection text-right pull-right">
+                <button mat-flat-button="" style="float: right; margin-top: -40px;" (click)="openListDetails(1)" class="mat-focus-indicator fuse-mat-button-rounded mat-flat-button mat-button-base mat-primary ng-star-inserted" tabindex="0" ng-reflect-color="primary" ><span class="mat-button-wrapper"><mat-icon role="img" class="mat-icon notranslate icon-size-5 mat-icon-no-color" aria-hidden="true" ng-reflect-svg-icon="heroicons_solid:plus" data-mat-icon-type="svg" data-mat-icon-name="plus" data-mat-icon-namespace="heroicons_solid">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                </svg></mat-icon><span class="ml-2">Add List</span></span><span matripple="" class="mat-ripple mat-button-ripple" ng-reflect-disabled="false" ng-reflect-centered="false" ng-reflect-trigger="[object HTMLButtonElement]"></span><span class="mat-button-focus-overlay"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col flex-auto p-6 sm:p-8" style="background-color: white;">
+        <div class="mt-4 md:mt-0">
+            <ng-container *ngIf="lists$ | async as lists">
+                <!-- <ng-container *ngIf="lists.length; else noList">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0 px-6 sm:px-8">
+                        <ng-container *ngFor="let list of lists; let k = index; trackBy: trackByFn">
+                            <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden cursor-pointer"
+                                (click)="openListDetails(list);">
+                                <div class="flex items-start justify-between">
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Orders</div>
+                                    <div class="ml-2 -mr-3">
+                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:cursor-click'">
+                                        </mat-icon>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center mt-2">
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500">
+                                        {{ list.list_data.count }}</div>
+                                    <div class="text-lg font-medium text-center text-blue-500">
+                                        {{ list.name }}
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container> -->
+
+                <div class="table-responsive ">
+                <ng-container *ngIf="lists.length; else noList">
+
+                    <ng-container *ngIf="list!=1">
+                        <table class="table custometable">
+                            <thead>
+                            <tr>
+                                <th scope="col">S.No</th>
+                                <th scope="col">List Name</th>
+                                <th scope="col">List Size</th>
+                                <th scope="col">Invite History</th>
+                                <th scope="col">Action</th>
+                                <!-- <th scope="col">Handle</th> -->
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let list of lists; let k = index; trackBy: trackByFn">
+                                    <td scope="row">{{k+1}}</td>
+                                    <td >
+                                         <a (click)="viewChannelList(list)" style="cursor: pointer;"> 
+                                            <mat-icon *ngIf="list.plateform_type ==1" matPrefix svgIcon="feather:youtube" class="text-red-600 pt-1"></mat-icon>
+                                            <mat-icon *ngIf="list.plateform_type == 2" matPrefix svgIcon="feather:instagram" class="text-pink-600 pt-1"></mat-icon>
+                                            {{list.name}}</a></td>
+                                    <td >{{list.listCount}}</td>
+                                    <td ></td>
+
+                                    <td>
+                                    <i class="fa fa-pencil" (click)="openListDetails(list)" style="margin-right:20px; color:blue"></i>
+                                    <!-- <i class="fa fa-eye" (click)="viewChannelList(list)"  style="margin-right:20px; color:sienna "></i> -->
+                                    <i class="fa fa-trash" (click)="deleteList(list)" style="margin-right:20px; color:red "></i>
+                                    <!-- <i *ngIf="list.listCount !=0" class="fa fa-paper-plane" (click)="viewChannelList(list)" style="margin-right:20px; color:blue "></i> -->
+                                    </td>
+                                
+                                </tr>
+                               
+                            </tbody>
+                        </table>
+                    </ng-container>
+                    </ng-container>
+                </div>
+            </ng-container>
+            <ng-template #noList>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
+                    <img src="assets/images/loader/WhatsApp_Image.jpeg" style="width: 100%;height: 20%;">
+                </div>
+                <!-- <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There is no list!
+                </div> -->
+            </ng-template>
+        </div>
+    </div>
+    <ng-container *ngIf="lists?.length">
+        <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+        [length]="totalLists" [pageIndex]="currentPage" (page)="onChangePage($event)"
+        href="#_top" target="_top">
+        </mat-paginator>
+    </ng-container>
+</div>

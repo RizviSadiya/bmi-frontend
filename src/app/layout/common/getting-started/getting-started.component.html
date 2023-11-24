@@ -1,0 +1,225 @@
+<div class="sm:col-span-2 md:col-span-4 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+    <div class="flex flex-col sm:flex-row items-start justify-between">
+        <div class="relative py-2 px-8 text-md font-medium leading-5 rounded-full bg-amber-500 text-on-primary">
+            Getting Started
+        </div>
+    </div>
+    <div class="grid grid-cols-1 grid-flow-row gap-6 w-full mt-2 sm:mt-4">
+        <!-- Getting Started Steps -->
+        <div class="flex flex-col flex-auto">
+            <div class="mt-2">
+                <ol>
+                    <li class="relative flex py-4">
+                        <div class="absolute top-7 left-5 w-0.5 h-full -ml-px bg-gray-300 dark:bg-gray-600">
+                        </div>
+                        <div class="relative flex flex-auto">
+                            <div
+                                class="flex flex-shrink-0 items-center justify-center w-10 h-10 mr-4 rounded-full bg-gray-400">
+                                1
+                            </div>
+                            <div class="flex flex-col flex-auto items-start">
+                                <fuse-card
+                                    class="flex flex-col md:flex-row w-full rounded-lg bg-gray-200 dark:bg-gray-800">
+                                    <div class="flex-0 w-60 md:w-64">
+                                        <img class="w-full h-full" src="assets/images/getting-started/videointro.svg"
+                                            alt="videointro">
+                                    </div>
+                                    <div *ngIf="userType === 'INFLUENCER'" class="flex flex-col flex-auto m-8 mb-4">
+                                        <div class="text-2xl font-semibold leading-tight">
+                                            Verify your Channel and Add a Video Introduction
+                                        </div>
+                                        <div class="mt-2">
+                                            Complete your profile by adding a
+                                            video introduction and verifying your channel.
+                                        </div>
+                                    </div>
+                                    <div *ngIf="userType === 'BRAND'" class="flex flex-col flex-auto m-8 mb-4">
+                                        <div class="text-2xl font-semibold leading-tight">
+                                            Post a campaign to get free quotes
+                                        </div>
+                                        <div class="mt-2">
+                                            We make it easy for you to
+                                            <a class="cursor-pointer text-primary"
+                                                [routerLink]="['/apps/campaigns/all']">Post a campaing</a> in 4 easy
+                                            steps. Write a detailed description of your requirements, choose your
+                                            selection criteria, set a budget and voila! Your campaign is live, you can
+                                            see proposals coming in while relaxing in your armchair!
+                                        </div>
+                                    </div>
+                                </fuse-card>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="relative flex py-4">
+                        <div class="absolute top-7 left-5 w-0.5 h-full -ml-px bg-gray-300 dark:bg-gray-600">
+                        </div>
+                        <div class="relative flex flex-auto">
+                            <div
+                                class="flex flex-shrink-0 items-center justify-center w-10 h-10 mr-4 rounded-full bg-gray-400">
+                                2
+                            </div>
+                            <div class="flex flex-col flex-auto items-start">
+                                <fuse-card
+                                    class="flex flex-col md:flex-row w-full rounded-lg bg-gray-200 dark:bg-gray-800">
+                                    <div class="flex-0 w-60 md:w-64">
+                                        <img class="w-full h-full" src="assets/images/getting-started/campaigns.svg"
+                                            alt="campaigns">
+                                    </div>
+                                    <div *ngIf="userType === 'INFLUENCER'" class="flex flex-col flex-auto m-8 mb-4">
+                                        <div class="text-2xl font-semibold leading-tight">
+                                            Get invited or apply to Live campaigns</div>
+                                        <div class="mt-2">
+                                            Once you have updated your profile, you are all
+                                            set for getting invitations from brands for
+                                            their campaigns and you can also be a little
+                                            proactive and apply to campaigns
+                                            yourself.
+                                        </div>
+                                        <div class="mt-4">
+                                            Go check out the <a class="cursor-pointer text-primary"
+                                                [routerLink]="['/apps/campaigns/all']">Live
+                                                Campaigns</a> section today and get started
+                                            with your first campaign.
+                                        </div>
+                                    </div>
+                                    <div *ngIf="userType === 'BRAND'" class="flex flex-col flex-auto m-8 mb-4">
+                                        <div class="text-2xl font-semibold leading-tight">
+                                            Evaluate Influencers</div>
+                                        <div class="mt-2">
+                                            BookMyInfluencers shows you channel statistics such as Engagement Rate,
+                                            Collaboration Score, Performance Score (Show meaning on hover) that help you
+                                            in selecting the right channel for your brand and since you deal directly
+                                            with the influencers, you get the best pricing too!
+                                            <strong>Searching Influencers</strong> has never been
+                                            this easy.
+                                        </div>
+                                    </div>
+                                </fuse-card>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="relative flex py-4">
+                        <div class="absolute top-7 left-5 w-0.5 h-full -ml-px bg-gray-300 dark:bg-gray-600">
+                        </div>
+                        <div class="relative flex flex-auto">
+                            <div
+                                class="flex flex-shrink-0 items-center justify-center w-10 h-10 mr-4 rounded-full bg-gray-400">
+                                3
+                            </div>
+                            <div class="flex flex-col flex-auto items-start">
+                                <fuse-card
+                                    class="flex flex-col md:flex-row w-full rounded-lg bg-gray-200 dark:bg-gray-800">
+                                    <div class="flex-0 w-60 md:w-64">
+                                        <img class="w-full h-full" src="assets/images/getting-started/discussion.svg"
+                                            alt="discussion">
+                                    </div>
+                                    <div *ngIf="userType === 'INFLUENCER'" class="flex flex-col flex-auto m-8 mb-4">
+                                        <div class="text-2xl font-semibold leading-tight">
+                                            Discuss and negotiate terms with brands</div>
+                                        <div class="mt-2">
+                                            Great, you have a marketing campaign in your
+                                            kitty, use BookMyInfluencers platform to
+                                            communicate seamlessly with brands, discuss
+                                            campaign briefs, negotiate pricing and set
+                                            timelines as per your convenience before you
+                                            even begin working on the script.
+                                        </div>
+                                        <div class="mt-4">
+                                            Once the order is placed, use the communication
+                                            channel in case you have any changes you’d like
+                                            to discuss with the brand.
+                                        </div>
+                                    </div>
+                                    <div *ngIf="userType === 'BRAND'" class="flex flex-col flex-auto m-8 mb-4">
+                                        <div class="text-2xl font-semibold leading-tight">
+                                            Work Together</div>
+                                        <div class="mt-2">
+                                            Connect with influencers with a click of a button. Choose to call, chat or
+                                            email them and once you place an order, BookMyInfluencers gives you regular
+                                            updates on the order milestones, so that you don’t have to worry about your
+                                            campaign.
+                                        </div>
+                                    </div>
+                                </fuse-card>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="relative flex py-4">
+                        <div *ngIf="userType === 'BRAND'" class="absolute top-7 left-5 w-0.5 h-full -ml-px bg-gray-300 dark:bg-gray-600">
+                        </div>
+                        <div class="relative flex flex-auto">
+                            <div
+                                class="flex flex-shrink-0 items-center justify-center w-10 h-10 mr-4 rounded-full bg-gray-400">
+                                4
+                            </div>
+                            <div class="flex flex-col flex-auto items-start">
+                                <fuse-card
+                                    class="flex flex-col md:flex-row w-full rounded-lg bg-gray-200 dark:bg-gray-800">
+                                    <div class="flex-0 w-60 md:w-64">
+                                        <img class="w-full h-full" src="assets/images/getting-started/payment.svg"
+                                            alt="payment">
+                                    </div>
+                                    <div *ngIf="userType === 'INFLUENCER'" class="flex flex-col flex-auto m-8 mb-4">
+                                        <div class="text-2xl font-semibold leading-tight">
+                                            Deliver the video and get paid</div>
+                                        <div class="mt-2">
+                                            You focus on putting your best work forward and
+                                            timely delivery of the video
+                                            project.
+                                        </div>
+                                        <div class="mt-4">
+                                            BookMyInfluencers secures the payment from the
+                                            brand in advance and transfers it to your
+                                            account after successful delivery of the
+                                            campaign video. It is as simple as that!.
+                                        </div>
+                                    </div>
+                                    <div *ngIf="userType === 'BRAND'" class="flex flex-col flex-auto m-8 mb-4">
+                                        <div class="text-2xl font-semibold leading-tight">
+                                            Secure Payments through BookMyInfluencers</div>
+                                        <div class="mt-2">
+                                            The order amount is secured in an escrow till the order is completed as per
+                                            your requirements. The payment is released to the influencer after the video
+                                            is live.
+                                        </div>
+                                    </div>
+                                </fuse-card>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li class="relative flex py-4" *ngIf="userType === 'BRAND'">
+                        <div class="relative flex flex-auto">
+                            <div
+                                class="flex flex-shrink-0 items-center justify-center w-10 h-10 mr-4 rounded-full bg-gray-400">
+                                5
+                            </div>
+                            <div class="flex flex-col flex-auto items-start">
+                                <fuse-card
+                                    class="flex flex-col md:flex-row w-full rounded-lg bg-gray-200 dark:bg-gray-800">
+                                    <div class="flex-0 w-60 md:w-64">
+                                        <img class="w-full h-full" src="assets/images/getting-started/support.svg"
+                                            alt="support">
+                                    </div>
+                                    <div class="flex flex-col flex-auto m-8 mb-4">
+                                        <div class="text-2xl font-semibold leading-tight">
+                                            BookMyInfluencer Support</div>
+                                        <div class="mt-2">
+                                            Well we have tried to make the platform as friendly and convenient to use
+                                            for all the stakeholders but we understand there still might be some doubts
+                                            in your mind. Worry not, we got you covered! Use the chat option on the
+                                            bottom right of your page whenever you want to share something and our
+                                            Support team will be with you soon to help you with anything and everything
+                                            to enhance your BMI experience! :)
+                                        </div>
+                                    </div>
+                                </fuse-card>
+                            </div>
+
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,216 @@
+<div class="flex flex-col flex-auto min-w-0 bg-accent-300">
+
+    <!-- Header -->
+    <div 
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+    <div class="flex-1 min-w-0">
+          <!-- <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 ">Filters:</h2> -->
+    </div>
+    <div class="flex-1 min-w-0">
+        <!-- Tabs Header -->
+        <div class="mt-2">
+            <div class="tab">
+                <button class="tablinks" (click)="filterValue('2')"  onclick="openCity(event, 'insta')"><img src="assets/images/brands/instacircle.png"/></button>
+                <button class="tablinks active" (click)="filterValue('1')" onclick="openCity(event, 'youtube')"><img src="assets/images/brands/youtube.png"/></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div #topDiv id="topDiv"
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title -->
+            <div class="mt-2">
+                <h2 class="text-3xl font-extrabold ">
+                    <ng-container *ngIf="totalChannels" >
+                        {{ totalChannels | i18nPlural: {
+                        '=0' : 'Your Channel (0)',
+                        '=1' : 'Your Channel (1)',
+                        'other': 'Your Channels (' + totalChannels + ')'
+                        } }}
+                    </ng-container>
+                   
+                </h2>
+            </div>
+            <!-- <div class="mt-2 tabcontent"  id="insta">
+                <h2 class="text-3xl font-extrabold ">
+                  
+                    <ng-container class="tabcontent" id="insta" *ngIf="totalChannels">
+                        {{ totalChannels | i18nPlural: {
+                        '=0' : 'Your Instagram Channel (0)',
+                        '=1' : 'Your Instagram Channel (1)',
+                        'other': 'Your Instagram Channels (' + totalChannels + ')'
+                        } }}
+                    </ng-container>
+                </h2>
+            </div> -->
+                 <!-- Tabs Header -->
+                
+        </div>
+       
+        <div class="flex flex-col items-center mt-6">
+            <button class="fuse-mat-button-rounded" mat-flat-button [color]="'warn'" (click)="scroll(addChannel)">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                <a href="#"></a>
+                <span class="ml-2">Add Channel</span>
+            </button>
+        </div>
+    </div>
+ 
+    <div class="flex flex-col flex-auto p-6 sm:p-8">
+        <!-- <div class="mt-0 text-3xl md:text-4xl font-bold tracking-tight leading-7 sm:leading-10">
+            My Channels
+        </div> -->
+        <div class="mt-4 md:mt-6 tabcontent active" id="youtube" style="display: block;">
+            <all-channels [limit]="" [offset]=""  [filter]="filter"  (totalChannels)="totalChannelsReceived($event);"></all-channels>
+        </div>
+    </div>
+    <div class="mt-4 md:mt-6 tabcontent" id="insta">
+        <all-insta-channels > </all-insta-channels>
+    </div>
+
+    <div #addChannel id="addChannel" class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-8">
+        <div class="mt-0 text-3xl md:text-3xl font-bold tracking-tight leading-7 sm:leading-10">
+            Add Channel
+        </div>
+        <!-- Main -->
+        <div class="grid gap-2 grid-cols-2 w-full mt-4 md:mt-6">
+            <div class="bg-card  rounded-2xl overflow-hidden">
+                <form class="flex flex-col mt-4 px-8 pt-4 bg-card  rounded-xl overflow-hidden"
+                    [formGroup]="addChannelForm" autocomplete="off" novalidate>
+                    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start">
+                        <div class="text-center text-xl my-5">
+                            <h2 style="font-weight: bold;">Enter your channel details below</h2>
+                        </div>
+                       
+                        <div class="flex-auto min-w-64">
+                            <div class="flex mt-4" >
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Social Platform</mat-label>
+                                    <mat-select formControlName="plateform" (selectionChange)="selectValue($event)">
+                                        <mat-option value="">Choose one</mat-option>
+                                        <mat-option value="youtube">Youtube</mat-option>
+                                        <mat-option value="instagram">Instagram</mat-option>
+                                        <!-- <mat-option value="instagram"><a  [href]="instaFbLogin" target="_blank">Instagram</a></mat-option> -->
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <span *ngIf="submitted && channel.plateform.errors" class="flex error-block">
+                                <span *ngIf="channel.plateform.errors.required">Social Platform is required</span>
+                            </span>
+                            
+                            <div class="flex mt-4" *ngIf="platformValue === 'youtube'">
+                                <!-- <mat-form-field class="flex-auto">
+                                    <mat-label>Channel Name</mat-label>
+                                    <input matInput placeholder="Channel Name" formControlName="channel_link" autocomplete="none">
+                                    <span matPrefix>https://youtube.com/c/</span>
+                                </mat-form-field> -->
+                                <mat-form-field class="fuse-mat-no-subscript w-full">
+                                    <mat-label>Social Profile</mat-label>
+                                    <mat-icon *ngIf="platformValue =='youtube'" matPrefix svgIcon="feather:youtube" class="text-red-600 pt-1"></mat-icon>
+                                    <mat-icon *ngIf="platformValue == 'instagram'" matPrefix svgIcon="feather:instagram" class="text-pink-600 pt-1"></mat-icon>
+                                    <input matInput formControlName="channel_link" #typevalue [matAutocomplete]="matAutocomplete"
+                                        [placeholder]="'BBkivines'" (keyup)="onKeydown(typevalue.value)"  (keyup.enter)="onEnter()">
+                                    <!-- <button class="absolute top-1/2 right-5 sm:right-7 flex-shrink-0 w-10 h-10 -mt-5" mat-icon-button
+                                        (click)="searchInfluencer()">
+                                        <mat-icon [svgIcon]="'heroicons_solid:arrow-narrow-right'"></mat-icon>
+                                    </button> -->
+                                </mat-form-field>
+                                <mat-autocomplete class="max-h-128 mt-1 rounded" #matAutocomplete="matAutocomplete"
+                                    (optionSelected)="onResultSelection($event.option.value)">
+                                    <mat-option *ngFor="let result of filteredOptions"
+                                        class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
+                                        [value]="result.title">
+                                        {{ result.title }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </div>
+                            <span *ngIf="submitted && channel.channel_link.errors" class="flex error-block">
+                                <span *ngIf="channel.channel_link.errors.required">Channel Name is required</span>
+                            </span>
+
+                           <div class="flex mt-4">
+                                <mat-form-field class="flex-auto " [floatLabel]="'always'">
+                                    <mat-label>Video Promotion Price</mat-label>
+                                    <input type="number" matInput placeholder="Example: 10000"  formControlName="promotion_price">
+                                    <mat-select [value]="'INR'" formControlName="currency" matPrefix>
+                                        <mat-option [value]="'INR'">INR</mat-option>
+                                        <mat-option [value]="'USD'">USD</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <span *ngIf="submitted && channel.promotion_price.errors" class="flex error-block">
+                                <span *ngIf="channel.promotion_price.errors.required">Video Promotion Price is
+                                    required</span>
+                            </span>
+
+                        </div>
+                    </div>
+                    <!-- Alert -->
+                    <bmi-alert class="mt-8" *ngIf="alert.message" [appearance]="'outline'" [showIcon]="false"
+                        [type]="alert.type" [@shake]="alert.type === 'error'">
+                        {{ alert.message }}
+                    </bmi-alert>
+
+                    <div class="flex items-center justify-end px-8 py-5">
+                        <button mat-button type="reset" [disabled]="loading">
+                            Reset
+                        </button>
+                        <button type="submit" class="px-6 ml-3" mat-flat-button [color]="'primary'" [disabled]="loading"
+                            (click)="addNewChannel()">
+                            <mat-progress-spinner *ngIf="loading" [diameter]="24" [mode]="'indeterminate'">
+                            </mat-progress-spinner>
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="p-6 mt-8 md:mt-0 md:ml-4 bg-card rounded-2xl">
+                <div class="text-center text-xl my-5">
+                    <h2 style="font-weight: bold;">Add channel to</h2>
+                </div>
+                <div class="leading-5 text-md items-center justify-center mb-3">
+                    <mat-icon class="icon-size-5 mr-2" style="vertical-align: middle;" [ngClass]="'text-success'"
+                        [svgIcon]="'heroicons_solid:badge-check'">
+                    </mat-icon>
+                    <span>Get discovered by brands and increase your chances of success</span>
+                </div>
+                <div class="leading-5 text-md items-center justify-center my-3">
+                    <mat-icon class="icon-size-5 mr-2" style="vertical-align: middle;" [ngClass]="'text-success'"
+                        [svgIcon]="'heroicons_solid:badge-check'">
+                    </mat-icon>
+                    <span>Add any additional channel as well to maximise brand collaborations</span>
+                </div>
+                <div class="leading-5 text-md items-center justify-center my-3">
+                    <mat-icon class="icon-size-5 mr-2" style="vertical-align: middle;" [ngClass]="'text-success'"
+                        [svgIcon]="'heroicons_solid:badge-check'">
+                    </mat-icon>
+                    <span>Create a Unique Public Profile for all your social media channels</span>
+                </div>
+                <div class="leading-5 text-md items-center justify-center my-3">
+                    <mat-icon class="icon-size-5 mr-2" style="vertical-align: middle;" [ngClass]="'text-success'"
+                        [svgIcon]="'heroicons_solid:badge-check'">
+                    </mat-icon>
+                    <span>Get updates about jobs that match your channel category</span>
+                </div>
+                <div class="leading-5 text-md items-center justify-center mt-3">
+                    <mat-icon class="icon-size-5 mr-2" style="vertical-align: middle;" [ngClass]="'text-success'"
+                        [svgIcon]="'heroicons_solid:badge-check'">
+                    </mat-icon>
+                    <span>Apply to jobs and work with brands that you love</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="flex flex-col flex-auto items-center p-6 sm:p-8">
+        <div class="mt-0 text-3xl md:text-4xl font-bold tracking-tight leading-7 sm:leading-10">
+            My Channels
+        </div>
+        <div class="mt-4 md:mt-6">
+            <channel></channel>
+        </div>
+    </div> -->
+</div>

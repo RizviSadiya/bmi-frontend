@@ -1,0 +1,81 @@
+<div class="" style="width: 100%;">
+    <form [formGroup]="resourceForm">
+    <!--Design3:-order successfully. Copy code end here -->
+    <div class="cmplivemain mb-0 p-6" >
+        <div class="flex flex-auto justify-center  mx-auto mb-4 text-center ordersuccesfully" >
+            <h1 >Your order is placed successfully.</h1>
+        </div>
+        <div class="flex flex-auto justify-center  mx-auto mb-4 text-center ordersuccesfully">
+            <h2>However, work begins only after <span class="ordersuccesfully-redtext">{{order_process?.channel_name}}</span>  accepts <span class="ordersuccesfully-redtext">Campaign brief</span> provided by you. </h2>
+        </div>
+        <div class="flex flex-auto justify-center  mx-auto mb-4 text-center ordersuccesfully">
+            <p> Campaign brief are materials and information provided to influencers to promote a campaign, including branded graphics, sample products, promotional codes, instructions, and assets like videos or social media posts.
+                They help influencers effectively promote the campaign and align with the brand's goals.</p>
+        </div>
+        <div class="flex flex-auto justify-center  mx-auto mb-4 text-center ordersuccesfully">
+            <h2>Provide the <span class="ordersuccesfully-redtext">Campaign brief</span> in text or upload an attachment of the same.</h2>
+        </div>
+        <div class="flex flex-auto justify-center  mx-auto mb-4">
+            <div class="maincontenarsection grid grid-cols-12 sm:grid-cols-12 gap-x-2 gap-y-2 lg:grid-cols-12 lg:gap-2 w-full">
+                <!-- <div class="col-span-8 xs:col-span-12 sm:col-span-12 lg:col-span-8 bg-white p-2 ordersuccesfully">
+                    <textarea matInput [placeholder]="jdCommentDescription" [rows]="4"
+                    [formControlName]="'instruction'"></textarea>
+                    <angular-editor  [placeholder]="jdCommentDescription"
+                    [formControlName]="'instruction'"  [config]="editorConfig" ></angular-editor>
+
+                </div>
+                <div class=" text-center col-span-1 xs:col-span-12 sm:col-span-12 lg:col-span-1 flex flex-col items-center justify-center"  style="font-size: 19px;font-weight: 700;">
+                    or
+                </div> -->
+                <div class="font-bold col-span-3 xs:col-span-12 sm:col-span-12 lg:col-span-3 flex flex-col items-center justify-center font-2xl">
+                    <div class="">
+                        <input type="file" id="template_scripts" placeholder="Upload file" accept=".pdf,.doc,.docx"
+                        (change)="onFileSelected($event.target.files)" class="hidden">
+                        <label for="template_scripts" [matTooltip]="template_script ? 'Click to change Template Script' : 'Upload file'"
+                            class="cursor-pointer border rounded-2xl py-2 px-4 bg-gray-200 uploadfilebtn">
+                            {{ template_script ? template_script : "Upload file" }}
+                            <i class="fa fa-paperclip" style="font-size:26px;"></i>
+                        </label>
+                        <mat-icon *ngIf="template_script ||script_file" matTooltip="close" style="cursor: pointer;" (click)="template_script='' || script_file=''">close</mat-icon>
+
+                        <a role="button" target="_blank" class="ml-4 cursor-pointer" *ngIf="template_script"
+                            [href]="script_file" [download]="script_file"><u>Click to
+                                Download</u></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-auto justify-center  mx-auto mb-4">
+            <div class="maincontenarsection grid grid-cols-12 sm:grid-cols-12 gap-x-2 gap-y-2 lg:grid-cols-12 lg:gap-2 w-full">
+                <div class="col-span-12 xs:col-span-12 sm:col-span-12 lg:col-span-12 bg-white p-2 ordersuccesfully">
+                    <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-label>Suggestions (if any)</mat-label>
+                        <textarea matInput placeholder="Suggestions on the video concept/script ideas"
+                            [formControlName]="'suggestions'"></textarea>
+                    </mat-form-field>
+                    <div class="w-full truncate" *ngIf="order_process.comment">
+                        <span class="text-green-600 font-mono text-semibold">
+                            <span class="underline">Influencer's Comment</span>:&nbsp;
+                        </span>
+                        <span class="font-md">{{ order_process.comment }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-auto justify-center  mx-auto">
+            <button  class="infl-review-btn" mat-flat-button (click)="submit();" >Submit</button> 
+        </div>
+    </div>
+    </form>
+    <!--Design3:-order successfully. Copy code end here -->
+</div>
+
+<style>
+    mat-dialog-container#mat-dialog-1 {
+    padding: 0;
+    max-height: 100vh;
+    border-radius: 0!important;
+}
+</style>

@@ -1,0 +1,142 @@
+<div class="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0">
+    <div class="md:flex md:items-center md:justify-end w-full sm:w-auto md:h-full md:w-1/2 py-4 px-4 sm:p-12 md:p-16 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card">
+        <div class="divcenter">
+            <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0 divcenter md:items-center">
+                <!-- Logo -->
+                <div class="w-full items-center text-center">
+                    <img src="assets/images/logo/bmi-logo.png" alt="BMI Logo" class="w-40 ml-20 cursor-pointer" [routerLink]="['/home']">
+                </div>
+    
+                <!-- Title -->
+                <!-- <div class="mt-4 text-4xl font-extrabold tracking-tight leading-tight">Sign in</div> -->
+                
+                <!-- Alert -->
+                <bmi-alert class="mt-8 -mb-4" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false"
+                    [type]="alert.type" [@shake]="alert.type === 'error'">
+                    {{alert.message}}
+                </bmi-alert>
+                <!-- <mat-icon class="icon-size-20" [svgIcon]="'iconsmind:google'"></mat-icon> -->
+                <!-- Sign in form -->
+                <form class="mt-5" [formGroup]="signInForm" #signInNgForm="ngForm">
+                    <!-- Single sign-on buttons -->
+                    <div class="flex items-center mt-4 space-x-4">
+                        <button class="flex-auto fuse-mat-button-large w-full text-center leading-4 text-base rounded-md font-medium bg-gray-50 border border-solid border-primary-600 p-2" type="button" (click)="googleLogin()">
+                            <svg aria-hidden="true" class="native svg-icon iconGoogle inline-block" width="18" height="18" viewBox="0 0 18 18"><path d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18Z" fill="#4285F4"/><path d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17Z" fill="#34A853"/><path d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07Z" fill="#FBBC05"/><path d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3Z" fill="#EA4335"/></svg>
+                            Sign in with Google
+                        </button>
+                    </div>
+    
+                    <!-- Separator -->
+                    <div class="flex items-center mt-4 mb-4">
+                        <div class="flex-auto mt-px border-t"></div>
+                        <div class="mx-2 text-secondary">Or continue with</div>
+                        <div class="flex-auto mt-px border-t"></div>
+                    </div>
+    
+                    <!-- Email field -->
+                    <mat-form-field class="w-full">
+                        <mat-label>Email address</mat-label>
+                        <input id="email" matInput [formControlName]="'email'">
+                        <mat-error *ngIf="signInForm.get('email').hasError('required')">
+                            Email address is required
+                        </mat-error>
+                        <mat-error *ngIf="signInForm.get('email').hasError('email')">
+                            Please enter a valid email address
+                        </mat-error>
+                    </mat-form-field>
+    
+                    <!-- Password field -->
+                    <mat-form-field class="w-full">
+                        <mat-label>Password</mat-label>
+                        <input id="password" matInput type="password" [formControlName]="'password'" #passwordField>
+                        <button mat-icon-button type="button"
+                            (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                            matSuffix>
+                            <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'password'"
+                                [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                            <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'"
+                                [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                        </button>
+                        <mat-error>
+                            Password is required
+                        </mat-error>
+                    </mat-form-field>
+    
+                    <!-- Actions -->
+                    <div class="inline-flex items-end justify-between w-full mt-1.5">
+                        <mat-checkbox [color]="'primary'" [formControlName]="'rememberMe'">
+                            Remember me
+                        </mat-checkbox>
+                        <a class="text-md font-medium text-primary-500 hover:underline"
+                            [routerLink]="['/forgot-password']">Forgot password?
+                        </a>
+                    </div>
+    
+                    <!-- Submit button -->
+                    <button class="fuse-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'"
+                        [disabled]="signInForm.disabled" (click)="signIn()">
+                        <span *ngIf="!signInForm.disabled">
+                            Sign in
+                        </span>
+                        <mat-progress-spinner *ngIf="signInForm.disabled" [diameter]="24" [mode]="'indeterminate'">
+                        </mat-progress-spinner>
+                    </button>
+                    <!-- <a routerLink="/email-verification/45/%242y%2410%24o85fkYWY.YXRGeuZKFq/i.6OJvD1h0uOt2g33cwbf4wPiXsr855bK">verifyemail</a> -->
+                    <!-- <a routerLink="/reset-password/xgkqD1Bw8mGPLeM1ih4hzOGin9YevS0hQCcj72hZyHybgbiuGZDPxBwcw29tCIt8">reset</a> -->
+                </form>
+                
+                <div class="flex-auto mt-5 font-medium text-center items-center">
+                    <div class="text-center">Don't have an account?
+                    <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/sign-up']">Sign up</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relative hidden md:flex flex-auto items-center justify-center w-1/2 h-full p-16 lg:px-28 overflow-hidden bg-gray-800 dark:border-l">
+        <!-- Background - @formatter:off -->
+        <!-- Rings -->
+        <svg class="absolute inset-0 pointer-events-none" viewBox="0 0 960 540" width="100%" height="100%"
+            preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+            <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
+                <circle r="234" cx="196" cy="23"></circle>
+                <circle r="234" cx="790" cy="491"></circle>
+            </g>
+        </svg>
+        <!-- Dots -->
+        <svg class="absolute -top-16 -right-16 text-gray-700" viewBox="0 0 220 192" width="220" height="192"
+            fill="none">
+            <defs>
+                <pattern id="837c3e70-6c3a-44e6-8854-cc48c737b659" x="0" y="0" width="20" height="20"
+                    patternUnits="userSpaceOnUse">
+                    <rect x="0" y="0" width="4" height="4" fill="currentColor"></rect>
+                </pattern>
+            </defs>
+            <rect width="220" height="192" fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)"></rect>
+        </svg>
+        <!-- @formatter:on -->
+        <!-- Content -->
+        <div class="z-10 relative w-full max-w-2xl">
+            <div class="text-7xl font-bold leading-none text-gray-100">
+                <div>Welcome to</div>
+                <div>BookMyInfluencers</div>
+            </div>
+            <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400">
+                We Rocket-boost Your Influencer Research, Audit, Outreach & Promotions.
+            </div>
+            <div class="flex items-center mt-8">
+                <div class="flex flex-0 items-center -space-x-1.5">
+                    <img class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
+                    src="assets/images/avatars/icn1.PNG">
+                <img class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
+                    src="assets/images/avatars/icn2.PNG">
+                <img class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
+                    src="assets/images/avatars/icn3.PNG">
+                <img class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
+                    src="assets/images/avatars/icn4.PNG">
+                </div>
+                <div class="ml-4 font-medium tracking-tight text-gray-400">More than 10k people joined us, it's your
+                    turn</div>
+            </div>
+        </div>
+    </div>
+</div>

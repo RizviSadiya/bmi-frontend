@@ -1,0 +1,125 @@
+<div class="flex flex-col flex-auto">
+    <div>
+        <button mat-icon-button matDialogClose class="float-right -mt-6">
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+    <div class="text-center px-3 rounded-full text-3xl font-bold text-black-600 -mt-8">
+        Verify Your Channel
+    </div>
+
+    <div class="grid grid-cols-1  gap-8 w-full">
+        <div class="grid gap-8 sm:grid-flow-col xs:grid-flow-row">
+            <div class="popupverify">
+                <div class="font-semibold text-2xl">How to Verify channel?</div>
+                <mat-divider class="mb-0.5 mt-0.5"></mat-divider>
+                <ul>
+                    <li>{{ 'Sign in to Youtube Studio on your browser with ' + channel.channel_name }}</li>
+                        <li>Go to&nbsp;
+                            <!-- <a role="button" class="cursor-pointer text-primary" target="_blank"
+                                [href]="'https://studio.youtube.com/channel/' + channel.channel + '/editing/details'"> -->
+                                <strong> Customize Channel > Basic Info > Links</strong>
+                            <!-- </a> -->
+                            <!-- <a role="button" class="cursor-pointer text-primary" target="_blank"
+                                [href]="'https://studio.youtube.com/channel/' + channel.channel + '/editing/details'">
+                                Customize Channel > Basic Info > Links
+                            </a> -->
+                        </li>
+                        <li>
+                            In "<strong>Links</strong>" section, add <a href="https://prnt.sc/plSuxZmb34wV" target="_blank">(reference)</a>
+                            <br />
+                            <span>
+                                Link Title&nbsp;:&nbsp;<strong>BookMyInfluencers</strong>
+                                <mat-icon class="icon-size-5 cursor-pointer ml-1" matTooltip="copy link title" style="vertical-align: middle;"
+                                    [svgIcon]="'heroicons_outline:duplicate'" (click)="copyBmiText('BookMyInfluencers')"></mat-icon>
+                                    <span *ngIf="copiedBmi" class="text-green-600 font-semibold">copied</span>
+                            </span>
+                            <br />
+                            <span>
+                                Unique Profile URL&nbsp;:&nbsp;
+                                <!-- <strong>{{ 'https://bmi.yt/' + (channel.canonical_name ? channel.canonical_name : channel.channel) }}</strong> -->
+                                <strong>{{ 'https://bmi.yt/'}}{{channel.influ_id}}/{{channel.canonical_name}}</strong>
+                                <mat-icon class="icon-size-5 cursor-pointer ml-1" matTooltip="copy unique profile URL" style="vertical-align: middle;"
+                                    [svgIcon]="'heroicons_outline:duplicate'" (click)="copyProfileUrlText('https://bmi.yt/'+(link))"></mat-icon>
+                                <!-- <mat-icon class="icon-size-5 cursor-pointer ml-1" matTooltip="copy unique profile URL" style="vertical-align: middle;"
+                                    [svgIcon]="'heroicons_outline:duplicate'" (click)="copyProfileUrlText('https://bmi.yt/' + (channel.canonical_name ? channel.canonical_name : channel.channel))"></mat-icon> -->
+                                    <span *ngIf="copiedProfile" class="text-green-600 font-semibold">copied</span>
+                            </span>
+                        </li>
+                        <li *ngIf="channel.plateform_type===1 || channel.plateform==='youtube'">
+                            <span>Click <span class="font-semibold underline italic text-red-600 cursor-pointer" (click)="verifyChannel();">Verify</span>
+                            </span>
+                        </li>
+                        <li *ngIf="channel.plateform_type===2 || channel.plateform==='instagram'">
+                            <span>Click <span class="font-semibold underline italic text-red-600 cursor-pointer" (click)="instaVerifyChannel();">InstaVerify</span>
+                            </span>
+                        </li>
+                </ul>
+                <div class="text-center">
+                    <ng-container *ngIf="errorMessage">
+                        <div class="text-red-600 mb-4">{{ errorMessage }}</div>
+                    </ng-container>
+                    <!-- <button mat-flat-button [color]="'warn'" type="button" (click)="verifyChannel();">
+                        Verify
+                    </button> -->
+                </div>
+            </div>
+            <div class="popupverify">
+                <div class="font-semibold text-2xl">Why to Verify channel</div>
+                <mat-divider class="mb-0.5 mt-0.5"></mat-divider>
+                <ul>
+                    <li> Get
+                        <span>
+                            <mat-icon class="icon-size-5 text-success" [svgIcon]="'heroicons_solid:badge-check'" style="vertical-align: middle;">
+                            </mat-icon>
+                        </span>
+                        badge on your profile
+                    </li>
+                    <li>Apply to brand campaigns</li>
+
+                    <li>To increase visibility on the platform</li>
+                    <li>Generate trust among the brands</li>
+                    <li>For daily channel stats updation</li>
+                </ul>
+
+                
+                <!-- <div class="font-semibold text-2xl">How to Verify channel?</div>
+                <ol class="mt-0 mb-0">
+                    <li>{{ 'Sign in to Youtube Studio on your browser with ' + channel.channel_name }}</li>
+                    <li>Go to&nbsp;
+                        <a role="button" class="cursor-pointer text-primary" target="_blank"
+                            [href]="'https://studio.youtube.com/channel/' + channel.channel + '/editing/details'">
+                            Customize Channel > Basic Info > Links
+                        </a>
+                    </li>
+                    <li>
+                        In "<strong>Links</strong>" section, add
+                        <br />
+                        <span>
+                            Link Title&nbsp;:&nbsp;<strong>BookMyInfluencers</strong>
+                            <mat-icon class="icon-size-5 cursor-pointer ml-1" matTooltip="copy link title" style="vertical-align: middle;"
+                                [svgIcon]="'heroicons_outline:duplicate'" (click)="copyBmiText('BookMyInfluencers')"></mat-icon>
+                                <span *ngIf="copiedBmi" class="text-green-600 font-semibold">copied</span>
+                        </span>
+                        <br />
+                        <span>
+                            Unique Profile URL&nbsp;:&nbsp;<strong>{{ 'https://bmi.yt/' + (channel.canonical_name ? channel.canonical_name : channel.channel) }}</strong>
+                            <mat-icon class="icon-size-5 cursor-pointer ml-1" matTooltip="copy unique profile URL" style="vertical-align: middle;"
+                                [svgIcon]="'heroicons_outline:duplicate'" (click)="copyProfileUrlText('https://bmi.yt/' + (channel.canonical_name ? channel.canonical_name : channel.channel))"></mat-icon>
+                                <span *ngIf="copiedProfile" class="text-green-600 font-semibold">copied</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span>Click <span class="font-semibold underline italic text-red-600 cursor-pointer" (click)="verifyChannel();">Verify</span>
+                        </span>
+                    </li>
+                </ol>
+                <div class="text-center">
+                    <ng-container *ngIf="errorMessage">
+                        <div class="text-red-600 mb-4">{{ errorMessage }}</div>
+                    </ng-container>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>

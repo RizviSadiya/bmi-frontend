@@ -1,0 +1,134 @@
+<div class="flex flex-col flex-auto md:w-100 md:min-w-100">
+    <div class="m-4">
+        <div class="text-center mb-4 py-0.5 px-3 rounded-full text-2xl font-medium text-black-600">
+            Credit Top-up
+        </div>
+        <div class="flex-auto max-w-2xl prose prose-sm">
+            <div class="row">
+                <div class="col-md-4">
+                    <button mat-button mat-icon-button matPrefix aria-label="Remove" (click)="incrementValue(Inrvalue,usd_credit,'dec',inr_credit)" [color]="" [disabled]="">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                </div>
+                <div class="col-md-4">
+                    <input matInput [value]="Inrvalue" min="7500" max="5000"  />
+        
+                </div>
+                <div class="col-md-4">
+        
+                    <button mat-button mat-icon-button matSuffix aria-label="Add" (click)="incrementValue(Inrvalue,usd_credit,'incr',inr_credit)"  [color]="" [disabled]="">
+                        <mat-icon>add</mat-icon>
+                    </button>
+        
+                </div>
+            </div>
+        
+        </div>
+        <div>
+            <h2 *ngIf="userCurrency.currency==='INR'"><strong>₹</strong> {{inr_credit}}</h2>
+            <h2 *ngIf="userCurrency.currency==='USD'">{{usd_credit | currency : 'USD' : 'symbol':'1.1-2'}}</h2>
+        </div> 
+        <hr>
+        <div>
+            <h2 *ngIf="userCurrency.currency==='INR'"><strong>GST: </strong> {{gst_tax.tax_per}}%</h2>
+         
+        </div> 
+        <div>
+            <h2 *ngIf="userCurrency.currency==='INR'"><strong>Payable amount ₹</strong> {{payableAmount}}</h2>
+         
+        </div> 
+    </div>
+    <div class="flex items-center justify-end mt-4">
+        <button mat-flat-button matDialogClose class="mr-2">
+            Cancel
+        </button>
+        <button mat-flat-button [color]="'primary'" (click)="proceed();">
+            Pay Now
+        </button>
+    </div>
+</div>
+
+<!-- <div class="flex-auto max-w-2xl prose prose-sm">
+    <div class="row">
+        <div class="col-md-4">
+            <button mat-button mat-icon-button matPrefix aria-label="Remove" (click)="decrementValue(decvalue)" [color]="" [disabled]="">
+                <mat-icon>remove</mat-icon>
+            </button>
+        </div>
+        <div class="col-md-4">
+            <input matInput [value]="Inrvalue" min="7500" max="5000"  />
+
+        </div>
+        <div class="col-md-4">
+
+            <button mat-button mat-icon-button matSuffix aria-label="Add" (click)="incrementValue(Inrvalue,usd_credit,inr_credit)"  [color]="" [disabled]="">
+                <mat-icon>add</mat-icon>
+            </button>
+
+        </div>
+    </div>
+
+</div>
+<div>
+    <h2 > <strong>₹</strong>{{inr_credit}}</h2>
+    <h2 > <strong>$</strong>{{usd_credit}}</h2>
+</div> -->
+
+<!-- <div class="flex-auto max-w-2xl prose prose-sm">
+    <div class="bg-card px-6 rounded shadow">
+        <table>
+            <tbody>
+                <tr>
+                    <td class="font-mono text-md text-secondary">
+                        <div>Your Plan</div>
+                    </td>
+                    <td class="font-bold">
+                        {{ userPlan === 3 ? "Business" : userPlan === 2 ? "Starter" : "Free" }}
+                    </td>
+                </tr>
+                <tr >
+                    <td class="font-mono text-md text-secondary">
+                        <div>Top-up Amount</div>
+                    </td>
+                    <td class="font-bold"  *ngIf=" userCurrency.currency==='INR'"  >
+                        {{ 2500 | currency : 'INR' : 'symbol' : '1.0-2' }}
+                        {{ planDetails.price | currency : userCurrency.currency : 'symbol' : '1.0-2' }}
+                    </td>
+                 
+                    <td class="font-bold" *ngIf=" userCurrency.currency==='USD'"  >
+                        <input type="radio">
+                        {{ 30.49 | currency : 'USD' : 'symbol' : '1.0-2' }}
+                        {{ planDetails.price | currency : userCurrency.currency : 'symbol' : '1.0-2' }}
+                    </td>
+                    <td class="font-bold" *ngIf=" userCurrency.currency==='INR'"  >
+                        {{ 5000 | currency : 'USD' : 'symbol' : '1.0-2' }}
+                        {{ planDetails.price | currency : userCurrency.currency : 'symbol' : '1.0-2' }}
+                    </td>
+                  
+                    <td class="font-bold" *ngIf=" userCurrency.currency==='USD'"  >
+                        <input type="radio">
+
+                        {{ 60.98 | currency : 'USD' : 'symbol' : '1.0-2' }}
+                        {{ planDetails.price | currency : userCurrency.currency : 'symbol' : '1.0-2' }}
+                    </td>
+                  
+                </tr>
+                <tr>
+                    <td class="font-mono text-md text-secondary">
+                        <div>Credits</div>
+                    </td>
+                    <td class="font-bold">{{ planDetails ? planDetails.additional_credits : "--" }}</td>
+                    <td class="font-bold">{{ planDetails ? planDetails.credits : "--" }}</td>
+                    <td class="font-bold"   >
+                        {{ 7500  }}
+                        {{ planDetails.price | currency : userCurrency.currency : 'symbol' : '1.0-2' }}
+                    </td>
+                    <td class="font-bold" >
+                        {{ 15000 }}
+                        {{ planDetails.price | currency : userCurrency.currency : 'symbol' : '1.0-2' }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div> -->

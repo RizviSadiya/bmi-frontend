@@ -1,0 +1,22 @@
+version: 0.0
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+    commands:
+      - echo Installing
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies.
+      - npm install
+  build:
+    commands:
+      - echo Build started
+      - echo Compiling the Angular code.
+      - npm run prod
+  post_build:
+    commands:
+      - echo Build completed
+artifacts:
+  files:
+    - '**/*'

@@ -1,0 +1,40 @@
+<div class="flex flex-col flex-auto md:min-w-140">
+    <form [formGroup]="inviteForm" autocomplete="on" novalidate>
+        <div class="m-0">
+            <div>
+                <div class="text-center mb-4 py-0.5 px-3 rounded-full text-2xl font-medium text-black-600">
+                    {{ 'Send campaign invites to '}}<b>{{channelName}}</b>
+                </div>
+                <mat-form-field style="width: 100%" [floatLabel]="'always'">
+                    <!-- <mat-label>Send new invitations to:</mat-label> -->
+                    <mat-select placeholder="Select a campaign" formControlName="campaign">
+                        <mat-option value="" disabled>- Please Select campaign-</mat-option>
+                        <!-- <mat-option *ngIf="channelName == 'All'" value="" disabled>- All -</mat-option> -->
+                        <mat-option *ngFor="let campaign of campaigns" [value]="campaign.id">{{
+                            campaign.camp_title }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="submitted && inviteForm.get('campaign').hasError('required')">
+                    Please select a campaign.
+                </mat-error>
+            </div>
+        </div>
+        <div class="flex items-center justify-between mt-4">
+            <div class="justify-start">
+                <!-- <button mat-flat-button [color]="'accent'" (click)="createCampaign();">
+                    Create Campaign
+                </button> -->
+                <a role="button" class="link underline italic" rel="noreferrer" (click)="createCampaign();">Create
+                    Campaign</a>
+            </div>
+            <div class="justify-end">
+                <button mat-flat-button matDialogClose class="mr-2">
+                    Cancel
+                </button>
+                <button mat-flat-button [color]="'primary'" (click)="proceed();">
+                    Send Invite
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

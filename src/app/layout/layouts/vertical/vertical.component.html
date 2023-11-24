@@ -1,0 +1,103 @@
+<!-- Navigation -->
+<fuse-vertical-navigation *ngIf="navigation" class="dark bg-gray-900 print:hidden"
+    [mode]="isScreenSmall ? 'over' : 'side'" [name]="'mainNavigation'" [navigation]="navigation"
+    [ngClass]="{'bg-warn-900' : userType === 'BRAND'}" [opened]="!isScreenSmall && !publicProfileScreen"
+    [menuItems]="menuItems" [userCredit]="userCredit">
+    <ng-container fuseVerticalNavigationContentHeader>
+        <div class="flex items-center w-full p-4 pl-6">
+            <div class="flex items-center justify-center">
+                <img class="w-40"
+                    [src]="userType === 'BRAND' ? 'assets/images/logo/bmi-logo-all-white.png' : 'assets/images/logo/bmi-white-logo.png'">
+            </div>
+        </div>
+    </ng-container>
+</fuse-vertical-navigation>
+
+<!-- On load Navigation - It will not show when API response is loaded -->
+<fuse-vertical-navigation *ngIf="oldNavigation && !navigation" class="dark bg-gray-900 print:hidden"
+    [mode]="isScreenSmall ? 'over' : 'side'" [name]="'mainNavigation'" [navigation]="oldNavigation"
+    [ngClass]="{'bg-warn-900' : oldUserType === 'BRAND'}" [opened]="!isScreenSmall && !publicProfileScreen"
+    [menuItems]="menuItems" [userCredit]="userCredit">
+    <ng-container fuseVerticalNavigationContentHeader>
+        <div class="flex items-center w-full p-4 pl-6">
+            <div class="flex items-center justify-center">
+                <img class="w-40"
+                    [src]="oldUserType === 'BRAND' ? 'assets/images/logo/bmi-logo-all-white.png' : 'assets/images/logo/bmi-white-logo.png'">
+            </div>
+        </div>
+    </ng-container>
+</fuse-vertical-navigation>
+
+<!-- Wrapper -->
+<div class="flex flex-col flex-auto w-full min-w-0">
+
+    <!-- Header -->
+    <div
+        class="relative flex flex-0 items-center w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden">
+        <!-- Navigation toggle button -->
+        <button mat-icon-button (click)="toggleNavigation('mainNavigation')">
+            <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+        </button>
+        <!-- <bmi-fullscreen class="hidden md:block"></bmi-fullscreen> -->
+        <!-- Components -->
+        <div class="flex-auto grid grid-cols-12 gap-x-2 gap-y-2">
+            <!-- <div class="items-center pl-2 ml-auto"> -->
+            <div
+                class="xs:hidden md:block md:col-span-9 lg:col-span-10 sm:flex-auto sm:justify-end sm:m-0 w-full sm:ml-4">
+                <search *ngIf="userType === 'BRAND'" [appearance]="'basic'"></search>
+            </div>
+            <div
+                class="xs:col-span-12 md:col-span-3 lg:col-span-2 xs:flex xs:justify-end xs:items-end md:justify-center md:items-center">
+                <search class="xs:block md:hidden" *ngIf="userType === 'BRAND'"
+                    [appearance]="isScreenSmall ? 'bar' : 'basic'"></search>
+                <wallet *ngIf="userType === 'BRAND'"></wallet>
+                <notifications [unreadCount]="menuItems?.notificationsCount ? menuItems.notificationsCount : 0">
+                </notifications>
+                <button class="lg:hidden" mat-icon-button (click)="quickChat.toggle()" (select)="openChat()">
+                    <ng-container *ngIf="menuItems?.InboxCount > 0">
+                        <span class="absolute top-0 right-0 left-0 flex items-center justify-center h-3">
+                            <span
+                                class="flex items-center justify-center flex-shrink-0 min-w-4 h-4 px-1 ml-4 mt-2.5 rounded-full bg-teal-600 text-indigo-50 text-xs font-medium">
+                                {{menuItems?.InboxCount}}
+                            </span>
+                        </span>
+                    </ng-container>
+                    <mat-icon   [svgIcon]="'heroicons_outline:chat-alt-2'" >
+                       
+                        <!-- <img src="/assets/images/chat-icon.png"> -->
+                    </mat-icon>
+                </button>
+                <user [showAvatar]="true"></user>
+            </div>
+            <!-- </div> -->
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col flex-auto">
+        <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
+             Otherwise, layout changes won't be registered and the view won't be updated! -->
+        <router-outlet *ngIf="true"></router-outlet>
+    </div>
+
+    <!-- Footer -->
+    <div *ngIf="userType === 'BRAND' && menuItems?.plan_id && menuItems?.totalCredit < 50"
+        class="fixed bottom-0 flex flex-0 items-center justify-start w-full h-6 px-4 md:px-6 z-49 border-t bg-danger print:hidden">
+        <span class="font-small text-sm text-white">
+            <ng-container *ngIf="menuItems && (!menuItems.plan_id || menuItems.plan_id != 3); else businessPlan">
+                You're currently low on credits. Consider upgrading your plan or buying more credits.&nbsp;
+            </ng-container>
+            <ng-template #businessPlan>
+                You're currently low on credits. Consider buying more credits.&nbsp;
+            </ng-template>
+            <a (click)="topUp();" class="cursor-pointer"><u>[Buy Credits]</u></a>
+            <span *ngIf="menuItems && (!menuItems.plan_id || menuItems.plan_id != 3)">&nbsp;&nbsp;
+                <span [routerLink]="['/choose-plan']" class="cursor-pointer"><u>[Upgrade Plan]</u></span>
+            </span>
+        </span>
+    </div>
+
+</div>
+
+<!-- Quick chat -->
+<quick-chat #quickChat="quickChat"></quick-chat>

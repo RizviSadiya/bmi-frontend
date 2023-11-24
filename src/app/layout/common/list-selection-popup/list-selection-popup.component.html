@@ -1,0 +1,85 @@
+<div class="flex flex-col flex-auto md:w-160 md:min-w-160">
+    <!-- <form [formGroup]="listForm" autocomplete="off" *ngIf="userLists.length > 0 && createNew">
+        <div class="m-4">
+            <div>
+                <div class="text-center mb-4 py-0.5 px-3 rounded-full text-2xl font-bold text-black-600">
+                    Select a List to add <u>{{ channelName }}</u>
+                </div>
+                <div class="list-input items-center text-center">
+                    <mat-radio-group class="flex-auto" [color]="'primary'" [formControlName]="'listId'" required>
+                        <mat-radio-button class="mb-2 mr-4" [value]="item.id"
+                            *ngFor="let item of userLists; let i=index">
+                            {{ item.name }}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="checkbox-input">
+                    <div *ngFor="let item of userLists; let i=index">
+                        <label>
+                            <input type="checkbox" [value]="item.id" [checked]="checkIfSelected(item.list_data)"
+                            (change)="onSelectionChange($event)"/>
+                            {{ item.name }}
+                        </label>
+                    </div>
+                </div>
+                <mat-error *ngIf="listError" class="text-center">{{ listError }}</mat-error>
+            </div>
+        </div>
+        <div class="flex items-center justify-between mt-4">
+            <div class="justify-start">
+                <a role="button" class="link underline italic" rel="noreferrer" (click)="createNewList();">Create New
+                    List</a>
+            </div>
+            <div class="justify-end">
+                <button mat-flat-button matDialogClose class="mr-2">
+                    Cancel
+                </button>
+                <button mat-flat-button [color]="'primary'" (click)="proceed();"
+                    [disabled]="this.listForm.controls['listId'].value === ''">
+                    Save
+                </button>
+            </div>
+        </div>
+    </form> -->
+
+
+    <form [formGroup]="createForm" autocomplete="off" *ngIf="userLists.length == 0 || !createNew">
+        <div class="m-4">
+            <div>
+                <div class="text-center mb-4 py-0.5 px-3">
+                    <div class="rounded-full text-2xl font-bold text-black-600">
+                        Create a List to add 
+                        <!-- <u>{{ channelName }}</u> -->
+                    </div>
+                    <div *ngIf="userLists.length == 0" class="rounded-full text-md font-semibold text-black-600">
+                        You don't have any list created yet.
+                    </div>
+                </div>
+                <mat-form-field style="width: 100%">
+                    <mat-label
+                        class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                        List Name<span class="text-danger">*</span>
+                    </mat-label>
+                    <input matInput [placeholder]="'Enter List Name'" required="false" autocomplete="none" [formControlName]="'name'">
+                    <mat-error *ngIf="createForm.get('name').errors?.pattern">
+                        List name must be of 3-50 characters
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="flex items-center justify-between mt-4">
+            <div class="justify-start" *ngIf="createNew">
+                <a role="button" class="link underline italic" rel="noreferrer" (click)="createNewList();">Use
+                    Existing</a>
+            </div>
+            <div class="justify-end">
+                <button mat-flat-button matDialogClose class="mr-2">
+                    Cancel
+                </button>
+                <button mat-flat-button [color]="'primary'" (click)="createAndAdd();">
+                    Create and Add
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

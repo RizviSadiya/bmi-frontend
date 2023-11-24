@@ -1,0 +1,67 @@
+<div class="flex flex-col w-full">
+    <!-- Review Mode -->
+    <ng-container *ngIf="reviewMode">
+        <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
+            <div class="w-full max-w-3xl">
+                <div class="group w-full  p-6 sm:py-4 sm:px-10 rounded-xl mt-10">
+                    
+                    <div class="relative inset-x-0 -top-8 flex items-center justify-center">
+                        <div class="flex items-center h-8 px-8 rounded-full font-medium text-center leading-none bgdetailpopupbtn">
+                            Deal Terms</div>  
+                    </div>
+                    <div class="contentsection">
+                        <!-- <div class="closebtndetailpopup" [routerLink]="['../']">X</div> -->
+                        <ul>
+                            <li><b>Influencer&nbsp;: &nbsp;</b>{{ orderForm.get('step1').get('channelName').value }}</li>
+                            <li><b>Brand&nbsp;: &nbsp;</b> {{ order.camp_info.brand_name }}</li>
+                            <li><b>Promo type&nbsp;: &nbsp;</b> {{ order.camp_info.promot_product }}</li>
+                            <li *ngIf="order.camp_info.promotion_start !='undefined'"><b>Length of Brand integration &nbsp;: &nbsp;</b> {{ order.camp_info.duration }}s</li>
+                            <li><b>Deal value&nbsp;: &nbsp;</b> {{ orderForm.get('step1').get('amount').value  |currency: userCurrency.currency :'symbol':'1.0-0'  }}</li>
+                            <!-- <li *ngIf="order.camp_info.promot_product==='In-Video brand integration'"><b>Brand would prefer the integration to be &nbsp;: &nbsp;</b> <span [ngClass]="{'text-red-400': orderForm.get('step1').get('secondPreference').value === '0',
+                                '': orderForm.get('step1').get('secondPreference').value !== '0'}" >{{order.camp_info.duration }} </span></li> -->
+                            <li><b>flexible with minor changes after the video is submitted for review&nbsp;: &nbsp;</b> <span [ngClass]="{'text-red-400 ': orderForm.get('step2').get('changesFlexibility').value === 0,
+                                '': orderForm.get('step2').get('changesFlexibility').value === 1}" >{{orderForm.get('step2').get('changesFlexibility').value ==1 ? "Yes":"No" }} </span></li>
+                            <li *ngIf="order.camp_info.promotion_start !='undefined'"><b>Promo Placement&nbsp;: &nbsp;</b> <span [ngClass]="{'text-red-400': orderForm.get('step2').get('deliveryTime').value === 'other',
+                                '': orderForm.get('step2').get('deliveryTime').value !== 'other'}" >{{order.camp_info.promotion_start}} </span></li>
+                            <li><b>Delivery time after the order is confirmed&nbsp;: &nbsp;</b> <span [ngClass]="{'text-red-400': orderForm.get('step2').get('deliveryTime').value === 0,
+                                '': orderForm.get('step2').get('deliveryTime').value !=0}">
+                                <span class="leading-relaxed whitespace-nowrap"> {{
+                                orderForm.get('step2').get('deliveryTime').value !=0
+                                ? orderForm.get('step2').get('deliveryTime').value + " days"
+                                : (orderForm.get('step2').get('deliveryTimeOther').value +  " days")
+                                }}   </span></span>
+                                    </li>
+                            <li><b>Scope of sharing collaborationon other social media handles&nbsp;: &nbsp;</b> <span  [ngClass]="{'text-red-500': orderForm.get('step2').get('shareOnSocial').value == 0,
+                                '': orderForm.get('step2').get('shareOnSocial').value == 1}" >{{orderForm.get('step2').get('shareOnSocial').value == 0 ? "No" : "Yes" }}</span><span *ngIf="orderForm.get('step2').get('facebook').value ==='facebook'"
+                                class="inline-flex items-centertracking-wide ml-2" style="vertical-align: middle;">
+                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:facebook'">
+                                </mat-icon>
+                            </span>
+                            <span *ngIf="orderForm.get('step2').get('instagram').value ==='instagram'"
+                                class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:instagram'">
+                                </mat-icon>
+                            </span>
+                            <span *ngIf="orderForm.get('step2').get('twitter').value==='twitter'"
+                                class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:twitter'">
+                                </mat-icon>
+                            </span></li>
+                            <li *ngIf="order.userComment"><b>Reasons why this bid should be selected&nbsp;: &nbsp;</b> {{ order.userComment }}</li>
+                        </ul>
+                    </div>
+                    <div class="text-center mt-8">
+                        <button class="px-8 mr-2" mat-flat-button [color]="'warn'" type="button" [routerLink]="['../']" >
+                            Close
+                        </button>
+                    </div>
+                    <!-- <div class="text-center mt-8">
+                        <button class="px-8 mr-2" mat-flat-button [color]="'warn'" type="button" (click)="openQuickChat(order)">
+                            Message
+                        </button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

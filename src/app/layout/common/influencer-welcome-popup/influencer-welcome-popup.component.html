@@ -1,0 +1,28 @@
+<div class="flex flex-col flex-auto md:w-160 md:min-w-160">
+    <div class="m-4">
+        <div>
+            <div class="text-center mb-4 py-0.5 px-3 rounded-full text-3xl font-bold text-black-600">
+                Welcome to BookMyInfluencers
+            </div>
+            <!-- <bmi-alert [appearance]="'outline'" [type]="'success'" [showIcon]="false" class="welcome">
+                A platform to showcase your channel in front of hundreds of brands, looking to collaborate with creators
+                like you.
+            </bmi-alert> -->
+            <div class="text-center my-4 py-0.5 px-3 rounded-full text-2xl font-semibold text-black-600">
+                Before applying to <span class="text-red-600">Live campaigns</span> and getting enquiries from brands
+            </div>
+            <div class="text-center">
+                <button class="fuse-mat-button-rounded" mat-flat-button [color]="'warn'" (click)="verifyChannel();">
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:cursor-click'"></mat-icon>
+                    <span class="ml-2">Verify your channel</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-end mt-4">
+        <button mat-flat-button matDialogClose>
+            Close
+        </button>
+    </div>
+</div>

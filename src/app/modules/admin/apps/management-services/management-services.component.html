@@ -1,0 +1,37 @@
+<div class="flex flex-col flex-auto items-center sm:justify-center min-w-0 bg-accent-300">
+    <div class="w-full sm:w-auto py-8 px-4 sm:p-12 sm:rounded-2xl sm:shadow sm:bg-card" matRipple>
+        <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0 text-center">
+            <!-- Logo -->
+            <!-- <div class=""  *ngIf="servicesSelected">
+                <mat-icon class="w-20 h-20" [svgIcon]="'miscellaneous_services'"></mat-icon>
+            </div> -->
+            <!-- Title -->
+            <!-- <div class="mt-4 text-3xl font-extrabold tracking-tight leading-tight">Management Services</div> -->
+            <div class="mt-0.5 text-2xl text-2xl font-normal" *ngIf="!servicesSelected">
+                Need a Personal Manager at no extra charge for managing your paid collaborations for better
+                values and success rate?
+            </div>
+
+            <!-- Alert -->
+            <bmi-alert class="mt-0" *ngIf="servicesSelected" [appearance]="'outline'" [showIcon]="false"
+                [type]="alert.type" [@shake]="alert.type === 'error'">
+                {{ alert.message }}
+            </bmi-alert>
+
+            <!-- Coming soon form -->
+            <div class="mt-8" *ngIf="!servicesSelected">
+
+                <!-- Submit button -->
+                <button class="fuse-mat-button-large w-full mt-3" mat-flat-button type="button" [color]="'primary'"
+                    [disabled]="submitted" (click)="showFeaures()">
+                    <span *ngIf="!submitted">
+                        I'm interested
+                    </span>
+                    <mat-progress-spinner *ngIf="submitted" [diameter]="24" [mode]="'indeterminate'">
+                    </mat-progress-spinner>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

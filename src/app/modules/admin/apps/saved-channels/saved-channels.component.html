@@ -1,0 +1,105 @@
+<div class="flex flex-col flex-auto min-w-0 bg-accent-300">
+
+    <!-- Header -->
+    <div 
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+    <div class="flex-1 min-w-0">
+          <!-- <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 ">Filters:</h2> -->
+    </div>
+    <div class="flex-1 min-w-0">
+        <!-- Tabs Header -->
+        <div class="mt-2">
+            <div class="tab">
+                <button class="tablinks" (click)="filterValue('2')" onclick="openCity(event, 'insta')"><img src="assets/images/brands/instacircle.png"/></button>
+                <button class="tablinks active" (click)="filterValue('1')" onclick="openCity(event, 'youtube')"><img src="assets/images/brands/youtube.png"/></button>
+            </div>
+        </div>
+    </div>
+</div>
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w">
+            <!-- Title -->
+            <div class="headermenusection text-right pull-left">
+            <div class="mt-0">
+                <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10">
+                    <ng-container>
+                        {{ totalChannels | i18nPlural: {
+                        '=0' : 'Favourites Channel (0)',
+                        '=1' : 'Favourites Channel (1)',
+                        'other': 'Favourites Channels (' + totalChannels + ')'
+                        } }}
+                    </ng-container> 
+                </h2>
+            </div>
+            </div>
+            <div class="headermenusection text-right pull-right">
+            <div class="col-span-6 text-right" *ngIf="totalChannels>0">
+                <button mat-flat-button color="primary" (click)="inviteAll()">Invite All</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col flex-auto p-6 sm:p-8 tabcontent-active" #topdiv id="topdiv" id="youtube" style="display: block;">
+        <div class="mt-0 md:mt-0" *ngIf="filter==='1'">
+            <ng-container *ngIf="channels$ | async as channels">
+                <ng-container *ngIf="channels.length; else noChannel">
+                    <ng-container *ngFor="let channel of channels; let k = index; trackBy: trackByFn">
+                        <influencer-channel  [channel]="channel"></influencer-channel>
+                        
+                    </ng-container>
+                    <ng-container *ngIf="channels.length">
+                        <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+                        [length]="totalChannels" [pageIndex]="currentPage" (page)="onChangePage($event)"
+                        href="#_top" target="_top" (click)="scroll(topdiv)">
+                    </mat-paginator>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+            
+            <ng-template #noChannel>
+                
+                <div class="cmplivemain mb-4 p-11">
+                    <div class="flex flex-auto justify-center  mx-auto mb-4 text-center campaignlive">
+                        <h1 style="font-size:2rem">You're yet to mark any favourites</h1>
+                    </div>
+                    <div class="flex flex-auto justify-center  mx-auto mb-8 text-center campaignlive">
+                        <img src="/assets/images/bg_camp.png" />
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+    <div class="flex flex-col flex-auto p-6 sm:p-8 tabcontent" #topdiv id="topdiv" id="insta">
+        <div class="mt-0 md:mt-0" *ngIf="filter==='2'">
+            <ng-container *ngIf="channels$ | async as channels">
+                <ng-container *ngIf="channels.length; else noinstaChannel">
+                    <ng-container *ngFor="let channel of channels; let k = index; trackBy: trackByFn">
+                    
+                        <insta-channel-list  [channel]="channel"></insta-channel-list>
+                    </ng-container>
+                    <ng-container *ngIf="channels.length">
+                        <mat-paginator #paginator [pageSize]="pageSize"  [showFirstLastButtons]="false"
+                        [length]="totalChannels" [pageIndex]="currentPage" (page)="onChangePage($event)"
+                        href="#_top" target="_top" (click)="scroll(topdiv)">
+                    </mat-paginator>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+            
+            <ng-template #noinstaChannel>
+                
+                <div class="cmplivemain mb-4 p-11">
+                    <div class="flex flex-auto justify-center  mx-auto mb-4 text-center campaignlive">
+                        <h1 style="font-size:2rem">You're yet to mark any favourites</h1>
+                    </div>
+                    <div class="flex flex-auto justify-center  mx-auto mb-8 text-center campaignlive">
+                        <img src="/assets/images/bg_camp.png" />
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+
+</div>

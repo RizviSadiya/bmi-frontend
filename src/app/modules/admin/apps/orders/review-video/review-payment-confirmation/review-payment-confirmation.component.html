@@ -1,0 +1,17 @@
+<div style="width:300px">
+    <h2 mat-dialog-title>Select how to pay</h2>
+    
+    <div mat-dialog-actions align="end">
+        <span>
+            <button type="button" mat-flat-button color="primary" (click)="paywalletPayment()" >
+                pay from wallet
+            </button>
+            <button type="button" mat-flat-button color="accent" (click)="payUpiPayment(1)">
+                pay from upi
+            </button><br><br>
+            <button type="button" mat-flat-button color="warn" (click)="cancel()">
+                Cancel
+            </button>
+        </span>
+    </div>
+</div>

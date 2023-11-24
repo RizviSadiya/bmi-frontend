@@ -1,0 +1,234 @@
+<div class="modal-content outreach-popup" style="overflow:hidden;">
+    <div class="modal-header border-bottom-0 position-relative">
+        <h4 class="fw-bold mb-0 mx-auto"> <b>Reveal all add Add to list</b></h4>
+
+
+        <button type="button" class="btn-close btn-sm position-absolute end-0 me-1" style="text-align: right;" (click)="close()"
+            data-bs-dismiss="modal" aria-label="Close"><mat-icon>close</mat-icon></button>
+    </div>
+ 
+
+    <div class="modal-body p-3 pt-0" style="overflow: hidden;">
+        <div class="mt-4 add-list-body" id="add-list-body">
+            <!-- <div class="alert alert-info d-flex align-items-center rounded-0 py-1 mt-2 mb-0" role="alert"
+                style="display: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                    class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z">
+                    </path>
+                </svg>
+                <div class="d-flex align-items-center">
+                    <small class="fs-08">
+                        &nbsp;To setup outreach automation, you must add your target sites to a list by revealing them
+                        using your credit balance.
+                    </small>
+                </div>
+            </div> -->
+            <br>
+            <input type="hidden" name="list_type" id="list_type" value="1">
+            <div class="row mb-4">
+                <div class="col-sm-8">
+                    <div class="mb-3">
+                        <h6 ><span class="mb-2 strong">Choose your list</span> (Results will be added to this list)
+                        </h6>
+                        <div class="d-flex align-items-center">
+                         
+                            <div class="col-5 pr-0 pl-0">
+                                <mat-form-field class="">
+                                    <!-- <mat-label class="flex flex-row font-medium mb-2">
+                                        
+                                    </mat-label> -->
+                                    <mat-select value=""
+                                    (selectionChange)="selectListFilter($event)">
+                                        <mat-option value="" >Select Existing</mat-option>
+
+                                        <mat-option [value]="list.id" *ngFor="let list of outReachList;"  >{{list.name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            </div>
+                            <div class="col-1 text-center">
+                                <p class="mb-0 fw-bold">
+                                    or
+                                </p>
+                            </div>
+                            <div class="col-6 pr-0">
+                               
+
+                                <input type="text" id="new-list-name"  [(ngModel)]="listname"  class="form-control rounded-0 shadow-none"
+                                    placeholder="Add New" autocomplete="off" (keydown)="newlistname($event)">
+                                
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6>How many results you want to add to this list?</h6><br>
+                        <div class="mx-auto mb-4">
+                            <!-- <div class="lg:flex flex-col col-md-4  p-0 hoverdiv">
+                                <input type="radio" name="result" (click)="applyFilter('50')" class="radiobtnselectinput" />
+                                <div class="radiobtnselect radiobtnselectactive">Top 50 Results</div>
+                            </div>
+                            <div class="lg:flex flex-col col-md-4  p-0 hoverdiv">
+                                <input type="radio" name="result" (click)="applyFilter('500')" class="radiobtnselectinput" />
+                                <div class="radiobtnselect">Top 500 Results</div>
+                            </div>
+                            <div class="lg:flex flex-col col-md-4  p-0 hoverdiv">
+                                <input type="radio" name="result" (click)="applyFilter('1500')" class="radiobtnselectinput" />
+                                <div class="radiobtnselect">Top 1500 Results</div>
+                            </div> -->
+                            <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="applyFilter($event);" [animationDuration]="'0'">
+                                <mat-tab label="Top 50 Results"> 
+                                    <!-- <input type="radio" name="result" class="radiobtnselectinput" />
+                                    <div class="radiobtnselect radiobtnselectactive">Top 50 Results</div> -->
+                                </mat-tab> 
+                                <mat-tab label="Top 500 Results"> 
+                                    <!-- <input type="radio" name="result" class="radiobtnselectinput" />
+                                  <div class="radiobtnselect">Top 500 Results</div>  -->
+                                </mat-tab>
+                                <mat-tab label="Top 1500 Results"> 
+                                    <!-- <input type="radio" name="result" class="radiobtnselectinput" />
+                                    <div class="radiobtnselect ">Top 1500 Results</div> -->
+                                 </mat-tab>
+                              </mat-tab-group>
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <!-- <input type="checkbox" class="form-check-input shadow-none rounded-0 checkReveal"
+                                name="reveal_or_not" id="reveal_or_not" value="1">
+                            <label class="form-check-label " for="checkbtn1">
+                                <small>
+                                    Revealed profile only
+                                </small>
+                            </label> -->
+                            <!-- <label class="example-margin"></label> -->
+                            <mat-radio-group [(ngModel)]="is_reveal_or_not" (change)="notReveal($event)">
+                              <mat-radio-button class="example-margin"  [value]="1">Revealed profile only</mat-radio-button><br>
+                              <mat-radio-button class="example-margin" [value]="2">Profile that aren't revealed yet</mat-radio-button>
+                            </mat-radio-group>
+                         
+                        </div>
+                    </div>
+                    <div>
+                        <!-- <div class="form-check form-check-inline">
+                            <input type="checkbox" class="form-check-input shadow-none rounded-0 checkReveal"
+                                name="reveal_or_not" id="reveal_or_not" value="2" checked="">
+                            <label class="form-check-label " for="checkbtn2">
+                                <small>
+                                    Profile that aren't revealed yet
+                                </small>
+                            </label>
+                        </div> -->
+                    </div>
+
+                </div>
+                <div class="col-sm-4">
+                    <div class="card rounded-0 border-0 shadow-sm mb-3 bg-light">
+                        <div class="card-body py-2">
+                            <div>
+                                <p class="mb-0 text-muted fw-600">
+                                    <small>Profiles to reveal</small>
+                                </p>
+                                <h4 class="mb-0 fw-bold total_sites_list" id="total_sites_list">{{totalProfile}}</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-0 border-0 shadow-sm mb-3 bg-light">
+                        <div class="card-body py-2">
+                            <div>
+                                <p class="mb-0 text-muted fw-600">
+                                    <small>Credits required</small>
+                                </p>
+                                <h4 class="mb-0 fw-bold total_credits_list" id="total_credits_list">{{required_credit}}</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-0 border-0 shadow-sm bg-light">
+                        <div class="card-body py-2">
+                            <div>
+                                <p class="mb-0 text-muted fw-600">
+                                    <small>Credits available</small>
+                                </p>
+                                <h4 class="mb-0 fw-bold">
+                                   {{user_credit}}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="card rounded-0 border-0 shadow-sm" style="background-color: aqua;">
+                        <div class="card-body py-2">
+                            <div>
+                                <p class="mb-0 text-muted fw-600" >
+                                    <small>Add to list</small>
+                                </p>
+                                
+                            </div>
+                        </div>
+                    </div> -->
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="domain-lists">
+                       
+                        <!-- <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-sm">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">S. No.</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Credits</th>
+                                     
+                                    </tr>
+                                </thead>
+                                <tbody id="domain-list">
+                                    <tr *ngFor="let list of outReachChannelList; ;let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{list.title}}</td>
+                                        <td>{{list.credit_cost}}</td>
+                                      
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div> -->
+
+                        <hr class="mt-2 mb-2">
+                        <div class="hstack mb-2">
+                            <div class="row mb-3">
+                                <div class="col-sm-12">
+
+                                    <input type="hidden" class="credit_need" name="credit_need" id="credit_need"
+                                        value="2230">
+                                    <input type="hidden" name="domain_ids" id="domain_ids"
+                                        value="118452,76310,63951,29654,133598,42592,136298,164373,43150,96634,80766,18972,136941,21589,71015,82375,145472,113197,70153,158994,169402,81074,87536,59560,107751,116873,85515,112935,132430,4196,21488,156593,82290,27104,28602,84349,19087,139851,139863,139885,112777,58959,115088,44153,59567,29804,6396561,163333,168338,141039">
+                                    <input type="hidden" name="size" id="size" value="50">
+                                    <input type="hidden" class="total_sites" name="total_sites" id="total_sites"
+                                        value="50">
+                                    <input type="hidden" name="revealor_not" id="revealor_not" value="2">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+    <div class="modal-footer p-0 outreach-button">
+    <div class="d-grid mx-auto" id="add-list-action"><button class="mt-1 mb-1 btn rounded-4 btn btn-green px-5"
+            type="submit" (click)="addSitesToList()">Add to list</button></div>
+</div>
+<!-- </div> -->

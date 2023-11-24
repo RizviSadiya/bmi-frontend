@@ -1,0 +1,279 @@
+<div class="flex flex-col flex-auto min-w-0 bg-accent-300">
+
+    <!-- Header -->
+    <div id="youtube" class="tabcontent active" style="display: block;"
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 "></h2>
+        </div>
+        <div class="flex-1 min-w-0">
+            <!-- Tabs Header -->
+            <div class="mt-2">
+                <div class="tab">
+                    <button class="tablinks" (click)="filterValue('2')" onclick="openCity(event, 'insta')"><img src="assets/images/brands/instacircle.png"/></button>
+                    <button class="tablinks active" (click)="filterValue('1')" onclick="openCity(event, 'youtube')"><img src="assets/images/brands/youtube.png"/></button>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+    <ng-container *ngIf="!loading">
+        <!-- Filters -->
+        <div id="youtube" class="tabcontent active" style="display: block;" *ngIf="filter==='1'">
+            <div  *ngIf="pagination?.totalCount>1" class="flex flex-col sm:flex-row items-center justify-between w-full max-w-xs sm:max-w-none p-6 pb-0">
+                <mat-form-field class="fuse-mat-no-subscript w-full sm:w-50" >
+                    <mat-label>Subscribers</mat-label>
+                    <mat-select value="" (selectionChange)="filterBySubscribers($event)">
+                        <mat-option value="">All</mat-option>
+                        <mat-option value="10000">&gt; 10K</mat-option>
+                        <mat-option value="50000">&gt; 50K</mat-option>
+                        <mat-option value="100000">&gt; 100K</mat-option>
+                        <mat-option value="500000">&gt; 500K</mat-option>
+                        <mat-option value="1000000">&gt; 1M</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="fuse-mat-no-subscript w-full sm:w-50 sm:ml-4">
+                    <mat-label>Avg. Views</mat-label>
+                    <mat-select value="" (selectionChange)="filterByAverageViews($event)">
+                        <mat-option value="">All</mat-option>
+                        <mat-option value="1000">&gt; 1K</mat-option>
+                        <mat-option value="5000">&gt; 5K</mat-option>
+                        <mat-option value="10000">&gt; 10K</mat-option>
+                        <mat-option value="50000">&gt; 50K</mat-option>
+                        <mat-option value="100000">&gt; 100K</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="fuse-mat-no-subscript w-full sm:w-50 sm:ml-4">
+                    <mat-label>Eng. Rate</mat-label>
+                    <mat-select value="" (selectionChange)="filterByEngagementRate($event)">
+                        <mat-option value="">All</mat-option>
+                        <mat-option value="5">&lt; 5%</mat-option>
+                        <mat-option value="5-10">5-10%</mat-option>
+                        <mat-option value="10">&gt; 10%</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="fuse-mat-no-subscript w-full sm:w-50 sm:ml-4">
+                    <mat-label>Language</mat-label>
+                    <mat-select value="" (selectionChange)="filterByLanguage($event)">
+                        <mat-option value="">All</mat-option>
+                        <mat-option value="Hindi">Hindi</mat-option>
+                        <mat-option value="English">English</mat-option>
+                        <mat-option value="Odia">Odia</mat-option>
+                        <mat-option value="Malayalam">Malayalam</mat-option>
+                        <mat-option value="Tamil">Tamil</mat-option>
+                        <mat-option value="Bengali">Bengali</mat-option>
+                        <mat-option value="Kannada">Kannada</mat-option>
+                        <mat-option value="Punjabi">Punjabi</mat-option>
+                        <mat-option value="Assamese">Assamese</mat-option>
+                        <mat-option value="Gujarati">Gujarati</mat-option>
+                        <mat-option value="Marathi">Marathi</mat-option>
+                        <mat-option value="Telugu">Telugu</mat-option>
+                        <mat-option value="Nagpuri">Nagpuri</mat-option>
+                        <mat-option value="Chinese">Chinese</mat-option>
+                        <mat-option value="Santali">Santali</mat-option>
+                        <mat-option value="Bihari">Bihari</mat-option>
+                        <mat-option value="Kumaoni">Kumaoni</mat-option>
+                        <mat-option value="Garhwali">Garhwali</mat-option>
+                        <mat-option value="Rajasthani">Rajasthani</mat-option>
+                        <mat-option value="Haryanvi">Haryanvi</mat-option>
+                        <mat-option value="Sanskrit">Sanskrit</mat-option>
+                        <mat-option value="Spanish">Spanish</mat-option>
+                        <mat-option value="Indonesian">Indonesian</mat-option>
+                        <mat-option value="Croatian">Croatian</mat-option>
+                        <mat-option value="Japanese">Japanese</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <!-- <mat-form-field class="fuse-mat-no-subscript w-full sm:w-50 sm:ml-4">
+                    <mat-label>Language</mat-label>
+                    <mat-select value="" (selectionChange)="filterByLanguage($event)">
+                        <mat-option value="">All</mat-option>
+                        <mat-option value="Hindi">Hindi</mat-option>
+                        <mat-option value="English">English</mat-option>
+                        <mat-option value="Odia">Odia</mat-option>
+                        <mat-option value="Malayalam">Malayalam</mat-option>
+                        <mat-option value="Tamil">Tamil</mat-option>
+                        <mat-option value="Bengali">Bengali</mat-option>
+                        <mat-option value="Kannada">Kannada</mat-option>
+                        <mat-option value="Punjabi">Punjabi</mat-option>
+                        <mat-option value="Assamese">Assamese</mat-option>
+                        <mat-option value="Gujarati">Gujarati</mat-option>
+                        <mat-option value="Marathi">Marathi</mat-option>
+                        <mat-option value="Telugu">Telugu</mat-option>
+                        <mat-option value="Nagpuri">Nagpuri</mat-option>
+                        <mat-option value="Chinese">Chinese</mat-option>
+                        <mat-option value="Santali">Santali</mat-option>
+                        <mat-option value="Bihari">Bihari</mat-option>
+                        <mat-option value="Kumaoni">Kumaoni</mat-option>
+                        <mat-option value="Garhwali">Garhwali</mat-option>
+                        <mat-option value="Rajasthani">Rajasthani</mat-option>
+                        <mat-option value="Haryanvi">Haryanvi</mat-option>
+                        <mat-option value="Sanskrit">Sanskrit</mat-option>
+                        <mat-option value="Spanish">Spanish</mat-option>
+                        <mat-option value="Indonesian">Indonesian</mat-option>
+                        <mat-option value="Croatian">Croatian</mat-option>
+                        <mat-option value="Japanese">Japanese</mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+            </div>
+        </div>
+        <div id="insta" class="tabcontent text-center items-center justify-between">
+            <div *ngIf="pagination?.totalCount>1" class="flex flex-col sm:flex-row items-center justify-between text-center w-full max-w-xs sm:max-w-none p-6 pb-0">
+                <mat-form-field class="fuse-mat-no-subscript w-full m-0">
+                    <mat-label>Followers</mat-label>
+                    <mat-select value="" (selectionChange)="filterByFollowers($event)">
+                        <mat-option value="">All</mat-option>
+                        <mat-option value="10000">&gt; 10K</mat-option>
+                        <mat-option value="50000">&gt; 50K</mat-option>
+                        <mat-option value="100000">&gt; 100K</mat-option>
+                        <mat-option value="500000">&gt; 500K</mat-option>
+                        <mat-option value="1000000">&gt; 1M</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="fuse-mat-no-subscript w-full sm:ml-4">
+                    <mat-label>Influencer Score</mat-label>
+                    <mat-select value="" (selectionChange)="filterByInfluencerScore($event)">
+                        <mat-option value="">All</mat-option>
+                        <mat-option value="1000">&gt; 1K</mat-option>
+                        <mat-option value="5000">&gt; 5K</mat-option>
+                        <mat-option value="10000">&gt; 10K</mat-option>
+                        <mat-option value="50000">&gt; 50K</mat-option>
+                        <mat-option value="100000">&gt; 100K</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="fuse-mat-no-subscript w-full sm:ml-4">
+                    <mat-label>Price</mat-label>
+                    <mat-select value="" (selectionChange)="filterByPrice($event)">
+                        <mat-option value="">All</mat-option>
+                        <mat-option value="5">&lt; 5%</mat-option>
+                        <mat-option value="5-10">5-10%</mat-option>
+                        <mat-option value="10">&gt; 10%</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div *ngIf="pagination?.totalCount>1" class="flex flex-col sm:flex-row items-center justify-between w-full max-w-xs sm:max-w-none p-6 pb-0">
+            <div class="">
+                <mat-checkbox [color]="'primary'" (change)="acceptfreePrmotion($event)">
+                Accept free promotions
+                </mat-checkbox>
+            </div>
+            <div class="">
+                <mat-checkbox [color]="'primary'" (change)="premiumInfluenceronly($event)">
+                    Premium Influencers only
+                </mat-checkbox>
+            </div>
+            <div class="">
+                <mat-checkbox [color]="'primary'" (change)="mustHavepromoprice($event)">
+                Must have promo price
+                </mat-checkbox>
+            </div>
+            <div class="">
+                <mat-checkbox [color]="'primary'" (change)="exludelowQuality($event)">
+                Exclude low-quality influencers
+                </mat-checkbox>
+            </div>
+        </div> 
+
+        <!-- Header -->
+
+
+        <div class="flex flex-col flex-auto p-6 tabcontent-active" #topdiv id="topdiv" id="youtube" style="display: block;" >
+            <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 " *ngIf="filter==='1'">
+                <ng-container *ngIf="pagination?.totalCount ; else noChannels"> Showing
+                    {{ pagination?.totalCount | i18nPlural: {
+                    '=0' : 'No Result Found',
+                    '=1' : '1 Result Found',
+                    'other': pagination?.totalCount + ' Results For'
+                    } }} <span style="color: rgb(44, 51, 171);"> '{{searchString}}'</span>
+                </ng-container>
+                <div  class="mt-2" style="text-align: right;" *ngIf="filter==='1'">
+                    <button *ngIf="pagination?.totalCount>1" class="btn btn-primary" style="margin-top: -92px;" (click)="outReach_results(filter)">Reveal all</button>
+    
+                </div>
+            </h2>
+            <!-- <button class="btn btn-primary" *ngIf="filter==='1'" (click)="outReach_results(filter)">Profile results</button> -->
+            
+            <div class="mt-4 md:mt-6 mb-15" *ngIf="filter==='1'">
+                <div class="grid grid-cols-1 w-full min-w-0">
+                    <div *ngFor="let channel of channels; ">
+                        <influencer-channel [channel]="channel" [filter]="filter"></influencer-channel>
+                    </div>
+                </div>
+                <div class="loadmore" style="
+                position: relative;">
+                    <!-- <button class="btn btn-warning" (click)="loadmoreRecommendedChannels();">
+                       Load More</button> -->
+                   
+                       <!-- onClick="window.scrollTo(0, 0)" -->
+                </div>
+            </div>
+       
+
+        
+            <mat-paginator *ngIf="pagination?.totalCount"  (page)="onChangePage($event)"
+                class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                [ngClass]="{'pointer-events-none': isLoading}" [length]="pagination.totalCount" [pageIndex]="pageIndex"
+                [pageSize]="pageSize" [showFirstLastButtons]="false" (click)="scroll(topdiv)"></mat-paginator>
+        </div>
+
+<!-- instaView -->
+
+        <div class="flex flex-col flex-auto p-6 tabcontent" #topdiv id="topdiv" id="insta">
+            <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 " *ngIf="filter==='2'">
+                <ng-container *ngIf="pagination?.totalCount else noChannels"> Showing
+                    {{ pagination?.totalCount | i18nPlural: {
+                    '=0' : 'No Result Found',
+                    '=1' : '1 Result Found',
+                    'other': pagination?.totalCount + ' Results For '
+                    } }} <span style="color: rgb(44, 51, 171);"> '{{searchString}}'</span>
+                </ng-container>
+            </h2>
+            <div class="mt-2" style="text-align: right;" *ngIf="filter==='2'">
+                <button *ngIf="pagination?.totalCount>1" class="btn btn-primary " style="margin-top: -92px;" (click)="outReach_results(filter)">Reveal all</button>
+
+            </div>
+            <!-- <button class="btn btn-primary" *ngIf="filter==='2'" (click)="outReach_results(filter)">Profile results</button> -->
+            
+            <div class="mt-4 md:mt-6 mb-15" *ngIf="filter==='2'">
+                <div class="grid grid-cols-1 w-full min-w-0">
+                    <div *ngFor="let channel of instaChannel;  ">
+                    <insta-channel-list [channel]="channel" [filter]="filter"></insta-channel-list>
+                    </div>
+                </div>
+                <div class="loadmore" style="
+                position: relative;">
+                    
+                </div>
+            </div>
+            <mat-paginator *ngIf="pagination?.totalCount"  (page)="onChangePage($event)"
+                class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                [ngClass]="{'pointer-events-none': isLoading}" [length]="pagination.totalCount" [pageIndex]="pageIndex"
+                [pageSize]="pageSize" [showFirstLastButtons]="false" (click)="scroll(topdiv)"></mat-paginator>
+        </div>
+
+        <!-- No courses -->
+       
+    </ng-container>
+    <ng-template #noChannels>
+        <div *ngIf="filter==='1'" class="flex flex-auto flex-col mt-10 items-center justify-center bg-gray-100 dark:bg-transparent">
+            <!-- <mat-icon class="icon-size-20" [svgIcon]="'iconsmind:file_search'"></mat-icon> -->
+            <!-- <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">No results found!</div> -->
+            <span>No youtube result found for '{{searchString}}'</span>
+            <img src="assets/images/loader/WhatsApp_Image.jpeg" style="width: 75%;height: 20%;">
+
+        </div>
+        <div *ngIf="filter==='2'" class="flex flex-auto flex-col mt-10 items-center justify-center bg-gray-100 dark:bg-transparent">
+            <!-- <mat-icon class="icon-size-20" [svgIcon]="'iconsmind:file_search'"></mat-icon> -->
+            <!-- <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">No results found!</div> -->
+            <span>No instagram result found for '{{searchString}}'</span>
+            <img src="assets/images/loader/WhatsApp_Image.jpeg" style="width: 75%;height: 20%;">
+
+        </div>
+    </ng-template>
+    <!-- Loading -->
+    <!-- <ng-container *ngIf="loading">
+        <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
+            <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">loading...</div>
+        </div>
+    </ng-container> -->
+</div>

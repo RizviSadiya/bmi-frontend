@@ -1,0 +1,26 @@
+<div class="flex flex-col flex-auto min-w-60 sm:min-w-100 md:w-160 md:min-w-160">
+    <form [formGroup]="disputeForm">
+        <div class="m-4">
+            <div>
+                <div class="text-center mb-4 py-0.5 px-3 rounded-full text-2xl font-medium text-black-600">
+                    Raise a Dispute
+                </div>
+                <mat-form-field style="width: 100%">
+                    <mat-label>Please raise your dispute with the order</mat-label>
+                    <input matInput [placeholder]="'Enter the dispute reason'" [formControlName]="'reason'">
+                </mat-form-field>
+            </div>
+        
+        <div class="flex items-center justify-end mt-4">
+            <!-- Close -->
+            <button mat-flat-button matDialogClose class="mr-2">
+                Cancel
+            </button>
+            <!-- Save -->
+            <button mat-flat-button [color]="'primary'" (click)="raiseDispute();">
+                Save
+            </button>
+        </div>
+    </div>
+    </form>
+</div>

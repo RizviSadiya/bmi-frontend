@@ -1,0 +1,1771 @@
+<style>
+    .test div {
+        float: left !important;
+    }
+</style>
+
+<div class="flex flex-col w-full bg-card">
+    <ng-container *ngIf="!reviewMode && !previewClicked">
+        <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
+            <div class="w-full">
+                <div class="mt-0 p-4">
+                    <div *ngIf="!editMode" class="text-3xl font-bold">
+                        {{ "Post a New Campaign" }}
+                    </div>
+                    <div *ngIf="editMode" class="text-3xl font-bold">
+                        {{ "Edit Campaign" }}
+                    </div>
+                </div>
+
+                <form class="p-4 bg-card shadow rounded overflow-hidden campaign_tabs" [formGroup]="campaignForm">
+                    <!-- [linear]="true" -->
+                    <mat-stepper [orientation]="(stepperOrientation | async)!" #campaignStepper>
+                        <mat-step [stepControl]="isCampaignChoiceSelected" #campaignStepperChoice
+                            *ngIf="!editMode && !backFromPreviewScreen">
+                            <ng-template matStepLabel>Campaign Setup</ng-template>
+                            <div class="flex flex-col">
+                                <mat-label
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                    What would you like to do?<span class="text-danger">*</span>
+                                </mat-label>
+                                <div class="flex flex-col sm:flex-row mt-5 ps-smaller">
+                                    <div class="flex flex-row sm:flex-col w-full radio-input">
+                                        <input type="radio" id="control_01" name="select_campaign" value="1" checked
+                                            (click)="campaignChoiceSelected(1)" />
+                                        <label for="control_01" class="w-full">
+                                            <h4 class="font-bold">
+                                                Create a new campaign
+                                            </h4>
+                                        </label>
+                                    </div>
+                                    <div class="flex flex-row sm:flex-col w-full radio-input">
+                                        <!-- <span style="
+                                                color: red;
+                                                text-align: right;
+                                            ">{{
+                                            draftedCampaignList.length
+                                            }}</span> -->
+                                        <input type="radio" id="control_02" name="select_campaign" value="2"
+                                            (click)="campaignChoiceSelected(2)" [disabled]="
+                                                draftedCampaignList.length === 0
+                                            " />
+
+                                        <label for="control_02" class="w-full">
+                                            <h4 class="font-bold">
+                                                Edit an existing draft (<span style="
+                                                color: red;
+                                                text-align: right;
+                                            ">{{
+                                                    draftedCampaignList.length
+                                                    }}</span>)
+                                            </h4>
+                                        </label>
+                                    </div>
+                                    <div class="flex flex-row sm:flex-col w-full radio-input">
+                                        <input type="radio" id="control_03" name="select_campaign" value="3" [ngClass]="{
+                                                disabled:
+                                                    previousCampaignsList?.length ===
+                                                    0
+                                            }" (click)="campaignChoiceSelected(3)" [disabled]="
+                                                previousCampaignsList?.length ===
+                                                0
+                                            " />
+                                        <label for="control_03" class="w-full">
+                                            <h4 class="font-bold">
+                                                Reuse a previous campaign
+                                            </h4>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div *ngIf="selectedChoice === 2"
+                                    class="flex flex-row mt-6 flex-0 items-center justify-between">
+                                    <div class="flex-1 min-w-0 text-center">
+                                        <form [formGroup]="draftCampaignForm">
+                                            <mat-form-field class="w-full sm:w-96" [floatLabel]="'always'">
+                                                <mat-label>Edit a draft campaign:
+                                                    <span class="text-danger">*</span>
+                                                </mat-label>
+                                                <mat-select placeholder="Draft Campaign" [formControlName]="
+                                                        'campaign_id'
+                                                    " (selectionChange)="
+                                                        campaignSelected(
+                                                            $event.value,
+                                                            'draft'
+                                                        )
+                                                    ">
+                                                    <mat-option value="">- Please Select
+                                                        -</mat-option>
+                                                    <mat-option *ngFor="
+                                                            let campaign of draftedCampaignList
+                                                        " [value]="campaign.id">{{
+                                                        campaign.camp_title
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="
+                                                        'heroicons_solid:document-duplicate'
+                                                    ">
+                                                </mat-icon>
+                                            </mat-form-field>
+                                            <mat-error *ngIf="
+                                                    nextClicked &&
+                                                    draftCampaignForm
+                                                        .get('campaign_id')
+                                                        .hasError('required')
+                                                ">
+                                                Please select a draft campaign
+                                                to edit.
+                                            </mat-error>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div *ngIf="selectedChoice === 3"
+                                    class="flex flex-row mt-6 flex-0 items-center justify-between">
+                                    <div class="flex-1 min-w-0 text-center">
+                                        <form [formGroup]="previousCampaignForm">
+                                            <mat-form-field class="w-full sm:w-96" [floatLabel]="'always'">
+                                                <mat-label>Reuse a previous campaign:
+                                                    <span class="text-danger">*</span>
+                                                </mat-label>
+                                                <mat-select placeholder="Previous Campaign" [formControlName]="
+                                                        'campaign_id'
+                                                    " (selectionChange)="
+                                                        campaignSelected(
+                                                            $event.value,
+                                                            'reuse'
+                                                        )
+                                                    ">
+                                                    <mat-option value="">- Please Select
+                                                        -</mat-option>
+                                                    <mat-option *ngFor="
+                                                            let campaign of previousCampaignsList
+                                                        " [value]="campaign.id">{{
+                                                        campaign.camp_title
+                                                        }}</mat-option>
+                                                </mat-select>
+                                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="
+                                                        'heroicons_solid:document-duplicate'
+                                                    ">
+                                                </mat-icon>
+                                            </mat-form-field>
+                                            <mat-error *ngIf="
+                                                    nextClicked &&
+                                                    previousCampaignForm
+                                                        .get('campaign_id')
+                                                        .hasError('required')
+                                                ">
+                                                Please select a previous
+                                                campaign to reuse.
+                                            </mat-error>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-2 mb-4"></mat-divider>
+
+                            <div class="flex flex-col">
+                                <mat-label
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                    Select the platform.<span class="text-danger">*</span>
+                                </mat-label>
+                                <div class="flex flex-col sm:flex-row mt-5">
+                                    <div class="flex flex-row sm:flex-col w-full radio-input">
+                                        <input type="radio" id="youtube_platform" name="platform" value="1"
+                                            (click)="SelectPlatform('youtube')" checked="" />
+                                        <label for="youtube_platform" class="w-full">
+                                            <img src="assets/images/brands/youtube-back.png" class="img-circle img-lg m-auto"
+                                                alt="youtube" />
+                                            
+                                        </label>
+                                    </div>
+                                    <div class="flex flex-row sm:flex-col w-full radio-input">
+                                        <input type="radio" id="instagram_platform" name="platform"
+                                            (click)="SelectPlatform('instagram')" value="2" />
+                                        <!-- disabled="" -->
+                                        <label for="instagram_platform" class="w-full">
+                                            <img src="assets/images/brands/instacircle-back.png"
+                                                class="img-circle img-lg m-auto" alt="instagram" />
+                                            <!-- <h4 class="font-bold text-secondary mt-1">
+                                                (Coming soon)
+                                            </h4> -->
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-end">
+                                <button class="px-8" mat-flat-button [color]="'primary'"
+                                    [disabled]="!isCampaignChoiceSelected" type="button"
+                                    (click)="firstNextClicked(campaignStepper)">
+                                    Next
+                                </button>
+                            </div>
+                        </mat-step>
+                        <mat-step [formGroupName]="'step1'" [stepControl]="campaignForm.get('step1')"
+                            #campaignStepperStep1>
+                            <ng-template matStepLabel>About Campaign</ng-template>
+
+                            <div class="row">
+                                <!-- (mouseenter)="changeHelpText('brandName')"
+                                (mouseleave)="removeHelpText()" -->
+                                <div class="col-lg-6 col-12">
+                                    <mat-form-field style="width: 100%">
+                                        <mat-label
+                                            class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                            Brand Name<span class="text-danger">*</span>
+                                        </mat-label>
+                                        <input matInput placeholder="Sony" required="false" autocomplete="none"
+                                            [formControlName]="'brand_name'" matTooltip=""
+                                            matTooltipClass="custom-tooltip" [errorStateMatcher]="
+                                                errorStateMatcher
+                                            " />
+                                        <!-- <input formControlName="'brand_name'" matInput> -->
+                                        <!-- <mat-error *ngIf="
+                                                campaignForm
+                                                    .get('step1')
+                                                    .get('brand_name')
+                                                    .hasError('required')
+                                            ">
+                                            Enter Brand Name
+                                        </mat-error> -->
+                                        <!-- <mat-error
+                                            *ngIf="campaignForm.get('step1').get('brand_name').hasError('pattern')">
+                                            Invalid Brand Name
+                                        </mat-error> -->
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-6 col-12" style="position: relative">
+                                    <div style="position: absolute">
+                                        <div *ngIf="helpText"
+                                            class="flex flex-auto flex-col rounded-lg mt-6 p-2 items-center justify-center bg-gray-100">
+                                            <mat-icon class="icon-size-10 text-yellow-400" [svgIcon]="
+                                                    'heroicons_solid:light-bulb'
+                                                "></mat-icon>
+                                            <div class="mt-2 p-4 text-lg font-semibold tracking-tight text-secondary ">
+                                                <span [innerHTML]="helpText"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <mat-divider class="mt-2 mb-4"></mat-divider>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-12">
+                                    <mat-form-field style="width: 100%">
+                                        <mat-label
+                                            class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                            Brand/Product Website URL<span class="text-danger">*</span>
+                                        </mat-label>
+                                        <input matInput placeholder="Ex - https://sony.com or https://www.sony.com" required="false"
+                                            
+                                            autocomplete="none" [formControlName]="'brand_url'" matTooltip=""
+                                            matTooltipClass="custom-tooltip" [errorStateMatcher]="
+                                                errorStateMatcher
+                                            " />
+                                        <!-- <mat-error *ngIf="
+                                                campaignForm
+                                                    .get('step1')
+                                                    .get('brand_url')
+                                                    .hasError('required')
+                                            ">
+                                            Enter Brand URL
+                                        </mat-error> -->
+                                        <!-- <mat-error
+                                            *ngIf="campaignForm.get('step1').get('brand_url').hasError('pattern')">
+                                            Invalid Brand URL. Valid URLs are - https://abc.com or https://www.abc.com
+                                        </mat-error> -->
+                                        <mat-error
+                                            *ngIf="campaignForm.get('step1').get('brand_url').hasError('pattern')">
+                                            Invalid Brand URL.
+                                        </mat-error>
+                                        <!-- <div *ngIf="!campaignForm.get('step1').get('brand_url').forbiddenName">
+                                            test
+                                        </div> -->
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-6 col-12" style="position: relative">
+                                    <div style="position: absolute">
+                                        <div *ngIf="brandUrlText"
+                                            class="flex flex-auto flex-col rounded-lg mt-6 p-2 items-center justify-center bg-gray-100">
+                                            <mat-icon class="icon-size-10 text-yellow-400" [svgIcon]="
+                                                    'heroicons_solid:light-bulb'
+                                                "></mat-icon>
+                                            <div class="mt-2 p-4 text-lg font-semibold tracking-tight text-secondary">
+                                                <span [innerHTML]="brandUrlText"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <mat-divider *ngIf="!editMode" class="mt-2 mb-4"></mat-divider>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-12">
+                                    <!-- <mat-form-field style="width: 100%"> -->
+                                    <div class="col-lg-6 col-12 mt-4">
+                                        <mat-label
+                                            class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                            Brand Logo<span class="text-danger">*</span>
+                                        </mat-label>
+                                        <!-- <input type="file" class="form-control" formControlName="brand_logo"
+                                            placeholder="Upload Logo"
+                                            (change)="onFileSelected($event.target.files)"> -->
+                                        <span
+                                            class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide bg-orange-600 text-on-warn-600 cursor-pointer"
+                                            (click)="uploadImage()" matTooltip="Select Logo">
+                                            <span class="leading-relaxed whitespace-nowrap">Select Logo</span>
+                                        </span>
+                                    </div>
+                                    <div class="col-lg-6 col-12">
+                                        <span *ngIf="croppedImage">
+                                            <img [src]="croppedImage"
+                                                class="items-center justify-center w-full h-auto xs:w-26 xs:h-26 md:w-26 md:h-26 border-1 rounded-full overflow-hidden m-auto" />
+                                        </span>
+                                    </div>
+
+                                    <mat-error *ngIf="
+                                            campaignForm
+                                                .get('step1')
+                                                .get('brand_logo')
+                                                .hasError('required')
+                                        ">
+
+                                    </mat-error>
+                                    <!-- </mat-form-field> -->
+                                </div>
+                                <div class="col-lg-6 col-12" style="position: relative">
+                                    <!-- <div style="position: absolute;">
+                                        <div *ngIf="helpText1"
+                                        class="flex flex-auto flex-col rounded-lg mt-6 p-2 items-center justify-center bg-gray-100">
+                                        <mat-icon class="icon-size-10 text-yellow-400"
+                                            [svgIcon]="'heroicons_solid:light-bulb'"></mat-icon>
+                                        <div
+                                            class="mt-2 p-4 text-lg font-semibold tracking-tight text-secondary text-justify">
+                                            <span [innerHTML]="helpText1"></span>
+                                        </div>
+                                    </div>
+                                    </div> -->
+                                </div>
+                                <mat-divider class="mt-2 mb-4"></mat-divider>
+                            </div><br>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-12">
+                                    <mat-form-field style="width: 100%">
+                                        <mat-label
+                                            class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                            Title of the campaign<span class="text-danger">*</span>
+                                        </mat-label>
+                                        <input matInput required="false" placeholder="Inviting Gaming Creators for PS5 promotion, Attention Gaming Creators" autocomplete="none" [formControlName]="'camp_title'" matTooltip=""
+                                            matTooltipClass="custom-tooltip" [errorStateMatcher]="
+                                                errorStateMatcher
+                                            " />
+                                        <mat-error *ngIf="
+                                                campaignForm
+                                                    .get('step1')
+                                                    .get('camp_title')
+                                                    .hasError('required')
+                                            ">
+                                            Enter Campaign title
+                                        </mat-error>
+                                        <!-- <mat-error *ngIf="
+                                                campaignForm
+                                                    .get('step1')
+                                                    .get('camp_title')
+                                                    .hasError('pattern')
+                                            ">
+                                            Invalid campaign title
+                                        </mat-error> -->
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-6 col-12" style="position: relative">
+                                    <div style="position: absolute; top: -105px">
+                                        <div *ngIf="titleText"
+                                            class="flex flex-auto flex-col rounded-lg mt-6 p-2 items-center justify-center bg-gray-100">
+                                            <mat-icon class="icon-size-10 text-yellow-400" [svgIcon]="
+                                                    'heroicons_solid:light-bulb'
+                                                "></mat-icon>
+                                            <div class="mt-2 p-4 text-lg font-semibold tracking-tight text-secondary">
+                                                <span [innerHTML]="titleText"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <mat-divider class="mt-2 mb-4"></mat-divider>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-12">
+                                    <mat-form-field style="width: 100%">
+                                        <mat-label
+                                            class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                            Campaign Description<span class="text-danger">*</span>
+                                        </mat-label>
+                                        <textarea matInput required="false"
+                                            placeholder="Join Sony Interactive Entertainment in showcasing the future of gaming with the PlayStation 5. Let's redefine gaming together! #PlayHasNoLimits #PS5.  "
+                                            formControlName="camp_desc" matTooltip="" [rows]="6" [errorStateMatcher]="
+                                                errorStateMatcher
+                                            ">
+                                        </textarea>
+                                        <mat-error *ngIf="
+                                                campaignForm
+                                                    .get('step1')
+                                                    .get('camp_desc')
+                                                    .hasError('required')
+                                            ">
+                                            Enter Campaign description
+                                        </mat-error>
+                                        <!-- <mat-error *ngIf="
+                                                campaignForm
+                                                    .get('step1')
+                                                    .get('camp_desc')
+                                                    .hasError('pattern')
+                                            ">
+                                            Invalid campaign description
+                                        </mat-error> -->
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-6 col-12" style="position: relative">
+                                    <div style="position: absolute">
+                                        <div *ngIf="descriptionText"
+                                            class="flex flex-auto flex-col rounded-lg mt-6 p-2 items-center justify-center bg-gray-100">
+                                            <mat-icon class="icon-size-10 text-yellow-400" [svgIcon]="
+                                                    'heroicons_solid:light-bulb'
+                                                "></mat-icon>
+                                            <div class="mt-2 p-4 text-lg font-semibold tracking-tight text-secondary">
+                                                <span [innerHTML]="
+                                                        descriptionText
+                                                    "></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end">
+
+                                <button *ngIf="!editMode" class="px-8 mr-2" mat-flat-button [color]="'accent'"
+                                    type="button" matStepperPrevious>
+                                    Back
+                                </button>
+
+
+
+                                <!-- <app-preview-campaign [editMode]="editMode"> -->
+                                <button *ngIf="editMode" class="px-8 mr-2" (click)="cancel()" mat-flat-button
+                                    [color]="'accent'" type="button">
+                                    Cancel
+                                </button>
+                                <!-- </app-preview-campaign> -->
+                                <button *ngIf="editCampaignSelected " class="px-8" mat-flat-button [color]="'primary'"
+                                    [disabled]="
+                                        campaignStepperStep1.stepControl.invalid
+                                    " type="button" (click)="nextStep(campaignStepper)">
+                                    Next
+                                </button>
+                                <button *ngIf="!editCampaignSelected" class="px-8" mat-flat-button [color]="'primary'"
+                                    [disabled]="
+                                        campaignStepperStep1.stepControl.invalid
+                                    " type="button" matStepperNext>
+                                    Next
+                                </button>
+                            </div>
+                        </mat-step>
+                        <mat-step [formGroupName]="'step2'" [stepControl]="campaignForm.get('step2')"
+                            #campaignStepperStep2>
+                            <ng-template matStepLabel>Define Preferences</ng-template>
+                            <div class="flex flex-row flex-0 items-center justify-between mt-6">
+                                <div class="flex-1 min-w-0" *ngIf="userPlan === 1">
+                                    <mat-label
+                                        class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0"
+                                        style="color: red">
+                                        <p style="background-color: rgb(235, 236, 240);" class=" w-full textcolorred mt-4 md:mt-6" *ngIf="userPlan===1">  <strong>  Free plan restricts 'public visibility'
+                                        of your campaign. To receive proposals,
+                                        you will have to invite influencers to
+                                        apply to your campaign. </strong> </p>
+                                        <span class="text-danger"></span>
+                                    </mat-label>
+                                </div> 
+                            </div>
+                            <div class="flex flex-row flex-0 items-center justify-between"
+                                *ngIf="plateform !='instagram' && selectedCampaign?.plateform_type !='2'">
+                                <div class="flex-1 min-w-0">
+                                    <mat-label
+                                        class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                        <strong>How would you like to promote your
+                                            product/service?</strong><span class="text-danger">*</span>
+                                    </mat-label>
+                                    <mat-radio-group class="flex flex-col" [color]="'primary'"
+                                        [formControlName]="'promot_product'" required (change)="
+                                            promotionTypeSelection($event)
+                                        ">
+                                        <mat-radio-button class="mb-2" [value]="'In-Video brand integration'">
+                                            <span style="font-weight: 400;">In-Video brand integration</span>
+                                        </mat-radio-button>
+                                        <mat-radio-button class="mb-2" [value]="'Dedicated Video Promotion'">
+                                            <span style="font-weight: 400;">Dedicated Video Promotion</span>
+                                        </mat-radio-button>
+                                        <mat-radio-button class="mb-2" [value]="'Short Video Promotion'">
+                                            <span style="font-weight: 400;">YouTube Short Promotion</span>
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-row flex-0 items-center justify-between mt-6"
+                                *ngIf="plateform !='youtube' || selectedCampaign?.plateform_type ===2">
+                                <div class="flex-1 min-w-0">
+                                    <mat-label
+                                        class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                        <strong>How would you like to promote your
+                                            product/service?</strong><span class="text-danger">*</span>
+                                    </mat-label>
+                                    <mat-radio-group class="flex flex-col" [color]="'primary'"
+                                        [formControlName]="'promot_product'" required (change)="
+                                            promotionTypeSelection($event)
+                                        ">
+                                        <mat-radio-button class="mb-2" [value]="'Reels'">
+                                            <span style="font-weight: 400;">Reel</span>
+                                        </mat-radio-button>
+                                        <mat-radio-button class="mb-2" [value]="'Posts'">
+                                            <span style="font-weight: 400;">Post</span>
+                                        </mat-radio-button>
+                                        <mat-radio-button class="mb-2" [value]="'Stories'">
+                                            <span style="font-weight: 400;">Story</span>
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-2 mb-4"
+                                *ngIf="plateform !='instagram' && selectedCampaign?.plateform_type !='2'"></mat-divider>
+
+                            <div class="flex flex-row flex-0 items-center justify-between mt-6"
+                                *ngIf="plateform !='instagram' &&  selectedCampaign?.plateform_type !='2'">
+                                <div class="flex-1 min-w-0">
+                                    <mat-label
+                                        class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                        <strong>What should be the duration of the
+                                            integration?</strong><span class="text-danger">*</span>
+                                    </mat-label>
+                                    <mat-radio-group class="flex flex-col" [color]="'primary'"
+                                        [formControlName]="'duration'"
+                                        [disabled]="selectedCampaign?.promot_product !='In-Video brand integration' && campaignForm.get('step2').get('promot_product').value !='In-Video brand integration' && campaignForm.get('step2').get('promot_product').value !=null"
+                                        (change)="durationSelection()">
+
+                                        <mat-radio-button class="mb-2" [value]="'30-60 second'">
+                                            30-60 sec
+                                        </mat-radio-button>
+                                        <mat-radio-button class="mb-2" [value]="'60-90 second'" style="color:#000">
+                                            <span style="font-weight: 400;">60-90 sec</span>
+                                        </mat-radio-button>
+                                        <mat-radio-button class="mb-2" [value]="'90-120 second'" style="color:#000">
+                                            <span style="font-weight: 400;">90-120 sec</span>
+                                        </mat-radio-button>
+                                        <mat-radio-button [value]="'Others'" style="color:#000">
+                                            <span style="font-weight: 400;">Other</span>
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                    <mat-form-field class="flex-auto gt-xs:pr-3 pl-5" *ngIf="
+                                            this.campaignForm.value.step2
+                                                .duration === 'Others'
+                                        ">
+                                        <input matInput [placeholder]="
+                                                'Enter your duration'
+                                            " [formControlName]="'new_duration'" />
+                                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="
+                                                'heroicons_solid:calculator'
+                                            ">
+                                        </mat-icon>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-2 mb-4"
+                                *ngIf="plateform !='instagram' && selectedCampaign?.plateform_type !='2'"></mat-divider>
+
+                            <div class="flex flex-row flex-0 items-center justify-between mt-6"
+                                *ngIf="plateform !='instagram' && selectedCampaign?.plateform_type !='2'">
+                                <div class="flex-1 min-w-0">
+                                    <mat-label
+                                        class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                        <strong>When would you like the promotion to
+                                            start?</strong><span class="text-danger">*</span>
+                                    </mat-label>
+                                    <mat-radio-group class="flex flex-col" [color]="'primary'"
+                                        [formControlName]="'promotion_start'"
+                                        [disabled]="selectedCampaign?.promotion_start==='undefined' || selectedCampaign?.promot_product !='In-Video brand integration' && campaignForm.get('step2').get('promot_product').value !='In-Video brand integration' && campaignForm.get('step2').get('promot_product').value !=null">
+                                        <mat-radio-button [value]="
+                                        'Somewhere in the second half'
+                                    ">
+                                            Somewhere in the second half
+                                            (ensures better video performance)
+
+                                            <!-- preferred by the influencersas it -->
+                                        </mat-radio-button>
+                                        <mat-radio-button class="mb-2" [value]="
+                                'Somewhere in the first half'
+                            " style="color:#000">
+                                            <span style="font-weight: 400;">Somewhere in the first half</span>
+                                            <!-- (preferred by brands) -->
+                                        </mat-radio-button>
+                                        <mat-radio-button class="mb-2" [value]="
+                                                'At the start of the video'
+                                            " style="color:#000">
+                                            <span style="font-weight: 400;">At the start of the video</span>
+                                        </mat-radio-button>
+
+
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-2 mb-4"></mat-divider>
+
+                            <div class="items-center justify-between mt-6">
+                                <div class="flex-1 min-w-0 space-y-4">
+                                    <mat-label
+                                        class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                        <strong>Do you have any reference video?
+                                            (optional)</strong>
+                                    </mat-label>
+                                    <ng-container *ngFor="
+                                            let reference of campaignForm
+                                                .get('step2')
+                                                .get('referenceVideo')[
+                                                'controls'
+                                            ];
+                                            let i = index;
+                                            let first = first;
+                                            let last = last;
+                                            trackBy: trackByFn
+                                        ">
+                                        <div class="flex">
+                                            <mat-form-field class="fuse-mat-no-subscript flex-auto">
+                                                <mat-icon matPrefix class="hidden sm:flex icon-size-5" [svgIcon]="
+                                                        'heroicons_solid:video-camera'
+                                                    "></mat-icon>
+                                                <input matInput [formControl]="
+                                                        reference.get('video')
+                                                    " [placeholder]="
+                                                        'https://www.youtube.com/watch?v=UUIdV4E6DTg '  + 
+                                                        (i + 1)
+                                                    " [spellcheck]="false" />
+                                            </mat-form-field>
+                                            <ng-container *ngIf="!(first && last)">
+                                                <div class="flex items-center w-10 pl-2">
+                                                    <button class="w-8 h-8 min-h-8" mat-icon-button (click)="
+                                                            removeReferenceVideoField(
+                                                                i
+                                                            )
+                                                        " matTooltip="Remove">
+                                                        <mat-icon class="icon-size-5" [svgIcon]="
+                                                                'heroicons_solid:trash'
+                                                            "></mat-icon>
+                                                    </button>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <mat-error *ngIf="
+                                                reference.get('video').errors
+                                                    ?.duplicated
+                                            ">
+                                            Duplicate Entry
+                                        </mat-error>
+                                        <mat-error *ngIf="
+                                                reference.get('video').errors
+                                                    ?.pattern
+                                            ">
+                                            Invalid URL
+                                        </mat-error>
+                                    </ng-container>
+                                </div>
+                                <div class="group inline-flex items-center mt-2 -ml-4 py-2 px-4 rounded cursor-pointer"
+                                    (click)="addReferenceVideoField()">
+                                    <mat-icon class="icon-size-5" [svgIcon]="
+                                            'heroicons_solid:plus-circle'
+                                        "></mat-icon>
+                                    <span class="ml-2 font-medium text-secondary group-hover:underline"
+                                        style="font-weight: 400;">Add a reference
+                                        video</span>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-2 mb-4"></mat-divider>
+
+                            <div class="flex flex-row flex-0 items-center justify-between mt-6">
+                                <div class="flex-1 min-w-0">
+                                    <mat-form-field style="width: 100%">
+                                        <mat-label
+                                            class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                            <strong>Define the maximum budget you can spend on single video
+                                                promotion</strong>
+                                        </mat-label>
+                                        <input type="number" required="false" (keyup)="onKeyUpEventbudget($event)"
+                                            matInput [placeholder]="'10000'" minlength="6" [formControlName]="'budget'"
+                                            [errorStateMatcher]="
+                                                errorStateMatcher
+                                            " />
+                                        <mat-select [value]="'INR'" matPrefix [formControlName]="'currency'">
+                                            <mat-option [disabled]="currency.currency" [value]="'INR'">INR</mat-option>
+                                            <mat-option [disabled]="currency.currency" [value]="'USD'">USD</mat-option>
+                                        </mat-select>
+                                        <!-- <mat-error *ngIf="
+                                                campaignForm
+                                                    .get('step2')
+                                                    .get('budget')
+                                                    .hasError(' minlength')
+                                            ">
+                                            campaign budget must be min. 5000inr
+                                        </mat-error> -->
+                                        <mat-error *ngIf="
+                                               
+                                                campaignForm
+                                                    .get('step2')
+                                                    .get('budget')
+                                                    .hasError('required') ||  campaignForm
+                                                    .get('step2')
+                                                    .get('currency').value==='INR'">
+                                            Please enter campaign budget
+                                        </mat-error>
+
+                                        <!-- <span *ngIf="  campaignForm
+                                        .get('step2')
+                                        .get('currency').value==='INR'">
+                                            <mat-error *ngIf="
+                                            campaignForm
+                                                .get('step2')
+                                                .get('budget')
+                                                .hasError('pattern')
+                                        ">
+                                        Invalid Amount ,campaign budget must
+                                        be min. 5000inr
+                                    </mat-error>
+                                        </span> -->
+                                        <!-- <span *ngIf="  campaignForm
+                                        .get('step2')
+                                        .get('currency').value==='USD'">
+                                            <mat-error *ngIf="
+                                            campaignForm
+                                                .get('step2')
+                                                .get('budget')
+                                                .hasError('pattern')
+                                        ">
+                                        Invalid Amount ,campaign budget must
+                                        be min. 62 USD
+                                    </mat-error>
+                                        </span> -->
+
+                                    </mat-form-field>
+                                    <div *ngIf="
+                                    campaignForm
+                                        .get('step2')
+                                        .get('currency').value==='INR'">
+                                        <mat-error *ngIf="amount < 5000 ">
+                                            Campaign Budget must be greater than INR 5000
+                                        </mat-error>
+                                    </div>
+                                    <!-- <div *ngIf="
+                                    campaignForm
+                                        .get('step2')
+                                        .get('currency').value==='INR'">
+                                        <mat-error *ngIf="amount < 5000 ">
+                                            Campaign Budget must be greater than INR 5000
+                                </mat-error>
+                                    </div> -->
+                                    <div *ngIf="
+                                    campaignForm
+                                        .get('step2')
+                                        .get('currency').value==='USD'">
+                                        <mat-error *ngIf="amount < 100 ">
+                                            Campaign Budget must be greater than USD 100
+                                        </mat-error>
+                                    </div>
+                                    <!-- <div *ngIf=" campaignForm
+                                    .get('step2')
+                                    .get('budget').value < 100
+                                    ||
+                                    campaignForm
+                                        .get('step2')
+                                        .get('currency').value==='USD'">
+                                        <mat-error *ngIf="amount < 100 ">
+                                            Campaign Budget must be greater than USD 100 
+                                </mat-error>
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-2 mb-4"></mat-divider>
+
+                            <!-- <div class="flex flex-col sm:flex-row flex-0 items-center justify-between mt-6">
+                                <div class="flex-1 min-w-0">
+                                    <mat-form-field style="width: 100%">
+                                        <mat-label
+                                            class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                            Select Channel Category
+                                        </mat-label>
+                                        <mat-select [formControlName]="'category'" [placeholder]="'Select Category'">
+                                            <mat-option value="ENTERTAINMENT">Entertainment</mat-option>
+                                            <mat-option value="FOOD">Food</mat-option>
+                                            <mat-option value="TRAVEL">Travel</mat-option>
+                                            <mat-option value="VLOGGERS">Vloggers</mat-option>
+                                        </mat-select>
+                                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:tag'">
+                                        </mat-icon>
+                                    </mat-form-field>
+                                </div>
+                            </div> -->
+
+                            <!-- <div class="flex flex-wrap items-center mt-6">
+                                <mat-label
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                    Add Channel Category
+                                </mat-label> -->
+                            <!-- Tags when edit campaign is called -->
+                            <!-- <ng-container *ngIf="selectedCampaign?.category?.length">
+                                    <ng-container
+                                        *ngFor="let category of selectedCampaign.category; trackBy: trackByFn">
+                                        <div
+                                            class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                            <span class="text-md font-medium whitespace-nowrap">{{ category }}</span>
+                                        </div>
+                                    </ng-container>
+                                </ng-container> -->
+                            <!-- Tags when add campaign is called -->
+                            <!-- <ng-container *ngIf="selectedTags?.length">
+                                    <ng-container *ngFor="let category of selectedTags; trackBy: trackByFn">
+                                        <div
+                                            class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                            <span class="text-md font-medium whitespace-nowrap">{{ category }}</span>
+                                        </div>
+                                    </ng-container>
+                                </ng-container> -->
+                            <!-- Tags panel and its button -->
+                            <!-- <div class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 cursor-pointer text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                                    (click)="openCategoryPopup()">
+
+                                    <ng-container *ngIf="selectedCampaign?.category?.length">
+                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'">
+                                        </mat-icon>
+                                        <span class="ml-1.5 text-md font-medium whitespace-nowrap">Edit</span>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="selectedTags?.length && !selectedCampaign?.category?.length">
+                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'">
+                                        </mat-icon>
+                                        <span class="ml-1.5 text-md font-medium whitespace-nowrap">Edit</span>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="!selectedTags?.length && !selectedCampaign?.category?.length">
+                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'">
+                                        </mat-icon>
+                                        <span class="ml-1.5 text-md font-medium whitespace-nowrap">Add</span>
+                                    </ng-container>
+                                </div> -->
+                            <!-- </div> -->
+                            <!-- <mat-error *ngIf="!selectedTags?.length && !selectedCampaign?.category?.length">
+                                please select at least one category
+                            </mat-error> -->
+
+
+
+                            <div class="flex flex-col">
+                                <mat-label
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                    <strong>Visibility?</strong><span class="text-danger">*</span>
+                                </mat-label>
+                                <mat-radio-group class="flex flex-row" [color]="'primary'"
+                                    [formControlName]="'visibility'" required>
+                                    <!-- || selectedCampaign?.visibility ===0  planId ===0-->
+                                    <mat-radio-button class="mb-2 mr-4" [value]="'0'"
+                                        [checked]="selectedCampaign?.visibility===0">
+                                        Private
+                                    </mat-radio-button>
+                                    <mat-radio-button [checked]="selectedCampaign?.visibility===1"
+                                        (click)="notification()" class="mb-2" [value]="'1'">
+                                        Public
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                                <!-- <mat-radio-button class="mb-2 mr-4" [value]="'0'" [checked]="planId===0">
+                                        Private
+                                    </mat-radio-button>
+                                    <mat-radio-button [disabled]="userPlan === 1" [checked]="planId===1"  (click)="notification()" class="mb-2"
+                                        [value]="'1'">
+                                        Public
+                                    </mat-radio-button> -->
+                                <!-- <button class="btn btn-warning" *ngIf="userPlan===1" style="margin-left: 10px;width:95px; height:53px;" routerLink="/choose-plan">Upgrade Plan</button> -->
+
+                            </div>
+
+                            <!-- <mat-divider class="mt-2 mb-4"></mat-divider>
+                            
+                            <div class="flex flex-col">
+                                <mat-label
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                    Campaign is for?<span class="text-danger">*</span>
+                                </mat-label>
+                                <mat-radio-group class="flex flex-row" [color]="'primary'" [formControlName]="'invite_only'" required>
+                                    <mat-radio-button class="mb-2 mr-4" [value]="'0'">
+                                        All
+                                    </mat-radio-button>
+                                    <mat-radio-button class="mb-2" [value]="'1'">
+                                        Invited Member Only
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div> -->
+
+                            <div class="flex justify-end mt-6">
+                                <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button"
+                                    matStepperPrevious>
+                                    Back
+                                </button>
+                                <button class="px-8" *ngIf="!editmode" mat-flat-button [color]="'primary'"
+                                    (click)="secondNextButtonClicked()" [disabled]="
+                                        campaignStepperStep2.stepControl.invalid || campaignForm.get('step2').get('currency').value==='USD' && campaignForm.get('step2').get('budget').value < 100
+                                        || campaignForm.get('step2').get('currency').value==='INR' && campaignForm.get('step2').get('budget').value < 5000
+                                        
+                                    " type="button" matStepperNext>
+                                    Next
+                                </button>
+                                <!-- && (campaignForm.get('step2').get('currency').value==='INR' || campaignForm.get('step2').get('budget').value < 5000) -->
+                                <!-- <button *ngIf="editCampaignSelected " class="px-8" mat-flat-button [color]="'primary'"
+                                [disabled]="
+                                    campaignStepperStep1.stepControl.invalid
+                                " type="button" (click)="nextStep(campaignStepper)">
+                                Next
+                            </button> -->
+                                <!-- <button *ngIf="editCampaignSelected" class="px-8" mat-flat-button [color]="'primary'"
+                                [disabled]="
+                                    campaignStepperStep2.stepControl.invalid
+                                " type="button" (click)="nextStep(campaignStepper)">
+                                Next2
+                            </button> -->
+                            </div>
+                        </mat-step>
+                        <mat-step [formGroupName]="'step3'" [stepControl]="campaignForm.get('step3')"
+                            #campaignStepperStep3>
+                            <ng-template matStepLabel>Qualification Criteria</ng-template>
+                            <p style="background-color: rgb(235, 236, 240);" class=" w-full textcolorred mt-4 md:mt-6" *ngIf="userPlan===1"><b>Your listing will be
+                                private so your campaign wouldn't be exposed to any influencer by default. Upgrade to
+                                expand your default exposure.</b></p>
+                            <div class="clearfix"></div>
+                            <div class="test w-50p items-center mt-6 position-relative">
+                                <mat-label *ngIf="
+                                !selectedCampaign?.category
+                                    ?.length && !selectedCampaign?.category[0] =='undefined'"
+                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                    Add Tags
+                                </mat-label>
+                                <div class="classfix" style="width:100%;height:29px;">
+                                    <mat-label *ngIf="
+                                    selectedCampaign?.category
+                                        ?.length"
+                                        class=" font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                        Tags
+                                    </mat-label>
+                                </div><br />
+                                <div class="classfix tags-container">
+                                    <!-- Tags when edit campaign is called -->
+                                    <ng-container *ngIf="
+                                            selectedCampaign?.category
+                                                ?.length
+                                        ">
+                                        <ng-container *ngFor="
+                                                let category of selectedCampaign.category;
+                                                trackBy: trackByFn
+                                            ">
+                                            <div *ngIf="category !='undefined'"
+                                                class="items-center px-4 mr-1.5 mb-1.5 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                                                style="width:auto;float:left">
+                                                <span class="text-md font-medium whitespace-nowrap">{{ category
+                                                    }}</span>
+                                            </div>
+                                        </ng-container>
+                                    </ng-container>
+                                </div>
+                                <!-- Tags when add campaign is called -->
+                                <ng-container *ngIf="selectedTags?.length">
+                                    <ng-container *ngFor="
+                                            let category of selectedTags;
+                                            trackBy: trackByFn
+                                        ">
+                                        <div
+                                            class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                            <span class="text-md font-medium whitespace-nowrap">{{ category
+                                                }}</span>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                                <!-- Tags panel and its button -->
+                                <div class="classfix" style="width:100%;height:29px;">
+                                    <mat-label *ngIf="
+                                    !selectedTags?.length &&
+                                    !selectedCampaign?.category
+                                        ?.length"
+                                        class=" font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                        <!-- Category -->
+                                    </mat-label>
+                                </div><br/>
+                                <div class="flex items-center justify-center px-4 mr-1.5 rounded-full leading-9 cursor-pointer text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                                    (click)="openCategoryPopup()">
+                                    
+                                    <ng-container *ngIf="
+                                            selectedCampaign?.category
+                                                ?.length
+                                        ">
+                                        <mat-icon class="icon-size-5" [svgIcon]="
+                                                'heroicons_solid:pencil-alt'
+                                            ">
+                                        </mat-icon>
+                                        <span class="mr-1.5 mb-1.5 text-md font-medium whitespace-nowrap">Edit</span>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="
+                                            selectedTags?.length &&
+                                            !selectedCampaign?.category
+                                                ?.length
+                                        ">
+                                        <mat-icon class="icon-size-5" [svgIcon]="
+                                                'heroicons_solid:pencil-alt'
+                                            ">
+                                        </mat-icon>
+                                        <span class="mr-1.5 mb-1.5  text-md font-medium whitespace-nowrap">Edit</span>
+                                    </ng-container>
+
+
+                                    <ng-container *ngIf="
+                                            !selectedTags?.length &&
+                                            !selectedCampaign?.category
+                                                ?.length
+                                        " >
+                                        
+                                        <mat-icon class="icon-size-5" [svgIcon]="
+                                                'heroicons_solid:plus-circle'
+                                            ">
+                                        </mat-icon>
+                                        <span class="ml-1.5 text-md font-medium whitespace-nowrap">Add</span>
+                                    </ng-container>
+                                </div>
+                                <!-- <mat-error *ngIf="
+                                        !selectedTags?.length &&
+                                        !selectedCampaign?.category
+                                            ?.length
+                                    ">
+                                    Please select at least one category
+                                </mat-error> -->
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 w-full mt-4 md:mt-6">
+                                <div>
+
+                                    <div class="flex flex-row flex-0 items-center justify-between"
+                                        *ngIf="plateform !='instagram' && selectedCampaign?.plateform_type !=2">
+                                        <div class="flex-1 min-w-0">
+                                            <!-- <mat-form-field style="width: 100%">
+                                                <mat-label
+                                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                                    Average Views
+                                                </mat-label>
+                                                <input matInput [placeholder]="'10000'"
+                                                    [formControlName]="'average_view'">
+                                                <mat-error
+                                                    *ngIf="campaignForm.get('step3').get('average_view').hasError('pattern')">
+                                                    Invalid value
+                                                </mat-error>
+                                            </mat-form-field> -->
+                                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                                <mat-label>Average Views</mat-label>
+                                                <mat-select [formControlName]="
+                                                        'average_view'
+                                                    " (selectionChange)="
+                                                        onAverageViewsChange()
+                                                    " [errorStateMatcher]="
+                                                        errorStateMatcher
+                                                    ">
+                                                    <mat-option value="">- Please Select-</mat-option>
+                                                    <mat-option *ngIf="userPlan !=1 && userPlan != 2 && userPlan===3"
+                                                        value="null">Include All</mat-option>
+                                                    <mat-option
+                                                        *ngIf="userPlan ===1 || userPlan === 2 && userPlan !=3">Include
+                                                        All
+                                                        <span class="badge bg-success" (click)="Openmodel()">Business
+                                                            accounts only</span>
+                                                    </mat-option>
+                                                    <mat-option value="1000">&gt; 1K</mat-option>
+                                                    <mat-option value="5000">&gt; 5K</mat-option>
+                                                    <mat-option value="10000">&gt; 10K</mat-option>
+                                                    <mat-option *ngIf="userPlan !=1 && userPlan != 2" value="50000">&gt;
+                                                        50K
+                                                    </mat-option>
+                                                    <mat-option *ngIf="userPlan ===1 || userPlan === 2">&gt; 50K
+                                                        <span class="badge bg-success" (click)="Openmodel()">Business
+                                                            accounts only</span>
+                                                    </mat-option>
+                                                    <mat-option
+                                                        *ngIf="userPlan ===1 || userPlan === 2 || userPlan != 3">&gt;
+                                                        100K
+                                                        <span class="badge bg-success" (click)=" Openmodel()">Business
+                                                            accounts only</span>
+                                                    </mat-option>
+                                                    <mat-option *ngIf="userPlan !=1 && userPlan != 2"
+                                                        value="100000">&gt; 100K</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="flex flex-row flex-0 items-center justify-between mt-6"
+                                        *ngIf="plateform !='instagram' && selectedCampaign?.plateform_type !=2">
+                                        <div class="flex-1 min-w-0">
+                                            <!-- <mat-form-field style="width: 100%">
+                                                <mat-label
+                                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                                    Subscribers
+                                                </mat-label>
+                                                <input matInput [placeholder]="'10000'"
+                                                    [formControlName]="'subscriber'">
+                                                <mat-error
+                                                    *ngIf="campaignForm.get('step3').get('subscriber').hasError('pattern')">
+                                                    Invalid value
+                                                </mat-error>
+                                            </mat-form-field> -->
+                                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                                <mat-label>Subscribers</mat-label>
+                                                <mat-select [formControlName]="
+                                                        'subscriber'
+                                                    " (selectionChange)="
+                                                        onSubscribersChange()
+                                                    " [errorStateMatcher]="
+                                                        errorStateMatcher
+                                                    ">
+                                                    <mat-option value="">- Please Select-</mat-option>
+                                                    <mat-option value="10000">&gt; 10K</mat-option>
+                                                    <mat-option value="50000">&gt; 50K</mat-option>
+                                                    <mat-option value="100000">&gt; 100K</mat-option>
+                                                    <mat-option value="500000">&gt; 500K</mat-option>
+                                                    <mat-option value="1000000">&gt; 1M</mat-option>
+                                                    <mat-option value="null">All</mat-option>
+
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+                        
+
+                                    
+                                    <div class="flex flex-row flex-0 items-center justify-between mt-6"
+                                        *ngIf="plateform !='youtube' || selectedCampaign?.plateform_type ===2">
+                                        <div class="flex-1 min-w-0">
+
+                                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                                <mat-label>Followers</mat-label>
+                                                <mat-select [formControlName]="
+                                                        'followers'
+                                                    " (selectionChange)="
+                                                        onFollowersChange()
+                                                    " [errorStateMatcher]="
+                                                        errorStateMatcher
+                                                    ">
+                                                    <mat-option value="">- Please Select-</mat-option>
+                                                    <mat-option value="10000">&gt; 10K</mat-option>
+                                                    <mat-option value="50000">&gt; 50K</mat-option>
+                                                    <mat-option value="100000">&gt; 100K</mat-option>
+                                                    <mat-option value="500000">&gt; 500K</mat-option>
+                                                    <mat-option value="1000000">&gt; 1M</mat-option>
+                                                    <mat-option value="">All</mat-option>
+
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+                                    
+
+                                    <div class="flex flex-row flex-0 items-center justify-between mt-6"
+                                        *ngIf="plateform !='youtube' || selectedCampaign?.plateform_type ===2">
+                                        <div class="flex-1 min-w-0">
+
+                                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                                <mat-label>Influencer Score</mat-label>
+                                                <mat-select [formControlName]="
+                                                        'inf_score'
+                                                    " (selectionChange)="
+                                                        onInfluencerScoreChange()
+                                                    " [errorStateMatcher]="
+                                                        errorStateMatcher
+                                                    ">
+                                                    <mat-option value="">- Please Select-</mat-option>
+                                                    <mat-option value="25">&gt; 25</mat-option>
+                                                    <mat-option value="50">&gt; 50</mat-option>
+                                                    <mat-option value="75">&gt; 75</mat-option>
+                                                    <mat-option value="100">&gt; 100</mat-option>
+                                                    <!-- <mat-option value="500">&gt; 500</mat-option> -->
+                                                    <mat-option value="">All</mat-option>
+
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="flex flex-row flex-0 items-center justify-between mt-6"
+                                        *ngIf="plateform !='instagram' && selectedCampaign?.plateform_type !=2">
+                                        <div class="flex-1 min-w-0">
+                                            <mat-form-field style="width: 100%">
+                                                <mat-label
+                                                    class="flex flex-row font-medium mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
+                                                    Engagement Rate (%)
+
+                                                </mat-label>
+                                                <!-- [(ngModel)]="engamentRate" -->
+                                                <mat-select [formControlName]="'engagement_rate'"
+                                                    (selectionChange)="onEngagementRateChange($event)">
+                                                    <mat-option value=""> Please select</mat-option>
+                                                    <mat-option [value]="1">&gt; 1</mat-option>
+                                                    <mat-option [value]="2">&gt; 2</mat-option>
+                                                    <mat-option [value]="5">&gt; 5 </mat-option>
+                                                    <mat-option [value]="10">&gt; 10 </mat-option>
+                                                    <mat-option [value]="null">All</mat-option>
+
+                                                </mat-select>
+                                                <!-- <mat-slider style="width: 100%" min="0" max="10" class="example-margin"
+                                                    [ngModelOptions]="{
+                                                        standalone: true
+                                                    }" [(ngModel)]="engamentRate" (change)="
+                                                    onEngagementRateChange()
+                                                "></mat-slider>
+                                                <input matInput hidden />  {{ engamentRate }} -->
+                                                <!-- <input matInput [placeholder]="'2.5'"
+                                                    [formControlName]="'engagement_rate'"
+                                                    (change)="onEngagementRateChange()"
+                                                    [errorStateMatcher]="errorStateMatcher"> -->
+                                                <!-- <mat-error
+                                                    *ngIf="campaignForm.get('step3').get('engagement_rate').hasError('pattern')">
+                                                    Invalid Engagement Rate
+                                                </mat-error> -->
+                                            </mat-form-field>
+                                            <!-- <mat-form-field class="fuse-mat-no-subscript w-full">
+                                                <mat-label>Engagement Rate</mat-label>
+                                                <mat-select [formControlName]="'engagement_rate'"
+                                                    (selectionChange)="onEngagementRateChange()">
+                                                    <mat-option value="">-Select-</mat-option>
+                                                    <mat-option value="5">&lt; 5%</mat-option>
+                                                    <mat-option value="5-10">5-10%</mat-option>
+                                                    <mat-option value="10">&gt; 10%</mat-option>
+                                                </mat-select>
+                                            </mat-form-field> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="px-6 mt-6" *ngIf="chartQualification">
+                                    <apx-chart class="flex flex-auto items-center justify-center graphwidth"
+                                        [chart]="chartQualification.chart" [colors]="chartQualification.colors"
+                                        [labels]="chartQualification.labels" [plotOptions]="
+                                            chartQualification.plotOptions
+                                        " [series]="chartQualification.series" [states]="chartQualification.states"
+                                        [tooltip]="chartQualification.tooltip"></apx-chart>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end mt-8">
+                                <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button"
+                                    matStepperPrevious>
+                                    Back
+                                </button>
+                                <button *ngIf="!editMode" class="px-8 mr-2" mat-flat-button [color]="'warn'"
+                                    type="reset" (click)="
+                                        campaignStepperStep3.reset();
+                                        croppedImage = '';
+                                        backFromPreviewScreen = false
+                                    ">
+                                    Reset
+                                </button>
+                                <button class="px-8" mat-flat-button [color]="'primary'" type="button" [disabled]="
+                                        campaignStepperStep3.stepControl
+                                            .invalid ||
+                                        (!selectedTags?.length &&
+                                            !selectedCampaign?.category?.length)
+                                    " (click)="toggleReviewMode(true)">
+                                    Preview
+                                </button>
+                            </div>
+                        </mat-step>
+                    </mat-stepper>
+                </form>
+            </div>
+        </div>
+    </ng-container>
+
+    <!-- Review Mode -->
+    <ng-container *ngIf="reviewMode">
+        <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
+            <div class="w-full">
+                <div class="mt-4">
+                    <div class="text-3xl font-bold">
+                        {{ "Review your Campaign" }}
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="group w-full mt-4">
+                    <span class="text-help mb-4">Influencers will see the campaign as below</span>
+                </div>
+
+
+                <div class="group w-full mt-4" [class.border-t]="first">
+                    <!-- [campaign]="selectedCampaign" -->
+                    <single-campaign [campaign]="previewCampaign" [reviewMode]="reviewMode" [plateform]="plateform"
+                        [mode]="'review'">
+                    </single-campaign>
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Platform Selected:&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">YouTube</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Brand Name:&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ campaignForm.get('step1').get('brand_name').value }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Brand/Product Website URL:&nbsp;
+                                <span class="inline-flex items-center font-medium text-md px-2.5 py-0.5 tracking-wide">
+                                    <a class="leading-relaxed" [href]="campaignForm.get('step1').get('brand_url').value"
+                                        target="_blank">
+                                        {{ campaignForm.get('step1').get('brand_url').value }}
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Title of the campaign:&nbsp;
+                                <span class="inline-flex items-center font-medium text-md px-2.5 py-0.5 tracking-wide">
+                                    <span class="leading-relaxed">
+                                        {{ campaignForm.get('step1').get('camp_title').value }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Campaign Description:&nbsp;
+                                <span
+                                    class="inline-flex items-center font-medium text-md px-2.5 py-0.5 text-justify tracking-wide">
+                                    <span class="leading-relaxed">
+                                        {{ campaignForm.get('step1').get('camp_desc').value }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">
+                                How would you like to promote your
+                                product/service?&nbsp;
+                                <span
+                                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{
+                                        campaignForm
+                                        .get("step2")
+                                        .get("promot_product").value
+                                        }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative flex items-center h-full py-4 border-t" *ngIf="
+                            campaignForm.get('step2').get('promot_product')
+                                .value === 'In-Video brand integration'
+                        ">
+                        <div class="flex-auto">
+                            <div class="font-bold">
+                                What should be the duration of the
+                                integration?&nbsp;
+                                <span
+                                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{
+                                        campaignForm
+                                        .get("step2")
+                                        .get("duration").value
+                                        }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative flex items-center h-full py-4 border-t" *ngIf="
+                            campaignForm.get('step2').get('promot_product')
+                                .value === 'In-Video brand integration'
+                        ">
+                        <div class="flex-auto">
+                            <div class="font-bold">
+                                When would you like the promotion to
+                                start?&nbsp;
+                                <span
+                                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{
+                                        campaignForm
+                                        .get("step2")
+                                        .get("promotion_start").value
+                                        }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="relative flex items-center h-full py-4 border-t" *ngIf="referenceVideos.length > 0">
+                        <div class="flex-auto">
+                            <div class="font-bold">Do you have any reference video?&nbsp;
+                                <a *ngFor="let video of referenceVideos;"
+                                    class="flex items-center text-sm px-2.5 py-0.5 tracking-wide mr-2"
+                                    [href]="video.video" target="_blank">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ video.video }}
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Define the maximum budget you can spend on a video promotion:&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ campaignForm.get('step2').get('budget').value | currency :
+                                        campaignForm.get('step2').get('currency').value : 'symbol' : '1.2-2' }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t" *ngIf="categories.length > 0">
+                        <div class="flex-auto">
+                            <div class="font-bold">Channel Category:&nbsp;
+                                <span *ngFor="let item of categories;" class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50 ml-2">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ item }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Average Views:&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ campaignForm.get('step3').get('average_view').value }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Subscribers:&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ campaignForm.get('step3').get('subscriber').value }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Engagement Rate:&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ campaignForm.get('step3').get('engagement_rate').value }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="flex justify-end mt-8">
+                    <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button"
+                        (click)="backFromPreview()">
+                        Edit
+                    </button>
+                    <button class="px-8" mat-flat-button [color]="'primary'" type="button"
+                        (click)="postCampaign('save')">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="previewClicked">
+        <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
+            <div class="w-full">
+                <div class="mt-4">
+                    <div class="headermenusection">
+                        <div class="text-3xl font-bold">
+                            {{ " Campaign Preview " }}
+                        </div>
+                    </div>
+                    <div class="headermenusection pull-right">
+                        <div class="flex justify-end mt-0">
+
+                            <button style="margin-top:32px;" class="px-8 mr-2" mat-flat-button [color]="'primary'"
+                                type="button" (click)="backFromPreview()">
+                                Edit
+                            </button>
+                            <app-preview-campaign>
+
+                                <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button"
+                                    (click)="backPreview()">
+                                    Back
+                                </button>
+                            </app-preview-campaign>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="group w-full mt-4">
+                    <!-- <span class="text-help mb-4">Brand will see the campaign posted below</span> -->
+                </div>
+
+                <div class="group w-full mt-4" [class.border-t]="first">
+
+
+                    <single-campaign [campaign]="previewCampaign" [reviewMode]="reviewMode" [mode]="'review'">
+                    </single-campaign>
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Platform Selected:&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">YouTube</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Brand Name:&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ campaignForm.get('step1').get('brand_name').value }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Brand/Product Website URL:&nbsp;
+                                <span class="inline-flex items-center font-medium text-md px-2.5 py-0.5 tracking-wide">
+                                    <a class="leading-relaxed" [href]="campaignForm.get('step1').get('brand_url').value"
+                                        target="_blank">
+                                        {{ campaignForm.get('step1').get('brand_url').value }}
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Title of the campaign:&nbsp;
+                                <span class="inline-flex items-center font-medium text-md px-2.5 py-0.5 tracking-wide">
+                                    <span class="leading-relaxed">
+                                        {{ campaignForm.get('step1').get('camp_title').value }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Campaign Description:&nbsp;
+                                <span
+                                    class="inline-flex items-center font-medium text-md px-2.5 py-0.5 text-justify tracking-wide">
+                                    <span class="leading-relaxed">
+                                        {{ campaignForm.get('step1').get('camp_desc').value }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">
+                                How would you like to promote your
+                                product/service?&nbsp;
+                                <span
+                                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{
+                                        campaignForm
+                                        .get("step2")
+                                        .get("promot_product").value
+                                        }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative flex items-center h-full py-4 border-t" *ngIf="
+                            campaignForm.get('step2').get('promot_product')
+                                .value === 'In-Video brand integration'
+                        ">
+                        <div class="flex-auto">
+                            <div class="font-bold">
+                                What should be the duration of the
+                                integration?&nbsp;
+                                <span
+                                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{
+                                        campaignForm
+                                        .get("step2")
+                                        .get("duration").value
+                                        }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative flex items-center h-full py-4 border-t" *ngIf="
+                            campaignForm.get('step2').get('promot_product')
+                                .value === 'In-Video brand integration'
+                        ">
+                        <div class="flex-auto">
+                            <div class="font-bold">
+                                When would you like the promotion to
+                                start?&nbsp;
+                                <span
+                                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{
+                                        campaignForm
+                                        .get("step2")
+                                        .get("promotion_start").value
+                                        }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="relative flex items-center h-full py-4 border-t" *ngIf="referenceVideos.length > 0">
+                        <div class="flex-auto">
+                            <div class="font-bold">Do you have any reference video?&nbsp;
+                                <a *ngFor="let video of referenceVideos;"
+                                    class="flex items-center text-sm px-2.5 py-0.5 tracking-wide mr-2"
+                                    [href]="video.video" target="_blank">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ video.video }}
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Define the maximum budget you can spend on a video promotion:&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ campaignForm.get('step2').get('budget').value | currency :
+                                        campaignForm.get('step2').get('currency').value : 'symbol' : '1.2-2' }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t" *ngIf="categories.length > 0">
+                        <div class="flex-auto">
+                            <div class="font-bold">Channel Category:&nbsp;
+                                <span *ngFor="let item of categories;" class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50 ml-2">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ item }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Average Views:&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ campaignForm.get('step3').get('average_view').value }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Subscribers:&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ campaignForm.get('step3').get('subscriber').value }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative flex items-center h-full py-4 border-t">
+                        <div class="flex-auto">
+                            <div class="font-bold">Engagement Rate:&nbsp;
+                                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="leading-relaxed whitespace-nowrap">
+                                        {{ campaignForm.get('step3').get('engagement_rate').value }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <!-- <div class="flex justify-end mt-8">
+                    <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button" (click)="backPreview()">
+                        Back
+                    </button>
+                </div> -->
+            </div>
+        </div>
+    </ng-container>
+</div>

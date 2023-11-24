@@ -1,0 +1,177 @@
+<div class="flex flex-col flex-auto min-w-0 bg-accent-300">
+
+
+    <div
+        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 md:px-8 border-b sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+
+        <div class="text-3xl font-extrabold tracking-tight">
+            <ng-container>
+                {{ totalChannels | i18nPlural: {
+                '=0' : 'Similar Channel (0)',
+                '=1' : 'Similar Channel (1)',
+                'other': 'Similar Channels (' + totalChannels + ')'
+                } }}
+            </ng-container>
+            <!-- <ng-container >
+        <button *ngIf="inviteForCamp !=undefined" style="margin-left: 60px" class="btn btn-primary" (click)="suggestedChannel()"> Revealed Channels {{totalChannels}}</button>
+           
+          
+        </ng-container> -->
+            <!-- <ng-container >
+        <button *ngIf="inviteForCamp !=undefined" style="margin-left: 60px" class="btn btn-danger" (click)="suggestedChannel()"> Suggested Channels</button>
+           
+          
+        </ng-container> -->
+
+
+
+
+        </div>
+        <!-- <div class="col-span-6 text-right" *ngIf="totalChannels>0  || liveCamp>0">
+        <button mat-flat-button color="primary" (click)="inviteAll()">Invite All</button>
+    </div> -->
+    </div>
+
+    <div class="items-center m-4 mb-4">
+        <div class="" *ngFor="let channel of similarInfluencer?.channel_list">
+            <influencer-channel *ngIf="channel" [channel]="channel" [list]="channel.list"></influencer-channel>
+
+
+        </div>
+        <div *ngIf="!similarInfluencer?.channel_list.length "
+        class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
+        <mat-icon class="icon-size-20" [svgIcon]="'iconsmind:search_oncloud'"></mat-icon>
+        <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">
+            {{ 'Sorry no similar channels found.' }}
+        </div>
+    </div>
+    <style>
+        .dropdown-toggle::after {
+            display: none;
+        }
+
+        body {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .custom_drop {
+            min-width: 250px;
+            /* position: absolute;
+        inset: 0px 0px auto auto;
+        margin: 0px;
+        transform: translate3d(0px, 25px, 0px); */
+            padding: 0;
+        }
+
+        .bg-light {
+            background: #F8F9FA;
+            padding: 0.5rem !important;
+            border-bottom: 1px solid #dee2e6 !important;
+        }
+
+        .cus-form-control {
+            display: block;
+            width: 100%;
+            padding: 0.375rem 0.75rem;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            appearance: none;
+            border-radius: 0.25rem;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+            box-shadow: none;
+        }
+
+        #autocom-box {
+            max-height: 160px;
+            overflow: auto;
+        }
+
+        .align-items-center {
+            align-items: center !important;
+        }
+
+        .gap-2 {
+            gap: 0.5rem !important;
+        }
+
+        .d-flex {
+            display: flex !important;
+        }
+
+        .dropdown-menu {
+            right: 0;
+            left: auto;
+        }
+
+        .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 0.25rem 1rem !important;
+            clear: both;
+            font-weight: 400;
+            color: #212529;
+            text-align: inherit;
+            text-decoration: none;
+            white-space: nowrap;
+            background-color: transparent;
+            border: 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35em 0.65em;
+            font-size: .75em;
+            font-weight: 700;
+            line-height: 1;
+            color: #080c15;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.25rem;
+            background: transparent;
+        }
+
+        .border-dark {
+            border-color: #212529 !important;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        .border {
+            border: 1px solid #212529 !important;
+        }
+
+        .dropdown-item:focus,
+        .dropdown-item:hover {
+            color: #1e2125 !important;
+            background-color: #e9ecef !important;
+        }
+
+        hr:not([size]) {
+            height: 1px;
+        }
+
+        li.bg-light.py-1 {
+            padding: 0.25rem 0 !important;
+
+        }
+
+        .my-0 {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .dropdown-divider {
+            height: 0;
+            margin: 0.5rem 0;
+            overflow: hidden;
+            border-top: 1px solid rgba(0, 0, 0, .15);
+        }
+    </style>

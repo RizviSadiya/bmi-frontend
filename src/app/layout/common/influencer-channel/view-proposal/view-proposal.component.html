@@ -1,0 +1,318 @@
+<div class="group w-full">
+    <!-- <label><b><i>Proposal Info</i></b></label> -->
+    <div class="relative flex items-center h-full py-4 border-t">
+        
+        <div class="flex-auto">
+           
+            <div class="font-bold" style="text-align: center;">Proposal By:&nbsp;
+                <!-- <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50"> -->
+                <span class="leading-relaxed whitespace-nowrap uppercase font-semibold"  *ngIf="proposalView?.plateform==='youtube'">
+                    <mat-icon [svgIcon]="'feather:youtube'" style="vertical-align: middle;" class="text-danger mr-2"></mat-icon>{{proposalView?.title}}
+                    <!-- <mat-icon  [svgIcon]="'feather:instagram'" style="vertical-align: middle;" class="text-danger mr-2"></mat-icon>{{proposalView?.title}} -->
+                </span>
+                <span class="leading-relaxed whitespace-nowrap uppercase font-semibold" *ngIf="proposalView?.plateform==='instagram'">
+                    <!-- <mat-icon *ngIf="proposalView?.plateform==='youtube'" [svgIcon]="'feather:youtube'" style="vertical-align: middle;" class="text-danger mr-2"></mat-icon>{{proposalView?.title}} -->
+                    <mat-icon *ngIf="proposalView?.plateform==='instagram'" [svgIcon]="'feather:instagram'" style="vertical-align: middle;" class="text-danger mr-2"></mat-icon>{{proposalView?.title}}
+                </span>
+                <!-- </span> -->
+            </div>
+        </div>
+    </div>
+    <div class="relative flex items-center h-full py-4 border-t">
+        <div class="flex-auto">
+            <div class="font-bold"> Price bid:&nbsp;
+                <!-- <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50"> -->
+                <span [ngClass]="{'text-red-800' : proposalView.price,
+                    'text-green-800' : proposalView?.price}">
+                    <span class="leading-relaxed whitespace-nowrap font-semibold">{{
+                        proposalView.price | currency : userCurrency?.currency : 'symbol' : '1.0-0' }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <span *ngIf="proposalView.promot_product==='In-Video brand integration' && proposalView.plateform_type !=2">
+        <div class="relative flex items-center h-full py-4 border-t" *ngIf="proposalView.old_duration=== 1">
+            <div class="flex-auto" >
+                <div class="font-bold">
+                    Brand would prefer the integration to be for 30-60 seconds&nbsp;
+                    <span
+                        class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                        [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalView.old_duration == '0',
+                                    'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalView.old_duration == '1'}">
+                        <span class="leading-relaxed whitespace-nowrap">{{
+                            proposalView.old_duration == '1' ? "Agree" :
+                            "Disagree" }}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </span>
+  
+    <!-- relative flex items-center h-full py-2 pl-5 -->
+    <!-- <div *ngIf="proposalView.new_duration !='' "
+        class="">
+        <div class="flex-auto">
+            <div class="font-bold">
+                Your preferred duration selected&nbsp;
+                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                    bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalView.new_duration !== 'other'
+                        ? proposalView.new_duration
+                        : proposalView.new_other_duration}}</span>
+                </span>
+            </div>
+        </div>
+    </div> -->
+    <div class="relative flex items-center h-full py-4 border-t" *ngIf="proposalView.new_duration !=null ">
+        <div class="flex-auto">
+            <div class="font-bold">
+                Influencer agrees for the integration to be for&nbsp;
+                <!-- Your preferred duration selected.&nbsp; -->
+                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                    bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalView.new_duration }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <span *ngIf="proposalView.promot_product==='In-Video brand integration'">
+       <span >
+        <div class="relative flex items-center h-full py-4 border-t" *ngIf="proposalView.promotion_slot=== 1">
+            <!-- || proposalView.promotion_slot===0 -->
+            <div class="flex-auto">
+                <div class="font-bold">
+                    Brand prefers the promotion to appear at the start of the video.&nbsp;
+                    <span
+                        class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                        [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalView.promotion_slot == 0,
+                                    'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalView.promotion_slot == 1}">
+                        <span class="leading-relaxed whitespace-nowrap">{{
+                            proposalView.promotion_slot == 1 ? "Agree" :
+                            "Disagree" }}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+       </span>
+    </span>
+   
+    <div class="relative flex items-center h-full py-4 border-t" *ngIf="proposalView.new_duration !=null">
+        <div class="flex-auto">
+            <div class="font-bold">
+                Influencer agrees for the promotion to appear.&nbsp;
+                <!-- Your preference for promotion to start.&nbsp; -->
+                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                    bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalView.new_promotion_slot }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- relative flex items-center h-full pb-4 pl-4 -->
+    <!-- <div *ngIf=" proposalView.new_promotion_slot !=''"
+        class="">
+        <div class="flex-auto" >
+            <div class="font-bold">
+                Your preference for promotion to start&nbsp;
+                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                    bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalView.new_promotion_slot }}</span>
+                </span>
+            </div>
+        </div>
+    </div> -->
+    <div class="relative flex items-center h-full py-4 border-t" *ngIf="proposalView.view_commitment===null">
+        <div class="flex-auto">
+            <div class="font-bold">
+                Can you commit any minimum video views for this campaign?&nbsp;
+                <span
+                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalView.view_commitment == 0,
+                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalView.view_commitment == 1}">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalView.view_commitment == 1 ? "Yes" : "No"
+                        }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="proposalView.view_commitment == 1 || proposalView.view_commitment===null"
+        class="relative flex items-center h-full pb-4 pl-4">
+        <div class="flex-auto" >
+            <div class="font-bold">
+                Your committed minimum videos views&nbsp;
+                <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase
+                    bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalView.min_views }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="relative flex items-center h-full py-4 border-t" >
+        <div class="flex-auto">
+            <div class="font-bold">
+                Influencer is  <span *ngIf="proposalView.minor_changes === 0"
+                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalView.minor_changes === 0,
+                            'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalView.minor_changes === 1}">
+              
+                <span  class="leading-relaxed whitespace-nowrap">{{
+                    proposalView.minor_changes === 1 ? "" : "Not"
+                    }}</span>
+            </span> flexible with minor changes after video submission&nbsp;
+                <!-- Are you flexible with minor changes after the video is submitted for review?&nbsp; -->
+                <!-- <span
+                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalView.minor_changes == 0,
+                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalView.minor_changes == 1}">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalView.minor_changes == 1 ? "Yes" : "No"
+                        }}</span>
+                </span> -->
+            </div>
+        </div>
+    </div>
+    <div class="relative flex items-center h-full py-4 border-t">
+        <div class="flex-auto">
+            <div class="font-bold">
+                Influencer will take    <span
+                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalView.delivery_days === 0 || proposalView.delivery_days===null,
+                            'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalView.delivery_days !=0 && proposalView.delivery_days !=null}">
+                <span class="leading-relaxed whitespace-nowrap">{{
+                    proposalView.delivery_days !=0 && proposalView.delivery_days !=null
+                    ? proposalView.delivery_days  + 'days'
+                    : (proposalView.other_delivery_days  +  "days")
+                    }} </span>
+            </span> for delivery after the order is confirmed&nbsp;
+                <!-- How soon can you deliver, after the order is confirmed by the brand?&nbsp; -->
+                <!-- <span
+                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalView.delivery_days === 'other',
+                                'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': proposalView.delivery_days !== 'other'}">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalView.delivery_days !== 'other'
+                        ? proposalView.delivery_days
+                        : (proposalView.other_delivery_days + " days")
+                        }} days</span>
+                </span> -->
+            </div>
+        </div>
+    </div>
+    <div class="relative flex items-center h-full py-4 border-t">
+        <div class="flex-auto">
+            <div class="font-bold">
+                <!-- Would you share the video on any of your other social media handles.&nbsp;
+                bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50 -->
+                Influencer will also share the video on.&nbsp;
+                <span
+                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                    [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': proposalView.social_media_share == 0,
+                                '': proposalView.social_media_share == 1}">
+                    <span class="leading-relaxed whitespace-nowrap">{{
+                        proposalView.social_media_share == 0 ? "No" :
+                        "" }}</span>
+                </span>
+                <!-- <span *ngIf="proposalView.get('step2').get('facebook').value === true"
+                    class="inline-flex items-centertracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:facebook'">
+                    </mat-icon>
+                </span>
+                <span *ngIf="proposalView.get('step2').get('instagram').value === true"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:instagram'">
+                    </mat-icon>
+                </span>
+                <span *ngIf="proposalView.get('step2').get('twitter').value === true"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:twitter'">
+                    </mat-icon>
+                </span> -->
+                <div *ngIf="socialmidea">
+                    <span *ngIf="socialmidea[1] === 'instagram'"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5 text-pink-600 "  matPrefix [svgIcon]="'feather:instagram'">
+                    </mat-icon>
+                </span> 
+                <span *ngIf="socialmidea[0] === 'instagram'"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5 text-pink-600" matPrefix [svgIcon]="'feather:instagram'">
+                    </mat-icon>
+                </span> 
+                <span *ngIf="socialmidea[2] === 'instagram'"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5 text-pink-600" matPrefix [svgIcon]="'feather:instagram'">
+                    </mat-icon>
+                </span> 
+                <span *ngIf="socialmidea[0] === 'facebook'"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5 text-blue-600" matPrefix [svgIcon]="'feather:facebook'">
+                    </mat-icon>
+                </span> 
+                <span *ngIf="socialmidea[1] === 'facebook'"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5 text-blue-600" matPrefix [svgIcon]="'feather:facebook'">
+                    </mat-icon>
+                </span> 
+                <span *ngIf="socialmidea[2] === 'facebook'"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5 text-blue-600" matPrefix [svgIcon]="'feather:facebook'">
+                    </mat-icon>
+                </span> 
+                <span *ngIf="socialmidea[2] === 'twitter'"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5 text-blue-600" matPrefix [svgIcon]="'feather:twitter'">
+                    </mat-icon>
+                </span> 
+                <span *ngIf="socialmidea[1] === 'twitter'"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5 text-blue-600" matPrefix [svgIcon]="'feather:twitter'">
+                    </mat-icon>
+                </span> 
+                <span *ngIf="socialmidea[0] === 'twitter'"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5 text-blue-600" matPrefix [svgIcon]="'feather:twitter'">
+                    </mat-icon>
+                </span> 
+                </div>
+              
+                <!-- <span *ngIf="proposalView.social_media === 'instagram'"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:instagram'">
+                    </mat-icon>
+                </span> 
+                <span *ngIf="proposalView.social_media === 'facebook'"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:facebook'">
+                    </mat-icon>
+                </span> 
+                <span *ngIf="proposalView.social_media === 'twitter'"
+                    class="inline-flex items-center tracking-wide ml-2" style="vertical-align: middle;">
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'feather:twitter'">
+                    </mat-icon>
+                </span>  -->
+            </div>
+        </div>
+    </div>
+    <div *ngIf="proposalView.comment" class="relative flex items-center h-full py-4 border-t">
+        <div class="flex-auto">
+            <div class="font-bold">
+                Reasons why your bid should be selected&nbsp;
+                <!-- Additional comments for the Brand&nbsp; -->
+                <span class="inline-flex items-center font-medium text-md px-2.5 py-0.5 rounded-full tracking-wide">
+                    <span class="leading-relaxed">
+                        {{ proposalView.comment }}
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-danger" (click)="closeModel()">Close</button>
+</div>
